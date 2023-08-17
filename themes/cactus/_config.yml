@@ -5,7 +5,7 @@
 # Link to a page that gives an overview of all your projects.
 # This can be an external link (e.g., to you GitHub profile) or to another
 # page within your website.
-projects_url: http://github.com/lifan-chen
+projects_url: https://github.com/lifan-chen
 
 # Set the page direction to RTL or LTR. default is LTR. (if you set it 'rtl', the 'vazir' font will be loaded.)
 direction: ltr
@@ -18,8 +18,8 @@ nav:
   articles: /archives/
   category: /categories/
   tag: /tags/
-  about: /about/
-  search: /search/
+#  about: /about/
+#  search: /search/
 
 
 # Links to your social media accounts.
@@ -29,9 +29,9 @@ nav:
 # You can optionally add a 'label' key to set the title attribute on the link. 
 # 'icon' value will be used as title when 'label' is missing.
 social_links:
-#  -
-#    icon: github
-#    link: http://github.com/lifan-chen
+  -
+    icon: github
+    link: https://github.com/lifan-chen
 #  -
 #    icon: mail
 #    link: mailto:name@email.com
@@ -44,9 +44,9 @@ social_links:
 #    label: fosstodon.org
 #    link: https://fosstodon.org/@alice
 
-# Customize the overview with displaying a tagcloud on the index page.
+# Customize the overview with displaying a tag cloud on the index page.
 # Options: https://hexo.io/docs/helpers.html#tagcloud
-tags_overview: true
+tags_overview: false
 
 # Customize the overview with the most recent blog posts on the index page.
 # Options:
