@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>【AI夏令营】生命科学赛道-Baseline</title>
+      <link href="/2023/08/17/%E3%80%90AI%E5%A4%8F%E4%BB%A4%E8%90%A5%E3%80%91%E7%94%9F%E5%91%BD%E7%A7%91%E5%AD%A6%E8%B5%9B%E9%81%93-Baseline/"/>
+      <url>/2023/08/17/%E3%80%90AI%E5%A4%8F%E4%BB%A4%E8%90%A5%E3%80%91%E7%94%9F%E5%91%BD%E7%A7%91%E5%AD%A6%E8%B5%9B%E9%81%93-Baseline/</url>
+      
+        <content type="html"><![CDATA[<h2 id="1-配置阿里云DSW环境"><a href="#1-配置阿里云DSW环境" class="headerlink" title="1 配置阿里云DSW环境"></a>1 配置阿里云DSW环境</h2><p><a href="https://qwosdw576oc.feishu.cn/docx/NajfdyJm3oripXxrPFFczjSon4z">阿里云机器学习Pai-DSW服务器部署教程</a></p><h2 id="2-下载数据"><a href="#2-下载数据" class="headerlink" title="2 下载数据"></a>2 下载数据</h2><ul><li><a href="https://help.aliyun.com/zh/oss/developer-reference/install-ossutil?spm=a2c22.12281978.0.0.48a3558ctL6RrI">安装 ossutil 工具</a><br>ossutil 是 OSS 的命令行管理工具，支持 Windows、Linux、macOS、ARM 系统。可以通过 ossutil 提供的方便、简洁、丰富的 Bucket 和 Object 命令管理自己的 OSS。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash</span><br></pre></td></tr></table></figure></li><li>分别复制训练集和测试集的 ossutil 内网命令至 DSW 的 Terminal，即可下载</li></ul><h2 id="3-解压数据"><a href="#3-解压数据" class="headerlink" title="3 解压数据"></a>3 解压数据</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压训练集的压缩包文件</span></span><br><span class="line">!unzip ai4bio_trainset.zip</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压测试集的压缩包文件</span></span><br><span class="line">!unzip ai4bio_testset_final.zip</span><br></pre></td></tr></table></figure><h2 id="4-运行-life-baseline-ipynb"><a href="#4-运行-life-baseline-ipynb" class="headerlink" title="4 运行 life-baseline.ipynb"></a>4 运行 life-baseline.ipynb</h2><ul><li>将 baseline 代码上传至 DSW</li><li>运行代码</li></ul><h2 id="5-提交结果"><a href="#5-提交结果" class="headerlink" title="5 提交结果"></a>5 提交结果</h2><ul><li>下载 baseline 运行后生成的文件 submit_2.txt</li><li>在比赛界面提交结果文件</li><li>在 我的成绩 界面查看成绩</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Note </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Git常用命令</title>
       <link href="/2023/08/17/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
       <url>/2023/08/17/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
@@ -58,9 +77,9 @@
       
         <tags>
             
-            <tag> linux </tag>
-            
             <tag> remark </tag>
+            
+            <tag> linux </tag>
             
         </tags>
       
