@@ -4,6 +4,98 @@
   
     
     <entry>
+      <title>Git常用命令</title>
+      <link href="/2023/08/17/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2023/08/17/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<h2 id="1-使用代理"><a href="#1-使用代理" class="headerlink" title="1 使用代理"></a>1 使用代理</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用http代理</span></span><br><span class="line">git config --global http.proxy http://127.0.0.1:7890</span><br><span class="line">git config --global https.proxy https://127.0.0.1:7890</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> remark </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Conda常用命令</title>
+      <link href="/2023/08/17/Conda%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2023/08/17/Conda%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<h2 id="1-查看版本"><a href="#1-查看版本" class="headerlink" title="1 查看版本"></a>1 查看版本</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda --version</span><br></pre></td></tr></table></figure><h2 id="2-虚拟环境"><a href="#2-虚拟环境" class="headerlink" title="2 虚拟环境"></a>2 虚拟环境</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda info -e # 显示所有虚拟环境</span><br></pre></td></tr></table></figure><h2 id="3-使用代理"><a href="#3-使用代理" class="headerlink" title="3 使用代理"></a>3 使用代理</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda config --set proxy_servers.http http://127.0.0.1:7890</span><br><span class="line">conda config --set proxy_servers.https https://127.0.0.1:7890</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> remark </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux常用命令</title>
+      <link href="/2023/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+      <url>/2023/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<h2 id="1-版本"><a href="#1-版本" class="headerlink" title="1 版本"></a>1 版本</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">查看linux发行版本</span><br><span class="line">lsb_release -a</span><br><span class="line"></span><br><span class="line">查看linux内核版本</span><br><span class="line">uname -a</span><br></pre></td></tr></table></figure><h2 id="2-显卡"><a href="#2-显卡" class="headerlink" title="2 显卡"></a>2 显卡</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure><h2 id="3-磁盘"><a href="#3-磁盘" class="headerlink" title="3 磁盘"></a>3 磁盘</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -h</span><br></pre></td></tr></table></figure><h2 id="用户"><a href="#用户" class="headerlink" title="用户"></a>用户</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /home</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> remark </tag>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>test</title>
+      <link href="/2023/08/16/test/"/>
+      <url>/2023/08/16/test/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Baz </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Foo </tag>
+            
+            <tag> Bar </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hello World</title>
       <link href="/2023/08/15/hello-world/"/>
       <url>/2023/08/15/hello-world/</url>
