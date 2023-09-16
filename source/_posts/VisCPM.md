@@ -1,0 +1,147 @@
+---
+title: VisCPM
+tags:
+  - AI
+categories:
+  - Note
+abbrlink: 23111
+date: 2023-09-14 10:14:26
+---
+
+## 1 Title
+
+Large Multilingual Models Pivot Zero-Shot Multimodal Learning across Languages
+
+## 2 abs
+
+* MpM, an effective training paradigm for training large multimodal (多模态) models in low-resource language
+
+    MPM demonstrates that Multilingual language models can Pivot zero-shot Multimodal learning across languages
+
+    pretrained on English-only image-text data can well generalize to other languages in a zero-shot manner
+
+* open-source codes and model weights at https://github.com/OpenBMB/VisCPM
+
+## 3 Intro
+
+* the multimodal generative capabilities across images and text can be divided into two categories
+    * In the field of image-totext generation, multimodal large language models (like GPT-4 [38], LLaVA [32] and InstructBLIP [13]) exhibit remarkable multimodal conversational and reasoning abilities (多模态对话和推理能力) based on images
+    * In the field of text-to-image generation, models such as Imagen [45] and Stable Diffusion [43] excel in generating highly realistic and relevant images (高度逼真和相关的图像) based on text prompts
+* the paucity of multimodal data resources in non-English languages, the progress of multimodal research in these languages remains hindered
+    * To address this challenge, we propose MPM, an effective training paradigm for large multimodal models in non-English languages
+    * multilingual learners can effectively align the visual semantics with newly acquired language based on established multimodal and multilingual alignment
+    * MPM divides the non-English multimodal learning into two consecutive stages: ==multilingual alignment and multimodal alignment==. The former focuses on building a multilingual model, while the latter culminates in a multimodal model spanning multiple languages.
+* for multilingual alignment, MPM harnesses a pretrained multilingual large language model (LLM) as the backbone language model
+* for the multimodal alignment, MPM trains the visual modules based on the multilingual model exclusively on English image-text pairs to align English and visual semantics.
+
+## 4 Related Work
+
+* Image-to-text Models
+
+    * Traditional image-to-text generation models mainly focus on the task of image caption and visual question answering.
+
+    * Recently, the mainstream of image-to-text has turned to multimodal LLM, focus on rendering LLM capable of interaction with users (LLM能够与用户进行多模态交互).
+
+        * connect the visual module and LLM with perceivers
+
+            VPGTrans [64] explores the transferability of visual modules across LLM. 探索视觉模块跨LLM的可转移性
+
+            LLaVA [32] and Mini-GPT-4 [68] build visual content-related dialog by transferring image captions into conversation data using GPT-4. 通过使用GPT-4将图像描述转换为对话数据来构建与视觉内容相关的对话
+
+            InstructBLIP [13] and M^3^IT [30] incorporate downstream vision-language datasets to construct instruction data. 结合了下游的视觉语言数据集来构建指令数据
+
+* Text-to-image Models
+
+    * In the early stages: generative adversarial networks and auto-regressive generation.
+    * Recently, large-scale diffusion-based text-to-image models such as DALLE-2, Imagen, and Stable Diffusion have taken center stage.
+
+* Multilingual Multimodal Models
+
+    * the extension of multimodal models to include multilingual capabilities has become a key research focus over the post few years.
+
+    * make efforts to extend the powerful image-text model CLIP to handle more languages using techniques such as ==knowledge distillation [5]== or ==contrastive learning [4, 10, 25]==
+
+    * Other studies have aimed to create a universal framework for multilingual vision-language pretraining.
+
+    * Differing from these studies, which try to simultaneously achieve multilingual and multimodal alignment, we focus on effectively leveraging pretrained multilingual LLMs in multimodal learning across various languages.
+
+        * cross-lingual transfer from multilingual LLM in multimodal setting
+
+            Ying-VLM shows that instruction tuning in English can generalize to other languages.
+
+            MultiFusion discover that the multilingual language model can help cross-lingual transfer in text-to-image generation.
+
+    * Differently, our proposed MPM provides a more systematical formulation for the training of multilingual multimodal models and demonstrates that the zero-shot transfer performance of these models can surpass that of models trained on native-language multimodal data.
+
+## 5 Method
+
+### 5.1 MPM Training Paradigm
+
+* Multimodal learning can be formulated as modeling the relationship between images, denoted as $x$, and text, denoted as $y$, in a target language $l_t$.
+
+    we introduce the privot language $l_p$, which contains abundant multimodal pairs $D_p = \{(x_i, y_i^{l_p})\}^M_{i = 1}$, where $M \gg N$. ($N$ is the number of $l_t$'s pairs).
+
+    Imitating the human learning mechanism that can naturally align visual concepts with various learned languages, MPM aims to transfer visual concepts learned in the pivot language to the target language.
+
+* MPM divides the multimodal learning process in target language $l_t$ into two consecutive stages
+
+    * multilingual alignment
+
+        For this, MPM aims to establish the cross-lingual alignment for $l_t$ and $l_p$. This is achieved by directly leveraging a pretrained multilingual LLM, denoted as $f_\alpha$, which can provide close hidden representations for text pair $y^{l_t}$ and $y^{l_p}$ with similar semantics. i.e., $f_\alpha(y^{l_t}) \approx f_\alpha(y^{l_p})$
+
+    * multimodal alignment
+
+        For this, MPM utilize the sufficient multimodal resource $D_p$ in the pivot language and optimize the image-to-text objective $p_\theta(y^{l_p}|x)$ and text-to-image objective $p_\phi(x|y^{l_p})$.
+
+* In the follow sections, we introduce the training process of **multimodal alignment** stage
+
+    It's worth noting that MPM is agnostic to the specific model architecture and training method (对具体的模型架构和训练方法并不敏感), which enables us to flexibly utilize existing highly effective model architectures and training techniques in each task (这使得我们可以在每个任务中灵活地利用现有的高效模型结构和训练技术).
+
+#### 5.1.1 the image-to-text generation
+
+* can be roughly summarized as generating description for input images, is to learn the conditional distribution $p_{\theta}(y^{l_t}|x)$ parameterized by $\theta$
+
+* we incorporate an image encoder module $h_\xi$ parameterized by $\xi$ (以 $\xi$ 参数化的图像编码器模块 $h_\xi$) to provide visual feature $z = h_xi(x)$. These visual features **z** are then concatenated with the text embedding (将这些视觉特征z与文本嵌入进行拼接) as input the multilingual LLM.
+
+* MPM's training process for image-to-text generation consists of two sub-stages
+
+    * Multimodal Pretraining
+
+        pretrain the visual module to align it with LLM on a large scale of image-text pairs using the language modeling objective:
+        $$
+        \mathcal L_1(p_\theta, \mathcal D_p) = - \sum_{i=1}^{M}log \, p_\theta (y_i^{l_p}|h_\xi(x_i))
+        $$
+        fix the parameters of LLM $(\theta = \{\xi\})$ (固定LLM的参数) to prevent the powerful capabilities of LLM from being influenced by short texts in the image-text pairs.
+
+    * Instruction Tuning
+
+        To enhance models' capabilities in following human instructions, we conduct instruction tuning on elaborately curated ==multimodal instruction tuning datasets== built by blending the existing multimodal instruction tuning datasets in the pivot language and their translated version in the target language.
+
+        Both the visual module and multilingual LLM are fine-tuned, i.e., $\theta = \{\xi, \alpha\}$, by maximizing the probability of the response.
+
+        we find a ==*quasi-zero-shot*== transfer capability of multilingual multimodal models in this scenario.
+
+        If excluding the translated variant in the target language and solely performing instruction tuning using the pivot language, when given an image $x$ and a question or an instruction $y_q^{l_t}$ in the target language, the resultant model responds accurately though mostly in the pivot language. This can be attributed to the close resemblance between the hidden representation of instructions in two languages provided by the multilingual LLM, i.e., $f_\alpha(y_q^{l_p}) \approx f_\alpha(y_q^{l_t})$ ==没看懂==
+
+        Since both pretraining and instruction tuning stages employ text components solely in the pivot language, the LLM can understand the question in the target language but cannot calibrate the response in the same language. ==没看懂==
+
+#### 5.1.2 the text-to-image generation
+
+* is to synthesize relevant images given input text prompts, is to learn $p_{\phi}(x|y^{l_t})$ parameterized by $\phi$
+
+
+
+### 5.2 VISCPM
+
+
+
+## 6 Exp
+
+
+
+## 7 Conclusion
+
+* MPM
+* utilize a multilingual LLM as a pivotal intermediary between vision signals and target languages
+* VISCPM shows remarkable capability in Chinese image-to-text and text-to-image tasks
+* by only rely on English multimodal data
