@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="1 Title Large Multilingual Models Pivot Zero-Shot Multimodal Learning across Languages 2 abs  MpM, an effective training paradigm for training large multimodal (多模态) models in low-resource langu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VisCPM">
+<meta property="og:url" content="http://example.com/2023/09/14/VisCPM/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="1 Title Large Multilingual Models Pivot Zero-Shot Multimodal Learning across Languages 2 abs  MpM, an effective training paradigm for training large multimodal (多模态) models in low-resource langu">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-09-14T02:14:26.000Z">
+<meta property="article:modified_time" content="2023-09-16T14:32:47.359Z">
+<meta property="article:author" content="Zoe">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VisCPM</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/08/31/Markdown%E8%AF%AD%E6%B3%95/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/09/14/VisCPM/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/09/14/VisCPM/&text=VisCPM"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/09/14/VisCPM/&is_video=false&description=VisCPM"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VisCPM&body=Check out this article: http://example.com/2023/09/14/VisCPM/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/09/14/VisCPM/&name=VisCPM&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/09/14/VisCPM/&t=VisCPM"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#title"><span class="toc-number">1.</span> <span class="toc-text">1 Title</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#abs"><span class="toc-number">2.</span> <span class="toc-text">2 abs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#intro"><span class="toc-number">3.</span> <span class="toc-text">3 Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#related-work"><span class="toc-number">4.</span> <span class="toc-text">4 Related Work</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#method"><span class="toc-number">5.</span> <span class="toc-text">5 Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mpm-training-paradigm"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 MPM Training Paradigm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#the-image-to-text-generation"><span class="toc-number">5.1.1.</span> <span class="toc-text">5.1.1 the image-to-text
+generation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#the-text-to-image-generation"><span class="toc-number">5.1.2.</span> <span class="toc-text">5.1.2 the text-to-image
+generation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#viscpm"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 VISCPM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp"><span class="toc-number">6.</span> <span class="toc-text">6 Exp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conclusion"><span class="toc-number">7.</span> <span class="toc-text">7 Conclusion</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VisCPM
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-09-14T02:14:26.000Z" class="dt-published" itemprop="datePublished">2023-09-14</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Note/">Note</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AI/" rel="tag">AI</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="title">1 Title</h2>
+<p>Large Multilingual Models Pivot Zero-Shot Multimodal Learning across
+Languages</p>
+<h2 id="abs">2 abs</h2>
+<ul>
+<li><p>MpM, an effective training paradigm for training large multimodal
+(多模态) models in low-resource language</p>
+<p>MPM demonstrates that Multilingual language models can Pivot
+zero-shot Multimodal learning across languages</p>
+<p>pretrained on English-only image-text data can well generalize to
+other languages in a zero-shot manner</p></li>
+<li><p>open-source codes and model weights at
+https://github.com/OpenBMB/VisCPM</p></li>
+</ul>
+<h2 id="intro">3 Intro</h2>
+<ul>
+<li>the multimodal generative capabilities across images and text can be
+divided into two categories
+<ul>
+<li>In the field of image-totext generation, multimodal large language
+models (like GPT-4 [38], LLaVA [32] and InstructBLIP [13]) exhibit
+remarkable multimodal conversational and reasoning abilities
+(多模态对话和推理能力) based on images</li>
+<li>In the field of text-to-image generation, models such as Imagen [45]
+and Stable Diffusion [43] excel in generating highly realistic and
+relevant images (高度逼真和相关的图像) based on text prompts</li>
+</ul></li>
+<li>the paucity of multimodal data resources in non-English languages,
+the progress of multimodal research in these languages remains hindered
+<ul>
+<li>To address this challenge, we propose MPM, an effective training
+paradigm for large multimodal models in non-English languages</li>
+<li>multilingual learners can effectively align the visual semantics
+with newly acquired language based on established multimodal and
+multilingual alignment</li>
+<li>MPM divides the non-English multimodal learning into two consecutive
+stages: ==multilingual alignment and multimodal alignment==. The former
+focuses on building a multilingual model, while the latter culminates in
+a multimodal model spanning multiple languages.</li>
+</ul></li>
+<li>for multilingual alignment, MPM harnesses a pretrained multilingual
+large language model (LLM) as the backbone language model</li>
+<li>for the multimodal alignment, MPM trains the visual modules based on
+the multilingual model exclusively on English image-text pairs to align
+English and visual semantics.</li>
+</ul>
+<h2 id="related-work">4 Related Work</h2>
+<ul>
+<li><p>Image-to-text Models</p>
+<ul>
+<li><p>Traditional image-to-text generation models mainly focus on the
+task of image caption and visual question answering.</p></li>
+<li><p>Recently, the mainstream of image-to-text has turned to
+multimodal LLM, focus on rendering LLM capable of interaction with users
+(LLM能够与用户进行多模态交互).</p>
+<ul>
+<li><p>connect the visual module and LLM with perceivers</p>
+<p>VPGTrans [64] explores the transferability of visual modules across
+LLM. 探索视觉模块跨LLM的可转移性</p>
+<p>LLaVA [32] and Mini-GPT-4 [68] build visual content-related dialog by
+transferring image captions into conversation data using GPT-4.
+通过使用GPT-4将图像描述转换为对话数据来构建与视觉内容相关的对话</p>
+<p>InstructBLIP [13] and M<sup>3</sup>IT [30] incorporate downstream
+vision-language datasets to construct instruction data.
+结合了下游的视觉语言数据集来构建指令数据</p></li>
+</ul></li>
+</ul></li>
+<li><p>Text-to-image Models</p>
+<ul>
+<li>In the early stages: generative adversarial networks and
+auto-regressive generation.</li>
+<li>Recently, large-scale diffusion-based text-to-image models such as
+DALLE-2, Imagen, and Stable Diffusion have taken center stage.</li>
+</ul></li>
+<li><p>Multilingual Multimodal Models</p>
+<ul>
+<li><p>the extension of multimodal models to include multilingual
+capabilities has become a key research focus over the post few
+years.</p></li>
+<li><p>make efforts to extend the powerful image-text model CLIP to
+handle more languages using techniques such as ==knowledge distillation
+[5]== or ==contrastive learning [4, 10, 25]==</p></li>
+<li><p>Other studies have aimed to create a universal framework for
+multilingual vision-language pretraining.</p></li>
+<li><p>Differing from these studies, which try to simultaneously achieve
+multilingual and multimodal alignment, we focus on effectively
+leveraging pretrained multilingual LLMs in multimodal learning across
+various languages.</p>
+<ul>
+<li><p>cross-lingual transfer from multilingual LLM in multimodal
+setting</p>
+<p>Ying-VLM shows that instruction tuning in English can generalize to
+other languages.</p>
+<p>MultiFusion discover that the multilingual language model can help
+cross-lingual transfer in text-to-image generation.</p></li>
+</ul></li>
+<li><p>Differently, our proposed MPM provides a more systematical
+formulation for the training of multilingual multimodal models and
+demonstrates that the zero-shot transfer performance of these models can
+surpass that of models trained on native-language multimodal
+data.</p></li>
+</ul></li>
+</ul>
+<h2 id="method">5 Method</h2>
+<h3 id="mpm-training-paradigm">5.1 MPM Training Paradigm</h3>
+<ul>
+<li><p>Multimodal learning can be formulated as modeling the
+relationship between images, denoted as <span
+class="math inline">\(x\)</span>, and text, denoted as <span
+class="math inline">\(y\)</span>, in a target language <span
+class="math inline">\(l_t\)</span>.</p>
+<p>we introduce the privot language <span
+class="math inline">\(l_p\)</span>, which contains abundant multimodal
+pairs <span class="math inline">\(D_p = \{(x_i, y_i^{l_p})\}^M_{i =
+1}\)</span>, where <span class="math inline">\(M \gg N\)</span>. (<span
+class="math inline">\(N\)</span> is the number of <span
+class="math inline">\(l_t\)</span>'s pairs).</p>
+<p>Imitating the human learning mechanism that can naturally align
+visual concepts with various learned languages, MPM aims to transfer
+visual concepts learned in the pivot language to the target
+language.</p></li>
+<li><p>MPM divides the multimodal learning process in target language
+<span class="math inline">\(l_t\)</span> into two consecutive stages</p>
+<ul>
+<li><p>multilingual alignment</p>
+<p>For this, MPM aims to establish the cross-lingual alignment for <span
+class="math inline">\(l_t\)</span> and <span
+class="math inline">\(l_p\)</span>. This is achieved by directly
+leveraging a pretrained multilingual LLM, denoted as <span
+class="math inline">\(f_\alpha\)</span>, which can provide close hidden
+representations for text pair <span
+class="math inline">\(y^{l_t}\)</span> and <span
+class="math inline">\(y^{l_p}\)</span> with similar semantics. i.e.,
+<span class="math inline">\(f_\alpha(y^{l_t}) \approx
+f_\alpha(y^{l_p})\)</span></p></li>
+<li><p>multimodal alignment</p>
+<p>For this, MPM utilize the sufficient multimodal resource <span
+class="math inline">\(D_p\)</span> in the pivot language and optimize
+the image-to-text objective <span
+class="math inline">\(p_\theta(y^{l_p}|x)\)</span> and text-to-image
+objective <span
+class="math inline">\(p_\phi(x|y^{l_p})\)</span>.</p></li>
+</ul></li>
+<li><p>In the follow sections, we introduce the training process of
+<strong>multimodal alignment</strong> stage</p>
+<p>It's worth noting that MPM is agnostic to the specific model
+architecture and training method (对具体的模型架构和训练方法并不敏感),
+which enables us to flexibly utilize existing highly effective model
+architectures and training techniques in each task
+(这使得我们可以在每个任务中灵活地利用现有的高效模型结构和训练技术).</p></li>
+</ul>
+<h4 id="the-image-to-text-generation">5.1.1 the image-to-text
+generation</h4>
+<ul>
+<li><p>can be roughly summarized as generating description for input
+images, is to learn the conditional distribution <span
+class="math inline">\(p_{\theta}(y^{l_t}|x)\)</span> parameterized by
+<span class="math inline">\(\theta\)</span></p></li>
+<li><p>we incorporate an image encoder module <span
+class="math inline">\(h_\xi\)</span> parameterized by <span
+class="math inline">\(\xi\)</span> (以 <span
+class="math inline">\(\xi\)</span> 参数化的图像编码器模块 <span
+class="math inline">\(h_\xi\)</span>) to provide visual feature <span
+class="math inline">\(z = h_xi(x)\)</span>. These visual features
+<strong>z</strong> are then concatenated with the text embedding
+(将这些视觉特征z与文本嵌入进行拼接) as input the multilingual
+LLM.</p></li>
+<li><p>MPM's training process for image-to-text generation consists of
+two sub-stages</p>
+<ul>
+<li><p>Multimodal Pretraining</p>
+<p>pretrain the visual module to align it with LLM on a large scale of
+image-text pairs using the language modeling objective: <span
+class="math display">\[
+  \mathcal L_1(p_\theta, \mathcal D_p) = - \sum_{i=1}^{M}log \, p_\theta
+(y_i^{l_p}|h_\xi(x_i))
+  \]</span> fix the parameters of LLM <span
+class="math inline">\((\theta = \{\xi\})\)</span> (固定LLM的参数) to
+prevent the powerful capabilities of LLM from being influenced by short
+texts in the image-text pairs.</p></li>
+<li><p>Instruction Tuning</p>
+<p>To enhance models' capabilities in following human instructions, we
+conduct instruction tuning on elaborately curated ==multimodal
+instruction tuning datasets== built by blending the existing multimodal
+instruction tuning datasets in the pivot language and their translated
+version in the target language.</p>
+<p>Both the visual module and multilingual LLM are fine-tuned, i.e.,
+<span class="math inline">\(\theta = \{\xi, \alpha\}\)</span>, by
+maximizing the probability of the response.</p>
+<p>we find a ==<em>quasi-zero-shot</em>== transfer capability of
+multilingual multimodal models in this scenario.</p>
+<p>If excluding the translated variant in the target language and solely
+performing instruction tuning using the pivot language, when given an
+image <span class="math inline">\(x\)</span> and a question or an
+instruction <span class="math inline">\(y_q^{l_t}\)</span> in the target
+language, the resultant model responds accurately though mostly in the
+pivot language. This can be attributed to the close resemblance between
+the hidden representation of instructions in two languages provided by
+the multilingual LLM, i.e., <span
+class="math inline">\(f_\alpha(y_q^{l_p}) \approx
+f_\alpha(y_q^{l_t})\)</span> ==没看懂==</p>
+<p>Since both pretraining and instruction tuning stages employ text
+components solely in the pivot language, the LLM can understand the
+question in the target language but cannot calibrate the response in the
+same language. ==没看懂==</p></li>
+</ul></li>
+</ul>
+<h4 id="the-text-to-image-generation">5.1.2 the text-to-image
+generation</h4>
+<ul>
+<li>is to synthesize relevant images given input text prompts, is to
+learn <span class="math inline">\(p_{\phi}(x|y^{l_t})\)</span>
+parameterized by <span class="math inline">\(\phi\)</span></li>
+</ul>
+<h3 id="viscpm">5.2 VISCPM</h3>
+<h2 id="exp">6 Exp</h2>
+<h2 id="conclusion">7 Conclusion</h2>
+<ul>
+<li>MPM</li>
+<li>utilize a multilingual LLM as a pivotal intermediary between vision
+signals and target languages</li>
+<li>VISCPM shows remarkable capability in Chinese image-to-text and
+text-to-image tasks</li>
+<li>by only rely on English multimodal data</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#title"><span class="toc-number">1.</span> <span class="toc-text">1 Title</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#abs"><span class="toc-number">2.</span> <span class="toc-text">2 abs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#intro"><span class="toc-number">3.</span> <span class="toc-text">3 Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#related-work"><span class="toc-number">4.</span> <span class="toc-text">4 Related Work</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#method"><span class="toc-number">5.</span> <span class="toc-text">5 Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mpm-training-paradigm"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 MPM Training Paradigm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#the-image-to-text-generation"><span class="toc-number">5.1.1.</span> <span class="toc-text">5.1.1 the image-to-text
+generation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#the-text-to-image-generation"><span class="toc-number">5.1.2.</span> <span class="toc-text">5.1.2 the text-to-image
+generation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#viscpm"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 VISCPM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp"><span class="toc-number">6.</span> <span class="toc-text">6 Exp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conclusion"><span class="toc-number">7.</span> <span class="toc-text">7 Conclusion</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/09/14/VisCPM/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/09/14/VisCPM/&text=VisCPM"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/09/14/VisCPM/&is_video=false&description=VisCPM"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VisCPM&body=Check out this article: http://example.com/2023/09/14/VisCPM/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/09/14/VisCPM/&title=VisCPM"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/09/14/VisCPM/&name=VisCPM&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/09/14/VisCPM/&t=VisCPM"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
