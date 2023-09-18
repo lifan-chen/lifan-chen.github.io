@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Diffusion Model 1 生词 latent：adj. 潜在的；潜伏的；隐藏的； n. 潜指印； decompose v. 分解；(使)还原；(使)腐烂；衰变； state-of-the-art adj. 最先进的 fidelity：n. 保真度 hierarchy n. 层次体系；等级制度（尤指社会或组织）；统治集团； exploit v. 开发；利用；剥削；利用…谋私利">
+    <meta name="description" content="Diffusion Model  1 生词 latent：adj. 潜在的；潜伏的；隐藏的； n. 潜指印； decompose v. 分解；(使)还原；(使)腐烂；衰变； state-of-the-art adj. 最先进的 fidelity：n. 保真度 hierarchy n. 层次体系；等级制度（尤指社会或组织）；统治集团； exploit v. 开发；利用；剥削；利用…谋私利； n.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="影像生成模型">
 <meta property="og:url" content="http://example.com/2023/08/31/%E5%BD%B1%E5%83%8F%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/index.html">
 <meta property="og:site_name" content="Shimmer">
-<meta property="og:description" content="Diffusion Model 1 生词 latent：adj. 潜在的；潜伏的；隐藏的； n. 潜指印； decompose v. 分解；(使)还原；(使)腐烂；衰变； state-of-the-art adj. 最先进的 fidelity：n. 保真度 hierarchy n. 层次体系；等级制度（尤指社会或组织）；统治集团； exploit v. 开发；利用；剥削；利用…谋私利">
+<meta property="og:description" content="Diffusion Model  1 生词 latent：adj. 潜在的；潜伏的；隐藏的； n. 潜指印； decompose v. 分解；(使)还原；(使)腐烂；衰变； state-of-the-art adj. 最先进的 fidelity：n. 保真度 hierarchy n. 层次体系；等级制度（尤指社会或组织）；统治集团； exploit v. 开发；利用；剥削；利用…谋私利； n.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-08-31T15:16:32.000Z">
 <meta property="article:modified_time" content="2023-09-14T02:15:03.078Z">
@@ -66,6 +66,7 @@
 		</script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
 <meta name="generator" content="Hexo 6.3.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
@@ -125,8 +126,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#diffusion-model"><span class="toc-number">1.</span> <span class="toc-text">Diffusion Model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E8%AF%8D"><span class="toc-number">1.1.</span> <span class="toc-text">1 生词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BA%E6%96%87%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">2 论文结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#title"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. Title</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#abs"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. Abs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#intro"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. Intro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#related-work"><span class="toc-number">1.2.4.</span> <span class="toc-text">4. Related Work</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#method"><span class="toc-number">1.2.5.</span> <span class="toc-text">5. Method</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exp"><span class="toc-number">1.2.6.</span> <span class="toc-text">6. Exp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#conclusion"><span class="toc-number">1.2.7.</span> <span class="toc-text">7. Conclusion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generative-adversarial-network-gan"><span class="toc-number">2.</span> <span class="toc-text">Generative Adversarial
-Network (GAN)</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#diffusion-model"><span class="toc-number">1.</span> <span class="toc-text"> Diffusion Model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E8%AF%8D"><span class="toc-number">1.1.</span> <span class="toc-text"> 1 生词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%AE%BA%E6%96%87%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text"> 2 论文结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-title"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 1. Title</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-abs"><span class="toc-number">1.2.2.</span> <span class="toc-text"> 2. Abs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-intro"><span class="toc-number">1.2.3.</span> <span class="toc-text"> 3. Intro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-related-work"><span class="toc-number">1.2.4.</span> <span class="toc-text"> 4. Related Work</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-method"><span class="toc-number">1.2.5.</span> <span class="toc-text"> 5. Method</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-exp"><span class="toc-number">1.2.6.</span> <span class="toc-text"> 6. Exp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-conclusion"><span class="toc-number">1.2.7.</span> <span class="toc-text"> 7. Conclusion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generative-adversarial-network-gan"><span class="toc-number">2.</span> <span class="toc-text"> Generative Adversarial Network (GAN)</span></a></li></ol>
       </div>
     
   </span>
@@ -176,29 +176,24 @@ Network (GAN)</span></a></li></ol>
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h2 id="diffusion-model">Diffusion Model</h2>
-<h3 id="生词">1 生词</h3>
+    <h2 id="diffusion-model"><a class="markdownIt-Anchor" href="#diffusion-model"></a> Diffusion Model</h2>
+<h3 id="1-生词"><a class="markdownIt-Anchor" href="#1-生词"></a> 1 生词</h3>
 <p>latent：adj. 潜在的；潜伏的；隐藏的； n. 潜指印；</p>
 <p>decompose v. 分解；(使)还原；(使)腐烂；衰变；</p>
 <p>state-of-the-art adj. 最先进的</p>
 <p>fidelity：n. 保真度</p>
 <p>hierarchy n. 层次体系；等级制度（尤指社会或组织）；统治集团；</p>
 <p>exploit v. 开发；利用；剥削；利用…谋私利； n. 功绩；</p>
-<p>prone adj.
-易于遭受；有做（坏事）的倾向；有做…倾向的；易于遭受…的；</p>
+<p>prone adj. 易于遭受；有做（坏事）的倾向；有做…倾向的；易于遭受…的；</p>
 <p>excessive adj. 过分的；过度的； 过多的；额外；极度的；</p>
-<p>imperceptible adj. （小得）无法察觉的；
-感觉不到的；觉察不到的；细微的；</p>
-<p>distortion：n. 扭曲；歪曲；【电】(信号,波形等的)失真；
-畸变；变形；失真度；</p>
+<p>imperceptible adj. （小得）无法察觉的； 感觉不到的；觉察不到的；细微的；</p>
+<p>distortion：n. 扭曲；歪曲；【电】(信号,波形等的)失真； 畸变；变形；失真度；</p>
 <p>trade-off：权衡</p>
 <p>perceptual adj. 知觉的；感知的</p>
 <p>superfluous adj. 过剩的；过多的；多余的；</p>
-<p>manifold n. 管汇；汇集；复写本；【机械工程】歧管； adj.
-许多的；多样的；由许多部分形成的；繁茂的； v. 复印；</p>
+<p>manifold n. 管汇；汇集；复写本；【机械工程】歧管； adj. 许多的；多样的；由许多部分形成的；繁茂的； v. 复印；</p>
 <p>bluriness n. 模糊性</p>
-<p>quantization n. 〔物〕量子化；分层； 网络释义：
-量化；量化程式；量化运算</p>
+<p>quantization n. 〔物〕量子化；分层； 网络释义： 量化；量化程式；量化运算</p>
 <p>autoregressively 自回归</p>
 <p>probabilistic 随机</p>
 <p>discrete 离散的</p>
@@ -206,243 +201,250 @@ Network (GAN)</span></a></li></ol>
 <p>intermediate representation 中间表示</p>
 <p>tractable 易加工的</p>
 <p>stagnate 停滞不前</p>
-<p>spectacular adj. 壮观的；壮丽的；令人惊叹的； n.
-壮观的场面；精彩的表演</p>
-<h3 id="论文结构">2 论文结构</h3>
-<h4 id="title">1. Title</h4>
+<p>spectacular adj. 壮观的；壮丽的；令人惊叹的； n. 壮观的场面；精彩的表演</p>
+<h3 id="2-论文结构"><a class="markdownIt-Anchor" href="#2-论文结构"></a> 2 论文结构</h3>
+<h4 id="1-title"><a class="markdownIt-Anchor" href="#1-title"></a> 1. Title</h4>
 <p>High-Resolution Image Synthesis with Latent Diffusion Models</p>
-<h4 id="abs">2. Abs</h4>
+<h4 id="2-abs"><a class="markdownIt-Anchor" href="#2-abs"></a> 2. Abs</h4>
 <ul>
-<li>Diffusion models（DMs）achieve state-of-the-art synthesis results
+<li>
+<p>Diffusion models（DMs）achieve state-of-the-art synthesis results</p>
 <ul>
 <li>image data and beyond</li>
-<li>allow for a guiding mechanism to control the image generation
-process <strong>without retraining</strong></li>
-<li>operate directly in pixel space, consume hundreds of GPU days and
-inference is expensive due to <strong>sequential
-evaluation</strong>s</li>
-</ul></li>
-<li>To enable DM training on limited computational resources while
-retaining quality and flexibility
+<li>allow for a guiding mechanism to control the image generation process <strong>without retraining</strong></li>
+<li>operate directly in pixel space, consume hundreds of GPU days and inference is expensive due to <strong>sequential evaluation</strong>s</li>
+</ul>
+</li>
+<li>
+<p>To enable DM training  on limited computational resources while retaining quality and flexibility</p>
 <ul>
-<li>apply DM in the latent space of <strong>pretrained
-autoencoders</strong></li>
-</ul></li>
-<li>In contrast to previous work
+<li>apply DM in the latent space of <strong>pretrained autoencoders</strong></li>
+</ul>
+</li>
+<li>
+<p>In contrast to previous work</p>
 <ul>
-<li>the first time to reach a near-optimal point (between complexity
-reduction and detail preservation)</li>
-</ul></li>
-<li>Introduce <strong>cross-attention layers</strong> into the model
-architecture
+<li>the first time to reach a near-optimal point (between complexity reduction and detail preservation)</li>
+</ul>
+</li>
+<li>
+<p>Introduce <strong>cross-attention layers</strong> into the model architecture</p>
 <ul>
 <li>turn DM into generators (inputs such as text or bounding boxes)</li>
 <li>high-resolution synthesis in a convolutional manner</li>
-</ul></li>
-<li>Latent diffusion models (LDMs)
-<ul>
-<li>achieve new state of art scores for image inpainting and
-class-conditional image synthesis</li>
-<li>unconditional image generation, text-to-image synthesis, and super
-resolution</li>
-<li>significantly reducing computational requirement compared to
-pixel-based DMs</li>
-</ul></li>
 </ul>
-<h4 id="intro">3. Intro</h4>
+</li>
+<li>
+<p>Latent diffusion models (LDMs)</p>
 <ul>
-<li><p>Images synthesis with the greatest computational demands</p></li>
-<li><p>high-resolution synthesis of complex, natural scenes is presently
-dominated by scaling up likelihood-based models containing billions of
-parameters in ==autoregressive (AR) transformers==</p></li>
-<li><p>DMs' application:</p>
+<li>achieve new state of art scores for image inpainting and class-conditional image synthesis</li>
+<li>unconditional image generation, text-to-image synthesis, and super resolution</li>
+<li>significantly reducing computational requirement  compared to pixel-based DMs</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-intro"><a class="markdownIt-Anchor" href="#3-intro"></a> 3. Intro</h4>
+<ul>
+<li>
+<p>Images synthesis with the greatest computational demands</p>
+</li>
+<li>
+<p>high-resolution synthesis of complex, natural scenes is presently dominated by scaling up likelihood-based models containing billions of parameters in <mark>autoregressive (AR) transformers</mark></p>
+</li>
+<li>
+<p>DMs’ application:</p>
 <ul>
 <li>class-conditional: image synthesis, super-resolution</li>
 <li>unconditional: inpainting, colorization, stroke-based synthesis</li>
-</ul></li>
-<li><p>Being likelihood-based models, they ==do not exhibit
-mode-collapse and training instabilities== as GANs and, by heavily
-exploiting ==parameter sharing==, they can model highly complex
-distributions of natural images without involving billions of parameters
-as in AR models</p></li>
-<li><p>Democratizing High-Resolution Image Synthesis</p>
-<p>DMs spends excessive amounts of capacity</p>
-<p>​ train and evaluate such a model requires repeated function
-evaluations (and gradient computions) in the high-dimensional space of
-RGB images</p></li>
-<li><p>Departure to Latent Space</p></li>
 </ul>
-<h4 id="related-work">4. Related Work</h4>
-<h4 id="method">5. Method</h4>
+</li>
+<li>
+<p>Being likelihood-based models, they <mark>do not exhibit mode-collapse and training instabilities</mark> as GANs and, by heavily exploiting <mark>parameter sharing</mark>, they can model highly complex distributions of natural images without involving billions of parameters as in AR models</p>
+</li>
+<li>
+<p>Democratizing High-Resolution Image Synthesis</p>
+<p>DMs spends excessive amounts of capacity</p>
+<p>​	train and evaluate such a model requires repeated function evaluations (and gradient computions) in the high-dimensional space of RGB images</p>
+</li>
+<li>
+<p>Departure to Latent Space</p>
+</li>
+</ul>
+<h4 id="4-related-work"><a class="markdownIt-Anchor" href="#4-related-work"></a> 4. Related Work</h4>
+<h4 id="5-method"><a class="markdownIt-Anchor" href="#5-method"></a> 5. Method</h4>
 <ul>
-<li><p>DMs allow to ignore perceptually irrelevant details by
-undersampling the corresponding loss terms ==[29]==???</p></li>
-<li><p>Introduce an explicit separation of the compressive from the
-generative learning phase</p>
+<li>
+<p>DMs allow to ignore perceptually irrelevant details by undersampling the corresponding loss terms <mark>[29]</mark>???</p>
+</li>
+<li>
+<p>Introduce an explicit separation of the compressive  from the generative learning phase</p>
 <ul>
 <li>use an autoencoding model (learn a space)</li>
 <li>offer reduced computational complexity</li>
-</ul></li>
-<li><p>Several advantages</p></li>
-<li><p>Perceptual Image Compression</p>
+</ul>
+</li>
+<li>
+<p>Several advantages</p>
+</li>
+<li>
+<p>Perceptual Image Compression</p>
 <ul>
-<li>==based on previous work [23]==</li>
-<li>an autoencoder trained by combination of a perceptual loss [102] and
-a patch-based adversarial objective</li>
+<li><mark>based on previous work [23]</mark></li>
+<li>an autoencoder trained by combination of a perceptual loss [102] and a patch-based adversarial objective</li>
 <li>ensure that
 <ul>
-<li>the reconstructions are confined to the image manifold by enforcing
-local realism</li>
-<li>avoid bluriness introduced by relying solely on pixel-space
-losses</li>
-</ul></li>
-<li>in order to avoid high-variance latent spaces, experiment with two
-different kinds of regularizations
+<li>the reconstructions are confined to the image manifold by enforcing local realism</li>
+<li>avoid bluriness introduced by relying solely on pixel-space losses</li>
+</ul>
+</li>
+<li>in order to avoid high-variance latent spaces, experiment with two different kinds of regularizations
 <ul>
-<li>The first variant, KL-reg., imposes a slight KL-penalty towards a
-standard normal on the learned latent, similar to a VAE
+<li>The first variant, KL-reg., imposes a slight KL-penalty towards a standard normal on the learned latent, similar to a VAE
 <ul>
-<li>VQ-reg. uses a vector quantization layer ==[93]== within the
-decoder</li>
-</ul></li>
-<li>rely on an arbitrary 1D oderding of the learned space
-<em>z</em></li>
-</ul></li>
-</ul></li>
-<li><p>Latent Diffusion Models</p>
+<li>VQ-reg. uses a vector quantization layer <mark>[93]</mark> within the decoder</li>
+</ul>
+</li>
+<li>rely on an arbitrary 1D oderding of the learned space <em>z</em></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Latent Diffusion Models</p>
 <ul>
-<li>Diffusion Models
+<li>
+<p>Diffusion Models</p>
 <ul>
 <li>probabilistic</li>
-<li>designed to learn a data distribution by gradually denoising a
-normally distributed variable</li>
-<li>trained to predict a denoised variant of their input <span
-class="math inline">\(x_t\)</span>, where <span
-class="math inline">\(x_t\)</span> is a noisy version of the input <span
-class="math inline">\(x\)</span></li>
-</ul></li>
-<li>Generative Modeling of Latent Represenetations (潜在表征的生成建模)
+<li>designed to learn a data distribution by gradually denoising a normally distributed variable</li>
+<li>trained to predict a denoised variant of their input <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">x_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">x_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is a noisy version of the input <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span></li>
+</ul>
+</li>
+<li>
+<p>Generative Modeling of Latent Represenetations (潜在表征的生成建模)</p>
 <ul>
-<li>have an efficient, low-dimensional latent space in which
-high-frequency. Compared to the high-dimensional pixel space, this space
-is more suitable for likehood-based generative models
+<li>
+<p>have an efficient, low-dimensional latent space in which high-frequency. Compared to the high-dimensional pixel space, this space is more suitable for likehood-based generative models</p>
 <ul>
 <li>focus on the important, semantic bits of the data</li>
-<li>train in a lower dimensional, computationally much more efficient
-space</li>
-</ul></li>
-<li>attention-based transformer model
+<li>train in a lower dimensional, computationally much more efficient space</li>
+</ul>
+</li>
+<li>
+<p>attention-based transformer model</p>
 <ul>
 <li>in a highly compressed, discrete latent space</li>
 <li>take advantage of image-specific inductive biases
 <ul>
-<li>build the underlying UNet primarily from 2D convolutational
-layers</li>
-<li>focus on the objective on the perceptually most relevant bits using
-the reweighted bound</li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li><p>Conditioning Mechanisms</p>
+<li>build  the underlying UNet primarily from 2D convolutational layers</li>
+<li>focus on the objective on the perceptually most relevant bits using the reweighted bound</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Conditioning Mechanisms</p>
 <ul>
-<li><p>diffusion models can</p>
+<li>
+<p>diffusion models can</p>
 <ul>
 <li>be implemented with a conditional denoising autoencoder</li>
-<li>paves the way to controlling the synthesis process through inputs
-<span class="math inline">\(y\)</span> such as <strong>text, semantic
-maps or other image-to-image translation tasks</strong>.</li>
-</ul></li>
-<li><p>we turn DMs into more flexible conditional image generators by
-augmentimg their underlying UNet backbone with the cross-attention
-mechanism</p>
-<p>我们通过交叉注意力机制增强DM的底层UNet主干，使其成为更灵活的条件图像生成器</p></li>
-<li><p>To pre-process <span class="math inline">\(y\)</span> from
-various modalities (such as language prompts)</p>
-<ul>
-<li>introduce a domain specific encoder that projects <span
-class="math inline">\(y\)</span> to an intermediate representation,
-which is then mapped to the intermediate layers of the UNet via a
-cross-attention layer implementing Attention ?????</li>
-</ul></li>
-</ul></li>
+<li>paves the way to controlling the synthesis process through inputs <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> such as <strong>text, semantic maps or other image-to-image translation tasks</strong>.</li>
 </ul>
-<h4 id="exp">6. Exp</h4>
-<p>LDMs provide means to flexible and computationally tractable
-diffusion based image synthesis also including high-resolution
-generation of various image modalities.</p>
+</li>
+<li>
+<p>we turn DMs into more flexible conditional image generators by augmentimg their underlying UNet backbone with the cross-attention mechanism</p>
+<p>我们通过交叉注意力机制增强DM的底层UNet主干，使其成为更灵活的条件图像生成器</p>
+</li>
+<li>
+<p>To pre-process <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> from various modalities (such as language prompts)</p>
 <ul>
-<li><p>analyze the gains of our models comapred to pixel-based diffusion
-models in both training and inference</p>
+<li>introduce a domain specific encoder that projects <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> to an intermediate representation, which is then mapped to the intermediate layers of the UNet via a cross-attention layer implementing Attention ???</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-exp"><a class="markdownIt-Anchor" href="#6-exp"></a> 6. Exp</h4>
+<p>LDMs provide means to flexible and computationally tractable diffusion based image synthesis also including high-resolution generation of various image modalities.</p>
 <ul>
-<li>LDMs trained in VQ-regularized latent spaces achieve better sample
-quality</li>
-</ul></li>
-<li><p>On Perceptual Compression Tradeoffs</p>
-<p>analyzes the behavior of our LDMs with different downsampling factors
-<span class="math inline">\(f ∈ \{1, 2, 4, 8, 16, 32\}\)</span></p>
+<li>
+<p>analyze the gains of our models comapred to pixel-based diffusion models in both training and inference</p>
+<ul>
+<li>LDMs trained in VQ-regularized latent spaces achieve better sample quality</li>
+</ul>
+</li>
+<li>
+<p>On Perceptual Compression Tradeoffs</p>
+<p>analyzes the behavior of our LDMs with different downsampling factors <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>4</mn><mo separator="true">,</mo><mn>8</mn><mo separator="true">,</mo><mn>16</mn><mo separator="true">,</mo><mn>32</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">f ∈ \{1, 2, 4, 8, 16, 32\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">8</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span><span class="mord">2</span><span class="mclose">}</span></span></span></span></p>
 <p>a single NVIDIA A100</p>
-<p>train all models for the same number of steps and with the same
-number of parameters</p>
+<p>train all models for the same number of steps and with the same number of parameters</p>
 <ul>
-<li>small downsampling factors for LDM-{1, 2} result in slow training
-process</li>
-<li>overly large values of f cause stagnating fidelity after comparably
-few training steps</li>
+<li>small downsampling factors for LDM-{1, 2} result in slow training process</li>
+<li>overly large values of f cause stagnating fidelity after comparably few training steps</li>
 <li>we attribute this to
 <ul>
 <li>leaving most of perceptual compression to the diffusion model</li>
-<li>too strong first stage compression result in information loss and
-thus limiting the achievable quality.</li>
-</ul></li>
-<li>LDM-{4-16} strike a good balance between efficiency and perceptually
-faithful result, which manifests in a significant ==FID[28]== gap of 28
-between pixel-based diffusion(LDM-1) and LDM-8 after 2M training
-steps.</li>
+<li>too strong first stage compression result in information loss and thus limiting the achievable quality.</li>
 </ul>
-<p>==LDM-4 and LDM-8== lie in the best behaved regime for achieving
-high-quality synthesis result.</p></li>
-<li><p>Image Generation with Latent Diffusion</p>
-<ul>
-<li>FID and ==Precision-and-Recall[49]==</li>
-</ul></li>
-<li><p>Conditional Latent Diffusion</p>
-<ul>
-<li><p>Transformer Encoders for LDMs</p>
-<ul>
-<li>text-to-image image model
-<ul>
-<li>train a 1.45B paramter model conditioned on language prompts on
-LAION-400M</li>
-<li>employ the BERT-tokenizer and implement <span
-class="math inline">\(\tau_\theta\)</span> as a transformer to infer a
-latent code ==which is mapped into UNet via cross-attention==</li>
-</ul></li>
-<li>to further analyze the flexibility of the cross-attention based
-conditioning mechanism
-<ul>
-<li>train models to synthesize images based on semantic layouts on
-OpenImages [48], and finetune on COCO [4]</li>
-</ul></li>
-<li>our best-performing class-conditional ImageNet models with <span
-class="math inline">\(f ∈ \{4, 8\}\)</span> outperform the state of the
-art diffusion model ADM while significantly reducing computational
-requirements and parameter count</li>
-</ul></li>
-<li><p>Convolutional Sampling Beyond <span
-class="math inline">\(256^2\)</span></p>
-<p>semantic synthesis, super-resolution and inpainting</p></li>
-</ul></li>
-<li><p>Super-Resolution with Latent Diffusion</p>
-<p>等待阅读</p></li>
-<li><p>Inpainting with Latent Diffusion</p>
-<p>等待阅读</p></li>
+</li>
+<li>LDM-{4-16} strike a good balance between efficiency and perceptually faithful result, which manifests in a significant <mark>FID[28]</mark> gap of 28 between pixel-based diffusion(LDM-1) and LDM-8 after 2M training steps.</li>
 </ul>
-<h4 id="conclusion">7. Conclusion</h4>
+<p><mark>LDM-4 and LDM-8</mark> lie in the best behaved regime for achieving high-quality synthesis result.</p>
+</li>
+<li>
+<p>Image Generation with Latent Diffusion</p>
+<ul>
+<li>FID and <mark>Precision-and-Recall[49]</mark></li>
+</ul>
+</li>
+<li>
+<p>Conditional Latent Diffusion</p>
+<ul>
+<li>
+<p>Transformer Encoders for LDMs</p>
+<ul>
+<li>
+<p>text-to-image image model</p>
+<ul>
+<li>train a 1.45B paramter model conditioned on language prompts on LAION-400M</li>
+<li>employ the BERT-tokenizer and implement <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>θ</mi></msub></mrow><annotation encoding="application/x-tex">\tau_\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.1132em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> as a transformer to infer a latent code <mark>which is mapped into UNet via cross-attention</mark></li>
+</ul>
+</li>
+<li>
+<p>to further analyze the flexibility of the cross-attention based conditioning mechanism</p>
+<ul>
+<li>train models to synthesize images based on semantic layouts on OpenImages [48], and finetune on COCO [4]</li>
+</ul>
+</li>
+<li>
+<p>our best-performing class-conditional ImageNet models with <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>4</mn><mo separator="true">,</mo><mn>8</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">f ∈ \{4, 8\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">8</span><span class="mclose">}</span></span></span></span> outperform the state of the art diffusion model ADM while significantly reducing computational requirements and parameter count</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Convolutional Sampling Beyond <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>25</mn><msup><mn>6</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">256^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">5</span><span class="mord"><span class="mord">6</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></p>
+<p>semantic synthesis, super-resolution and inpainting</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Super-Resolution with Latent Diffusion</p>
+<p>等待阅读</p>
+</li>
+<li>
+<p>Inpainting with Latent Diffusion</p>
+<p>等待阅读</p>
+</li>
+</ul>
+<h4 id="7-conclusion"><a class="markdownIt-Anchor" href="#7-conclusion"></a> 7. Conclusion</h4>
 <p>improve both the training and sampling efficiency</p>
 <p>without task-specific architectures</p>
-<h2 id="generative-adversarial-network-gan">Generative Adversarial
-Network (GAN)</h2>
+<h2 id="generative-adversarial-network-gan"><a class="markdownIt-Anchor" href="#generative-adversarial-network-gan"></a> Generative Adversarial Network (GAN)</h2>
 
   </div>
 </article>
@@ -470,8 +472,7 @@ Network (GAN)</h2>
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#diffusion-model"><span class="toc-number">1.</span> <span class="toc-text">Diffusion Model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E8%AF%8D"><span class="toc-number">1.1.</span> <span class="toc-text">1 生词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BA%E6%96%87%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">2 论文结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#title"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. Title</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#abs"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. Abs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#intro"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. Intro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#related-work"><span class="toc-number">1.2.4.</span> <span class="toc-text">4. Related Work</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#method"><span class="toc-number">1.2.5.</span> <span class="toc-text">5. Method</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exp"><span class="toc-number">1.2.6.</span> <span class="toc-text">6. Exp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#conclusion"><span class="toc-number">1.2.7.</span> <span class="toc-text">7. Conclusion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generative-adversarial-network-gan"><span class="toc-number">2.</span> <span class="toc-text">Generative Adversarial
-Network (GAN)</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#diffusion-model"><span class="toc-number">1.</span> <span class="toc-text"> Diffusion Model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E8%AF%8D"><span class="toc-number">1.1.</span> <span class="toc-text"> 1 生词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%AE%BA%E6%96%87%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text"> 2 论文结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-title"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 1. Title</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-abs"><span class="toc-number">1.2.2.</span> <span class="toc-text"> 2. Abs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-intro"><span class="toc-number">1.2.3.</span> <span class="toc-text"> 3. Intro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-related-work"><span class="toc-number">1.2.4.</span> <span class="toc-text"> 4. Related Work</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-method"><span class="toc-number">1.2.5.</span> <span class="toc-text"> 5. Method</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-exp"><span class="toc-number">1.2.6.</span> <span class="toc-text"> 6. Exp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-conclusion"><span class="toc-number">1.2.7.</span> <span class="toc-text"> 7. Conclusion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generative-adversarial-network-gan"><span class="toc-number">2.</span> <span class="toc-text"> Generative Adversarial Network (GAN)</span></a></li></ol>
       </div>
     
 
