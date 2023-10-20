@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Overview in NLP, most of the data is raw text the tokenizer is used to transform raw text to numbers (a meaningful representation)  Categories  Subword-based tokenization  the flaws of word-based and">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tokenization">
+<meta property="og:url" content="http://example.com/2023/10/20/Tokenization/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="Overview in NLP, most of the data is raw text the tokenizer is used to transform raw text to numbers (a meaningful representation)  Categories  Subword-based tokenization  the flaws of word-based and">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/10/20/Tokenization/Tokenization/image-20231020163748835.png">
+<meta property="og:image" content="http://example.com/2023/10/20/Tokenization/Tokenization/image-20231020163919035.png">
+<meta property="article:published_time" content="2023-10-20T08:07:50.000Z">
+<meta property="article:modified_time" content="2023-10-20T13:05:00.967Z">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/10/20/Tokenization/Tokenization/image-20231020163748835.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Tokenization</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/10/20/%E4%B9%A6%E5%86%99%E7%B3%BB%E7%BB%9F/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/10/17/ChatGLM/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/10/20/Tokenization/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/10/20/Tokenization/&text=Tokenization"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/10/20/Tokenization/&is_video=false&description=Tokenization"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tokenization&body=Check out this article: http://example.com/2023/10/20/Tokenization/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/10/20/Tokenization/&name=Tokenization&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/10/20/Tokenization/&t=Tokenization"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#overview"><span class="toc-number">1.</span> <span class="toc-text"> Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#categories"><span class="toc-number">2.</span> <span class="toc-text"> Categories</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#subword-based-tokenization"><span class="toc-number">2.1.</span> <span class="toc-text"> Subword-based tokenization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#word-based-tokenization"><span class="toc-number">2.2.</span> <span class="toc-text"> Word-based tokenization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#character-based-tokenization"><span class="toc-number">2.3.</span> <span class="toc-text"> Character-based tokenization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-tokenization-pipeline"><span class="toc-number">3.</span> <span class="toc-text"> The Tokenization Pipeline</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Tokenization
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-10-20T08:07:50.000Z" class="dt-published" itemprop="datePublished">2023-10-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Note/">Note</a> › <a class="category-link" href="/categories/Note/AI/">AI</a> › <a class="category-link" href="/categories/Note/AI/NLP/">NLP</a> › <a class="category-link" href="/categories/Note/AI/NLP/tokenizer/">tokenizer</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="overview"><a class="markdownIt-Anchor" href="#overview"></a> Overview</h2>
+<p>in NLP, most of the data is raw text</p>
+<p>the tokenizer is used to transform raw text to numbers (a meaningful representation)</p>
+<h2 id="categories"><a class="markdownIt-Anchor" href="#categories"></a> Categories</h2>
+<h3 id="subword-based-tokenization"><a class="markdownIt-Anchor" href="#subword-based-tokenization"></a> Subword-based tokenization</h3>
+<ul>
+<li>the flaws of word-based and character-based tokenization
+<ul>
+<li>Word-based tokenization
+<ul>
+<li>very large vocabularies</li>
+<li>large quantity of out-of-vocabulary tokens</li>
+<li>loss of meaning across very similar words</li>
+</ul>
+</li>
+<li>Character-based tokenization
+<ul>
+<li>very long sequences</li>
+<li>less meaningful individual tokens</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Subword-tokenization lies in between character-based and word-based tokenization algorithms.</p>
+<p>The idea is to find a middle ground between very large vocabularies, large quantity of out-of-vocabulary tokens, loss of meaning across very similar words, for word-based tokenizers and very long sequences, less meaningful individual tokens for character-based tokenizers. 这个想法是在非常大的词汇表、大量词汇外标记、非常相似的单词之间失去意义、基于单词的标记生成器和非常长的序列、基于字符的标记生成器的有意义的单个标记之间找到一个中间立场 。</p>
+<ul>
+<li>Frequently used words should not be split into smaller subwords.</li>
+<li>Rare words should be decomposed into meaningful subwords.</li>
+</ul>
+<img src="Tokenization/image-20231020163748835.png" alt="image-20231020163748835" style="zoom:50%;" />
+<p>Subwords help identify similar syntactic or semantic situations in text.</p>
+<img src="Tokenization/image-20231020163919035.png" alt="image-20231020163919035" style="zoom:50%;" />
+<p>Subword tokenization algorithms can identify start of word tokens.</p>
+<p>Most models obtaining state-of-the-art results in English today use some kind of subword-tokenization algorithm</p>
+<ul>
+<li>WordPiece: BERT, DistilBERT</li>
+<li>Unigram: XLNet, ALBERT</li>
+<li>Byte-Pair Encoding: GPT-2, RoBERTa</li>
+</ul>
+<h3 id="word-based-tokenization"><a class="markdownIt-Anchor" href="#word-based-tokenization"></a> Word-based tokenization</h3>
+<ul>
+<li>
+<p>the text is split on spaces</p>
+<p>The model has representations that are based on entire words.</p>
+</li>
+<li>
+<p>each word has a specific ID</p>
+<p>The information held in a single number is high as a word contains a lot of contextual and semantic information in a sentence. 单个数字所包含的信息量很大，因为一个单词在句子中包含大量上下文和语义信息。</p>
+</li>
+<li>
+<p>very similar words have entirely different meanings</p>
+</li>
+<li>
+<p>the vocabulary can end up very large (large vocabularies result in heavy models)</p>
+<p>We can limit the amount of words we add to the vocabulary. Out of vocabulary words result in a loss information</p>
+</li>
+</ul>
+<h3 id="character-based-tokenization"><a class="markdownIt-Anchor" href="#character-based-tokenization"></a> Character-based tokenization</h3>
+<ul>
+<li>
+<p>vocabularies are similar</p>
+</li>
+<li>
+<p>fewer out of vocabulary words</p>
+<p>As our vocabulary contains all characters used in a language, even words unseen during the tokenizer training can still can be tokenized, so out-of-vocabulary tokens will be less frequent.</p>
+</li>
+<li>
+<p>characters do not hold as much information individually as a word would hold</p>
+</li>
+</ul>
+<h2 id="the-tokenization-pipeline"><a class="markdownIt-Anchor" href="#the-tokenization-pipeline"></a> The Tokenization Pipeline</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer</span><br><span class="line"></span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;bert-base-uncased&quot;</span>)</span><br><span class="line">inputs = tokenizer(<span class="string">&quot;Let&#x27;s try to tokenize!&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(inputs[<span class="string">&quot;input_ids&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">101</span>, <span class="number">2292</span>, <span class="number">1005</span>, <span class="number">1055</span>, <span class="number">3046</span>, <span class="number">2000</span>, <span class="number">19204</span>, <span class="number">4697</span>, <span class="number">999</span>, <span class="number">102</span>]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>The tokenization pipeline: from input text to a list of numbers</p>
+<p>Raw text -&gt; Tokens -&gt; Special tokens -&gt; Input IDs</p>
+<ul>
+<li>
+<p>Tokens: words, parts of words, or punctuation symbols</p>
+<p>lowercasing all words, follow a set of rules to split the result in small chunks of text (Most of the Transformers models use a subword tokenization algorithm, which means that one given word can be split in several tokens)</p>
+<p>The ## prefix in front of “ize” is the convention used by BERT to indicate this token is not the beginning of a word. (other tokenizers may use different conventions)</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tokens = tokenizer.tokenize(<span class="string">&quot;Let&#x27;s try to tokenize!&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(tokens)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">&#x27;let&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;try&#x27;</span>, <span class="string">&#x27;to&#x27;</span>, <span class="string">&#x27;token&#x27;</span>, <span class="string">&#x27;##ize&#x27;</span>, <span class="string">&#x27;!&#x27;</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>map those tokens to their respective IDs as defined by the vocabulary of the tokenizer.</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">input_ids = tokenizer.convert_tokens_to_ids(tokens)</span><br><span class="line"><span class="built_in">print</span>(input_ids)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">2292</span>, <span class="number">1005</span>, <span class="number">1055</span>, <span class="number">3046</span>, <span class="number">2000</span>, <span class="number">19204</span>, <span class="number">4697</span>, <span class="number">999</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>对比最上面的输出，头尾都分别有一些数字缺失了，这些缺失的数字是 the special tokens</p>
+<p>The special tokens are added by the prepare_for_model method, which knows the indices of those tokens in the vocabulary and just adds the proper numbers. 特殊标记是通过prepare_for_model方法添加的，该方法知道词汇表中这些标记的索引，并且只添加适当的数字。</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">final_ids = tokenizer.prepare_for_model(input_ids)</span><br><span class="line"><span class="built_in">print</span>(final_ids[<span class="string">&#x27;input_ids&#x27;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">101</span>, <span class="number">2292</span>, <span class="number">1005</span>, <span class="number">1055</span>, <span class="number">3046</span>, <span class="number">2000</span>, <span class="number">19204</span>, <span class="number">4697</span>, <span class="number">999</span>, <span class="number">102</span>]</span><br></pre></td></tr></table></figure>
+<p>look at special tokens by using the decode method on the outputs of the tokenizer object</p>
+<p>As for the prefix for beginning of words/part of words, those special tokens vary depending on which tokenizer you are using.</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(tokenizer.decode(final_ids[<span class="string">&#x27;input_ids&#x27;</span>]))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&quot;[CLS] let&#x27;s try to tokenize! [SEP]&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#overview"><span class="toc-number">1.</span> <span class="toc-text"> Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#categories"><span class="toc-number">2.</span> <span class="toc-text"> Categories</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#subword-based-tokenization"><span class="toc-number">2.1.</span> <span class="toc-text"> Subword-based tokenization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#word-based-tokenization"><span class="toc-number">2.2.</span> <span class="toc-text"> Word-based tokenization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#character-based-tokenization"><span class="toc-number">2.3.</span> <span class="toc-text"> Character-based tokenization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-tokenization-pipeline"><span class="toc-number">3.</span> <span class="toc-text"> The Tokenization Pipeline</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/10/20/Tokenization/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/10/20/Tokenization/&text=Tokenization"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/10/20/Tokenization/&is_video=false&description=Tokenization"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tokenization&body=Check out this article: http://example.com/2023/10/20/Tokenization/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/10/20/Tokenization/&title=Tokenization"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/10/20/Tokenization/&name=Tokenization&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/10/20/Tokenization/&t=Tokenization"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
