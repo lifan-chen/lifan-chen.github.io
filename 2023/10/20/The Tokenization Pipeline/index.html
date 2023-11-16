@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="简单使用 1234567from transformers import AutoTokenizertokenizer &#x3D; AutoTokenizer.from_pretrained(&quot;bert-base-uncased&quot;)inputs &#x3D; tokenizer(&quot;Let&amp;#x27;s try to tokenize!&quot;)print(inputs[&quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Tokenization Pipeline">
+<meta property="og:url" content="http://example.com/2023/10/20/The%20Tokenization%20Pipeline/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="简单使用 1234567from transformers import AutoTokenizertokenizer &#x3D; AutoTokenizer.from_pretrained(&quot;bert-base-uncased&quot;)inputs &#x3D; tokenizer(&quot;Let&amp;#x27;s try to tokenize!&quot;)print(inputs[&quot;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-20T13:12:30.000Z">
+<meta property="article:modified_time" content="2023-11-16T04:56:38.921Z">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>The Tokenization Pipeline</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/10/20/Pre-tokenization/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/10/20/%E4%B9%A6%E5%86%99%E7%B3%BB%E7%BB%9F/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&text=The Tokenization Pipeline"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&is_video=false&description=The Tokenization Pipeline"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=The Tokenization Pipeline&body=Check out this article: http://example.com/2023/10/20/The%20Tokenization%20Pipeline/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&name=The Tokenization Pipeline&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&t=The Tokenization Pipeline"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        The Tokenization Pipeline
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-10-20T13:12:30.000Z" class="dt-published" itemprop="datePublished">2023-10-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Note/">Note</a> › <a class="category-link" href="/categories/Note/AI/">AI</a> › <a class="category-link" href="/categories/Note/AI/NLP/">NLP</a> › <a class="category-link" href="/categories/Note/AI/NLP/tokenizer/">tokenizer</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>简单使用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer</span><br><span class="line"></span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">&quot;bert-base-uncased&quot;</span>)</span><br><span class="line">inputs = tokenizer(<span class="string">&quot;Let&#x27;s try to tokenize!&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(inputs[<span class="string">&quot;input_ids&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">101</span>, <span class="number">2292</span>, <span class="number">1005</span>, <span class="number">1055</span>, <span class="number">3046</span>, <span class="number">2000</span>, <span class="number">19204</span>, <span class="number">4697</span>, <span class="number">999</span>, <span class="number">102</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>The tokenization pipeline: from input text to a list of numbers</strong></p>
+<p>Raw text -&gt; Tokens -&gt; Special tokens -&gt; Input IDs</p>
+<ol>
+<li>Tokens: words, parts of words, or punctuation symbols</li>
+</ol>
+<p>lowercasing all words, follow a set of rules to split the result in small chunks of text (Most of the Transformers models use a subword tokenization algorithm, which means that one given word can be split in several tokens)</p>
+<p>The ## prefix in front of “ize” is the convention used by BERT to indicate this token is not the beginning of a word. (other tokenizers may use different conventions)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tokens = tokenizer.tokenize(<span class="string">&quot;Let&#x27;s try to tokenize!&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(tokens)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">&#x27;let&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;try&#x27;</span>, <span class="string">&#x27;to&#x27;</span>, <span class="string">&#x27;token&#x27;</span>, <span class="string">&#x27;##ize&#x27;</span>, <span class="string">&#x27;!&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>map those tokens to their respective IDs as defined by the vocabulary of the tokenizer.</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">input_ids = tokenizer.convert_tokens_to_ids(tokens)</span><br><span class="line"><span class="built_in">print</span>(input_ids)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">2292</span>, <span class="number">1005</span>, <span class="number">1055</span>, <span class="number">3046</span>, <span class="number">2000</span>, <span class="number">19204</span>, <span class="number">4697</span>, <span class="number">999</span>]</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>对比最上面的输出，头尾都分别有一些数字缺失了，这些缺失的数字是 the special tokens</li>
+</ol>
+<p>The special tokens are added by the prepare_for_model method, which knows the indices of those tokens in the vocabulary and just adds the proper numbers. 特殊标记是通过prepare_for_model方法添加的，该方法知道词汇表中这些标记的索引，并且只添加适当的数字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">final_ids = tokenizer.prepare_for_model(input_ids)</span><br><span class="line"><span class="built_in">print</span>(final_ids[<span class="string">&#x27;input_ids&#x27;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">101</span>, <span class="number">2292</span>, <span class="number">1005</span>, <span class="number">1055</span>, <span class="number">3046</span>, <span class="number">2000</span>, <span class="number">19204</span>, <span class="number">4697</span>, <span class="number">999</span>, <span class="number">102</span>]</span><br></pre></td></tr></table></figure>
+<p>look at special tokens by using the decode method on the outputs of the tokenizer object</p>
+<p>As for the prefix for beginning of words/part of words, those special tokens vary depending on which tokenizer you are using.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(tokenizer.decode(final_ids[<span class="string">&#x27;input_ids&#x27;</span>]))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&quot;[CLS] let&#x27;s try to tokenize! [SEP]&quot;</span></span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&text=The Tokenization Pipeline"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&is_video=false&description=The Tokenization Pipeline"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=The Tokenization Pipeline&body=Check out this article: http://example.com/2023/10/20/The%20Tokenization%20Pipeline/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&title=The Tokenization Pipeline"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&name=The Tokenization Pipeline&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/10/20/The%20Tokenization%20Pipeline/&t=The Tokenization Pipeline"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

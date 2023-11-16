@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Prefix-Tuning Paper: Prefix-Tuning: Optimizing Continuous Prompts for Generation Fine-tuning is the de facto way to leverage large pretrained language models to perform downstream tasks.  It modifies">
+<meta property="og:type" content="article">
+<meta property="og:title" content="P-Tuning">
+<meta property="og:url" content="http://example.com/2023/10/24/P-Tuning/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="Prefix-Tuning Paper: Prefix-Tuning: Optimizing Continuous Prompts for Generation Fine-tuning is the de facto way to leverage large pretrained language models to perform downstream tasks.  It modifies">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-24T08:18:52.000Z">
+<meta property="article:modified_time" content="2023-11-16T14:46:35.924Z">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>P-Tuning</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/10/28/LLM-KG/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/10/20/Pre-tokenization/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/10/24/P-Tuning/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/10/24/P-Tuning/&text=P-Tuning"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/10/24/P-Tuning/&is_video=false&description=P-Tuning"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=P-Tuning&body=Check out this article: http://example.com/2023/10/24/P-Tuning/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/10/24/P-Tuning/&name=P-Tuning&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/10/24/P-Tuning/&t=P-Tuning"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#prefix-tuning"><span class="toc-number">1.</span> <span class="toc-text"> Prefix-Tuning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#p-tuning-v2"><span class="toc-number">2.</span> <span class="toc-text"> P-Tuning v2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#optimization-and-implementation"><span class="toc-number">2.1.</span> <span class="toc-text"> Optimization and Implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#experiments"><span class="toc-number">2.2.</span> <span class="toc-text"> Experiments</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        P-Tuning
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-10-24T08:18:52.000Z" class="dt-published" itemprop="datePublished">2023-10-24</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Note/">Note</a> › <a class="category-link" href="/categories/Note/AI/">AI</a> › <a class="category-link" href="/categories/Note/AI/NLP/">NLP</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="prefix-tuning"><a class="markdownIt-Anchor" href="#prefix-tuning"></a> Prefix-Tuning</h2>
+<p>Paper: Prefix-Tuning: Optimizing Continuous Prompts for Generation</p>
+<p>Fine-tuning is the de facto way to leverage large pretrained language models to perform downstream tasks.</p>
+<ul>
+<li>It modifies all the language model parameters</li>
+<li>necessitates storing a full copy for each task.
+<ul>
+<li>This can be prohibitively expensive, given the large size of current LMs.</li>
+</ul>
+</li>
+</ul>
+<p>Propose prefix-tuning, a lightweight alternative to fine-tuning for natural language generation tasks, which keeps language model parameters frozen, but optimizes a small <em>continuous task-specific</em> vector (called the prefix). Prefix-tuning draws inspiration from prompting, allowing subsequent tokens to attend to this prefix as if were “virtual tokens”. By learning only 0.1% of the parameters, prefix-tuning obtains comparable performance in the full data setting, outperforms fine-tuning in low-data settings, and extrapolates better to examples with topic unseen during training.</p>
+<ul>
+<li>
+<p>lightweight fine-tuning: freezes most of the pretrained parameters and augments the model with small trainable modules</p>
+<ul>
+<li>adapter-tuning: inserts additional task-specific layers between the layers of pretrained language models</li>
+</ul>
+</li>
+<li>
+<p>GPT-3 can be deployed without any task-specific tuning. Instead, users prepend a natural language task in struction and a few examples to task input; then generate the output from the LM. (This approach is know as in-context learning or <em>prompting</em>)</p>
+</li>
+</ul>
+<h2 id="p-tuning-v2"><a class="markdownIt-Anchor" href="#p-tuning-v2"></a> P-Tuning v2</h2>
+<p>Prompt tuning, which only tunes continuous prompts with a frozen language model, substantially reduces per-task storage and memory usage at training.</p>
+<ul>
+<li>However
+<ul>
+<li>In the context of NLU, prior work reveals that prompt tuning does not perform well for normal-sized pretrained models.</li>
+<li>Existing methods of prompt tuning cannot handle hard sequence labeling tasks, indicating a lack of universality.</li>
+</ul>
+</li>
+</ul>
+<p>We present a novel empirical finding that properly optimized prompt tuning can be universally effective across a wide range of model scales and NLU tasks. It matches the performance of finetuning while having only 0.1%-3% tuned parameters. (Our method P-Tuning v2 is an implementation of Deep Prompt Tuning optimized and adapted for NLU. Given the universality and simplicity of P-Tuning v2, we believe it can serve as an alternative to finetuning and a strong baseline for future research. <mark>P-Tuning和P-Tuning v2到底啥关系？？？</mark>)</p>
+<ul>
+<li>
+<p>Fine-tuning, a widely-used method, updates the entire set of model parameters for a target task.</p>
+<ul>
+<li>While fine-tuning obtains good performance, it is memory-consuming during training because gradients and optimizer states for all parameters must be stored. Moreover, keeping a copy of model parameters for each task during inference is inconvenient since pre-trained models are usually large.</li>
+</ul>
+</li>
+<li>
+<p><mark>Prompting</mark> freezes all parameters of a pre-trained model and uses a natural language prompt to query a language model. Prompting requires no training at all and stores one single copy of model parameters.</p>
+<ul>
+<li>However, <strong>discrete prompting</strong> can lead to suboptimal performance in many cases compared to fine-tuning.</li>
+</ul>
+</li>
+<li>
+<p><mark>Prompt tuning</mark> is an idea of tuning only the <strong>continuous prompts</strong>. (Prompt tuning 和 Prompting是不是不一样？一个离散的，一个连续的？)</p>
+<ul>
+<li>Liu et al.; Lester et al. proposed to add trainable continuous embeddings (also called continuous prompts) to the original sequence of input word embeddings.</li>
+<li>Only the continuous prompts are updated during training.</li>
+<li>While prompt tuning improves over prompting on many tasks, it still underperforms fine-tuning while the model size is not large, specifically less than 10 billion parameters. Moreover, as shown in our experiments, prompt tuning performs poorly compared to fine-tuning on several hard sequence labeling tasks such as extractive question answering.</li>
+<li>Let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">V</mi></mrow><annotation encoding="application/x-tex">\mathcal{V}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.08222em;">V</span></span></span></span></span> be the vocabulary of a language model <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">M</mi></mrow><annotation encoding="application/x-tex">\mathcal{M}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathcal">M</span></span></span></span></span> and let <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">e</mi></mrow><annotation encoding="application/x-tex">\mathrm{e}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord"><span class="mord mathrm">e</span></span></span></span></span> be the embedding layer of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">M</mi></mrow><annotation encoding="application/x-tex">\mathcal{M}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathcal">M</span></span></span></span></span>.
+<ul>
+<li>In the case of discrete prompting, prompt tokens  {“It”, “is”, “[MASK]”}<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>  </mtext><mo>∈</mo><mtext>  </mtext><mi mathvariant="script">V</mi></mrow><annotation encoding="application/x-tex">\;\in\;\mathcal{V}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.08222em;">V</span></span></span></span></span> can be used to classify a movie review.</li>
+<li>Given the trainable continuous embeddings <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><msub><mi>h</mi><mn>0</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>h</mi><mi>i</mi></msub><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[h_0, \dots, h_i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">]</span></span></span></span>, in the input embedding sequence is written as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mrow><mi mathvariant="normal">e</mi><mo stretchy="false">(</mo><mi mathvariant="normal">x</mi><mo stretchy="false">)</mo></mrow><mo separator="true">,</mo><msub><mi>h</mi><mn>0</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>h</mi><mi>i</mi></msub><mo separator="true">,</mo><mi mathvariant="normal">e</mi><msup><mo stretchy="false">(</mo><mrow><mo mathvariant="normal">′</mo><mo mathvariant="normal">′</mo></mrow></msup><mo stretchy="false">[</mo><mi>M</mi><mi>A</mi><mi>S</mi><mi>K</mi><msup><mo stretchy="false">]</mo><mrow><mo mathvariant="normal">′</mo><mo mathvariant="normal">′</mo></mrow></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[\mathrm{e(x)}, h_0,\dots ,h_i, \mathrm{e}(&#x27;&#x27;[MASK]&#x27;&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.001892em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathrm">e</span><span class="mopen">(</span><span class="mord mathrm">x</span><span class="mclose">)</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathrm">e</span></span><span class="mopen"><span class="mopen">(</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span>.</li>
+</ul>
+</li>
+<li>Lack of universality across scales
+<ul>
+<li>prompt tuning can be comparable to fine-tuning when the model scales to over 10 billion parameters.</li>
+<li>However, for medium-sized models (from 100M to 1B) that are widely used, prompt tuning performs much worse than fine-tuning.</li>
+</ul>
+</li>
+<li>Lack of universality across tasks
+<ul>
+<li>superiority on some of the NLU benchmarks</li>
+<li>perform poorly on typical sequence tagging tasks compared to fine-tuning.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Our main contribution in this paper is a novel empirical finding that properly optimized prompt tuning can be comparable to fine-tuning universally across various model scales and NLU tasks. 我们在本文中的主要贡献是一个新的经验发现，适当优化的即时微调可以与不同模型规模和NLU任务中的普遍微调相媲美.</p>
+<p>Our approach P-tuning v2 is not conceptually novel. It can be viewed as an optimized and adapted implementation of <strong>Deep Prompt Tuning</strong> (Prefix-tuning: Optimizing continuous prompts for generation; Learning how to ask: Querying lms with mixtures of soft prompts) designed for generation and knowledge probing (为生成和知识探测而设计的).</p>
+<ul>
+<li>Deep prompt tuning increases the capacity of continuous prompts and closes the gap to fine-tuning across various settings, especially for small models and hard tasks.</li>
+</ul>
+<p>The most significant improvement originates from appling continuous prompts for every layer of the pretrained model, instead of the mere input layer. 最显著的改进来自于对预训练模型的每一层施加连续的提示，而不是仅仅输入层</p>
+<p>Considering these challenges, we propose P-tuning v2, which adapts deep prompt tuning as a universal solution across scales and NLU tasks.</p>
+<ul>
+<li>Deep Prompt Tuning
+<ul>
+<li>continuous prompts are only inserted into the input embedding sequence</li>
+<li>two challenges: First, the number of tunable parameters is limited due to the constraints of sequence length. Second, the input embeddings have relatively indirect impact on model predictions. 首先，由于序列长度的限制，可调参数的数量有限。第二，输入嵌入对模型预测具有相对间接的影响。</li>
+</ul>
+</li>
+</ul>
+<p>To address these challenges, P-tuning v2 employs the idea of deep prompt tuning. Prompts in different layers are added as prefix tokens.</p>
+<p>One one hand, P-tuning v2 have more tunable task-specific parameters (from 0.01% to 0.1% - 3%) to allow more per-task capacity while being parameter-efficient; on the other hand, prompts added to deeper layers have more direct impact on predictions.</p>
+<ul>
+<li>P-tuning v2: Across Scales
+<ul>
+<li>P-tuning v2 matches the fine-tuning performance in all the tasks at a smaller scale.</li>
+<li>even significantly outperforms fine-tuning on RTE</li>
+<li>P-tuning v2 is always comparable to fine-tuning at all scales but with only 0.1% task-specific parameters needed comparing to fine-tuning.</li>
+</ul>
+</li>
+<li>P-tuning v2: Across Tasks
+<ul>
+<li>P-tuning v2 can be generally comparable to fine-tuning on all tasks.</li>
+</ul>
+</li>
+</ul>
+<h3 id="optimization-and-implementation"><a class="markdownIt-Anchor" href="#optimization-and-implementation"></a> Optimization and Implementation</h3>
+<ul>
+<li>Reparameterization 再参数化
+<ul>
+<li>Prior works usually leverage a reparameterization encoder such as MLP to transform trainable embeddings. 以往的工作通常利用一个重新参数化的编码器，如MLP，来转换可训练的嵌入。</li>
+<li>For NLU, we discover that its usefulness depends on tasks and datasets.</li>
+</ul>
+</li>
+<li>Prompt Length
+<ul>
+<li>different NLU tasks usually achieve their best performance with different prompt lengths</li>
+</ul>
+</li>
+<li>Multi-task Learning
+<ul>
+<li>Multi-task is optional for P-Tuning v2 but can be used for further boost performance by providing a better initialization.</li>
+</ul>
+</li>
+<li>Classification Head <mark>这啥意思？</mark>
+<ul>
+<li>Using a language modeling head to predict verbalizers has been central for prompt tuning, but we find it unnecessary in a full-data setting and incompatible with sequence labeling.</li>
+<li>P-tuning v2 instead applies a randomly-initialized classification head on top of the tokens as in BERT.</li>
+</ul>
+</li>
+</ul>
+<h3 id="experiments"><a class="markdownIt-Anchor" href="#experiments"></a> Experiments</h3>
+<p>In this work, all methods except for fine-tuning are conducted with frozen language model backbones.</p>
+<p>Our experiments are all conducted in the fully-supervised setting rather than few-shot setting.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#prefix-tuning"><span class="toc-number">1.</span> <span class="toc-text"> Prefix-Tuning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#p-tuning-v2"><span class="toc-number">2.</span> <span class="toc-text"> P-Tuning v2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#optimization-and-implementation"><span class="toc-number">2.1.</span> <span class="toc-text"> Optimization and Implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#experiments"><span class="toc-number">2.2.</span> <span class="toc-text"> Experiments</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/10/24/P-Tuning/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/10/24/P-Tuning/&text=P-Tuning"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/10/24/P-Tuning/&is_video=false&description=P-Tuning"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=P-Tuning&body=Check out this article: http://example.com/2023/10/24/P-Tuning/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/10/24/P-Tuning/&title=P-Tuning"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/10/24/P-Tuning/&name=P-Tuning&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/10/24/P-Tuning/&t=P-Tuning"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
