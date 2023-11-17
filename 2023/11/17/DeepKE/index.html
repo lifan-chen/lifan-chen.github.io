@@ -13,13 +13,15 @@
 <meta property="og:site_name" content="Shimmer">
 <meta property="og:description" content="1 Intro  1.1 Knowledge Base (KB)  As Information Extraction (IE) techniques develop fast, many large-scale Knowledge Bases (KBs) have been constructed. Those KBs can provide back-end support for know">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/11/17/DeepKE/image-20231117214113599.png">
 <meta property="article:published_time" content="2023-11-17T10:47:31.000Z">
-<meta property="article:modified_time" content="2023-11-17T12:37:26.404Z">
+<meta property="article:modified_time" content="2023-11-17T15:14:21.461Z">
 <meta property="article:author" content="Zoe">
 <meta property="article:tag" content="Note">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="KG">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/11/17/DeepKE/image-20231117214113599.png">
     
     
       
@@ -126,7 +128,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-intro"><span class="toc-number">1.</span> <span class="toc-text"> 1 Intro</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-knowledge-base-kb"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1 Knowledge Base (KB)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E7%8E%B0%E6%9C%89%E7%9A%84-ie-toolkits"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 现有的 IE toolkits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-deepke"><span class="toc-number">1.3.</span> <span class="toc-text"> 1.3 DeepKE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-core-functions"><span class="toc-number">2.</span> <span class="toc-text"> 2 Core Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-named-entity-recognition"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 Named Entity Recognition</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-intro"><span class="toc-number">1.</span> <span class="toc-text"> 1 Intro</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-knowledge-base-kb"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1 Knowledge Base (KB)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E7%8E%B0%E6%9C%89%E7%9A%84-ie-toolkits"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 现有的 IE toolkits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-deepke"><span class="toc-number">1.3.</span> <span class="toc-text"> 1.3 DeepKE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-core-functions"><span class="toc-number">2.</span> <span class="toc-text"> 2 Core Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-named-entity-recognition"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 Named Entity Recognition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-relation-extraction"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2 Relation Extraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-attribute-extraction"><span class="toc-number">2.3.</span> <span class="toc-text"> 2.3 Attribute Extraction</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-toolkit-design-and-implementation"><span class="toc-number">3.</span> <span class="toc-text"> 3 Toolkit Design and Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-data-module"><span class="toc-number">3.1.</span> <span class="toc-text"> 3.1 Data Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-model-module"><span class="toc-number">3.2.</span> <span class="toc-text"> 3.2 Model Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-core-module"><span class="toc-number">3.3.</span> <span class="toc-text"> 3.3 Core Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-framework-module"><span class="toc-number">3.4.</span> <span class="toc-text"> 3.4 Framework Module</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-toolkit-usage"><span class="toc-number">4.</span> <span class="toc-text"> 4 Toolkit Usage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-single-sentence-supervised-setting"><span class="toc-number">4.1.</span> <span class="toc-text"> 4.1 Single-sentence Supervised Setting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-low-resource-setting-%E5%8F%AF%E8%83%BD%E6%98%AF%E9%9C%80%E8%A6%81%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="toc-number">4.2.</span> <span class="toc-text"> 4.2 Low-resource Setting (可能是需要的功能！！！)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-document-level-setting"><span class="toc-number">4.3.</span> <span class="toc-text"> 4.3 Document-Level Setting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-multimodal-setting"><span class="toc-number">4.4.</span> <span class="toc-text"> 4.4 Multimodal Setting</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -257,7 +259,93 @@
 </li>
 </ul>
 <h2 id="2-core-functions"><a class="markdownIt-Anchor" href="#2-core-functions"></a> 2 Core Functions</h2>
+<img src="./image-20231117214113599.png" alt="image-20231117214113599" style="zoom:60%;" />
 <h3 id="21-named-entity-recognition"><a class="markdownIt-Anchor" href="#21-named-entity-recognition"></a> 2.1 Named Entity Recognition</h3>
+<ul>
+<li>As an essential task of IE, named entity recognition (NER) picks out the entity mentions and classifies them into pre-defined (<mark>糟了，这跟我想要的有所差距</mark>) semantic categories given plain texts.</li>
+<li>To achieve supervised NER, DeepKE adopts the pre-trained language model (Devlin et al., 2019 似乎是BERT) to encode sentences and make predictions.</li>
+<li>DeepKE also implements NER in the few-shot setting (including in-domain and cross-domain) (Chen et al., 2022a<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup>) and the multimodal setting.</li>
+</ul>
+<h3 id="22-relation-extraction"><a class="markdownIt-Anchor" href="#22-relation-extraction"></a> 2.2 Relation Extraction</h3>
+<ul>
+<li>
+<p>Relation Extraction (RE), a common task in IE for knowledge base population, predicts semantic relations between pairs of entities from unstructured texts.</p>
+</li>
+<li>
+<p>To allow users to customize their models, we adopt various models to accomplish standard supervised RE (我们采用不同的模型来实现标准的有监督RE), including CNN, RNN, Capsule, GCN, Transformer and BERT.</p>
+</li>
+<li>
+<p>Meanwhile, DeepKE provides <strong>few-shot and document-level support</strong> for RE.</p>
+<ul>
+<li>
+<p>For low-resource RE, DeepKE reimplements <em>KnowPrompt</em> (Chen et al., 2022b<sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup>), a recent well-performed few-shot RE method based on prompt-tuning.</p>
+<blockquote>
+<p>Few-shot RE is significant for real-world applications, which enables users to extract relations with only a few labeled instances.</p>
+</blockquote>
+</li>
+<li>
+<p>For document-level RE, DeepKE reimplements <em>DocuNet</em> (Zhang et al., 2021<sup class="footnote-ref"><a href="#fn9" id="fnref9">[9]</a></sup>)  to extract inter-sentence relational triples within one document.</p>
+</li>
+<li>
+<p>RE is also implemented in the multimodal setting.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="23-attribute-extraction"><a class="markdownIt-Anchor" href="#23-attribute-extraction"></a> 2.3 Attribute Extraction</h3>
+<ul>
+<li>Attribute extraction (AE) plays an indispensable role in the knowledge base population. Given a sentence, entities and queried attribute mentions, AE will infer the corresponding attribute type.</li>
+</ul>
+<h2 id="3-toolkit-design-and-implementation"><a class="markdownIt-Anchor" href="#3-toolkit-design-and-implementation"></a> 3 Toolkit Design and Implementation</h2>
+<h3 id="31-data-module"><a class="markdownIt-Anchor" href="#31-data-module"></a> 3.1 Data Module</h3>
+<ul>
+<li>The data module is designed for preprocessing and loading input data.</li>
+<li>The tokenizer in DeepKE implements tokenization for both English and Chinese.</li>
+<li>Developers can feed their own datasets into the tokenizer and preprocessor through the dataloader to obtain the tokens or image patches.</li>
+</ul>
+<h3 id="32-model-module"><a class="markdownIt-Anchor" href="#32-model-module"></a> 3.2 Model Module</h3>
+<ul>
+<li>The model module contains main neural networks leveraged to achieve three core tasks.</li>
+<li>We implement the <strong>BasicModel</strong> class with a unified <strong>model loader</strong> and <strong>saver</strong> to integrate multifarious neural models.</li>
+</ul>
+<h3 id="33-core-module"><a class="markdownIt-Anchor" href="#33-core-module"></a> 3.3 Core Module</h3>
+<ul>
+<li>In the core code of DeepKE, <strong>train</strong>, <strong>validate</strong> and <strong>predict</strong> methods are pivotal components.
+<ul>
+<li>As for <strong>train</strong> method, users can feed the expected parameters (e.g., the model, data, epoch, optimizer, loss function, .etc) into it without writing tedious glue code.</li>
+<li>The <strong>validate</strong> method is for evaluation. Users can modify the sentences in the configuration for prediction and then utilize the <strong>predict</strong> method to obtain the result.</li>
+</ul>
+</li>
+</ul>
+<h3 id="34-framework-module"><a class="markdownIt-Anchor" href="#34-framework-module"></a> 3.4 Framework Module</h3>
+<ul>
+<li>The framework module integrates three aforementioned components and different scenarios.</li>
+<li>It supports various functions, including data processing, model construction and model implementation.</li>
+<li>Meanwhile, developers and researchers can customize all hyper-parameters by modifying configuration files as <em>“*.yaml”</em>, from which we apply <a target="_blank" rel="noopener" href="https://hydra.cc/">Hydra</a> to obtain users’ configuration. We also offer an off-the-shelf automatic hyperparameter tuning component.</li>
+</ul>
+<h2 id="4-toolkit-usage"><a class="markdownIt-Anchor" href="#4-toolkit-usage"></a> 4 Toolkit Usage</h2>
+<h3 id="41-single-sentence-supervised-setting"><a class="markdownIt-Anchor" href="#41-single-sentence-supervised-setting"></a> 4.1 Single-sentence Supervised Setting</h3>
+<ul>
+<li>Every instance in datasets only contain on sentence.</li>
+<li>The datasets of these tasks are all annotated with specific information, such as entity mentions, entity categories, entity offsets, relation types and attributes. <mark>糟了，这一部分真的比较麻烦，不能到能不能用</mark></li>
+</ul>
+<h3 id="42-low-resource-setting-可能是需要的功能"><a class="markdownIt-Anchor" href="#42-low-resource-setting-可能是需要的功能"></a> 4.2 Low-resource Setting (<mark>可能是需要的功能！！！</mark>)</h3>
+<ul>
+<li>In real-world scenarios, labeled data may not be sufficient for deep learning models to make predictions for satisfying users’ specific demands. <mark>对对对，说得太对了，就是这样！！！</mark></li>
+<li>Therefore, DeepKE provides low-resource <mark>few-shot support</mark> for NER and RE.
+<ul>
+<li>DeepKE offers a generative framework with prompt-guided attention to achieve in-domain and cross-domain NER. DeepKE提供了一个具有及时引导注意力的生成框架来实现域内和跨域的NER。</li>
+<li>Meanwhile, DeepKE implements knowledge-informed prompt-tuning with synergistic for few-shot RE. 同时，DeepKE实现了基于协同优化的知识知情提示调整，用于小样本关系抽取。</li>
+</ul>
+</li>
+</ul>
+<h3 id="43-document-level-setting"><a class="markdownIt-Anchor" href="#43-document-level-setting"></a> 4.3 Document-Level Setting</h3>
+<ul>
+<li>Relations between two entities not only emerge in on sentence but appear in different sentences within the whole document.</li>
+<li>DeepKE can extract inter-sentence relations from documents, which predicts an entity-level relation matrix to capture local and global information.</li>
+</ul>
+<h3 id="44-multimodal-setting"><a class="markdownIt-Anchor" href="#44-multimodal-setting"></a> 4.4 Multimodal Setting</h3>
+<p>略</p>
 <hr class="footnotes-sep" />
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -272,6 +360,12 @@
 <li id="fn5" class="footnote-item"><p>José-Lázaro Martínez-Rodríguez, Ivan López-Arévalo, and Ana B. Ríos-Alvarado. 2018. Openie-based approach for knowledge graph construction from text. Expert Syst. Appl., 113:339–355. <a href="#fnref5" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn6" class="footnote-item"><p>Haoyang Wen, Ying Lin, Tuan Lai, Xiaoman Pan, Sha Li, Xudong Lin, Ben Zhou, Manling Li, Haoyu Wang, Hongming Zhang, Xiaodong Yu, Alexander Dong, Zhenhailong Wang, Yi Fung, Piyush Mishra, Qing Lyu, Dídac Surís, Brian Chen, Susan Windisch Brown, Martha Palmer, Chris Callison-Burch, Carl Vondrick, Jiawei Han, Dan Roth, Shih-Fu Chang, and Heng Ji. 2021. RESIN: A dockerized schemaguided cross-document cross-lingual cross-media information extraction and event tracking system. In In Proceedings of NAACL-HLT. <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p>Xiang Chen, Lei Li, Shumin Deng, Chuanqi Tan, Changliang Xu, Fei Huang, Luo Si, Huajun Chen, and Ningyu Zhang. 2022a. LightNER: A lightweight tuning paradigm for low-resource NER via pluggable prompting. In Proceedings of the 29th International Conference on Computational Linguistics, pages 2374–2387, Gyeongju, Republic of Korea. International Committee on Computational Linguistics. <a href="#fnref7" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn8" class="footnote-item"><p>Xiang Chen, Ningyu Zhang, Xin Xie, Shumin Deng, Yunzhi Yao, Chuanqi Tan, Fei Huang, Luo Si, and Huajun Chen. 2022b. Knowprompt: Knowledgeaware prompt-tuning with synergistic optimization for relation extraction. In WWW ’22: The ACM Web Conference 2022, Virtual Event, Lyon, France, April 25 - 29, 2022, pages 2778–2788. ACM. <a href="#fnref8" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn9" class="footnote-item"><p>Ningyu Zhang, Xiang Chen, Xin Xie, Shumin Deng, Chuanqi Tan, Mosha Chen, Fei Huang, Luo Si, and Huajun Chen. 2021. Document-level relation extraction as semantic segmentation. In Proceedings of IJCAI, pages 3999–4006. <a target="_blank" rel="noopener" href="http://ijcai.org">ijcai.org</a>. <a href="#fnref9" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -302,7 +396,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-intro"><span class="toc-number">1.</span> <span class="toc-text"> 1 Intro</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-knowledge-base-kb"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1 Knowledge Base (KB)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E7%8E%B0%E6%9C%89%E7%9A%84-ie-toolkits"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 现有的 IE toolkits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-deepke"><span class="toc-number">1.3.</span> <span class="toc-text"> 1.3 DeepKE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-core-functions"><span class="toc-number">2.</span> <span class="toc-text"> 2 Core Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-named-entity-recognition"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 Named Entity Recognition</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-intro"><span class="toc-number">1.</span> <span class="toc-text"> 1 Intro</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-knowledge-base-kb"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1 Knowledge Base (KB)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E7%8E%B0%E6%9C%89%E7%9A%84-ie-toolkits"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 现有的 IE toolkits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-deepke"><span class="toc-number">1.3.</span> <span class="toc-text"> 1.3 DeepKE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-core-functions"><span class="toc-number">2.</span> <span class="toc-text"> 2 Core Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-named-entity-recognition"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 Named Entity Recognition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-relation-extraction"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2 Relation Extraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-attribute-extraction"><span class="toc-number">2.3.</span> <span class="toc-text"> 2.3 Attribute Extraction</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-toolkit-design-and-implementation"><span class="toc-number">3.</span> <span class="toc-text"> 3 Toolkit Design and Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-data-module"><span class="toc-number">3.1.</span> <span class="toc-text"> 3.1 Data Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-model-module"><span class="toc-number">3.2.</span> <span class="toc-text"> 3.2 Model Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-core-module"><span class="toc-number">3.3.</span> <span class="toc-text"> 3.3 Core Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-framework-module"><span class="toc-number">3.4.</span> <span class="toc-text"> 3.4 Framework Module</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-toolkit-usage"><span class="toc-number">4.</span> <span class="toc-text"> 4 Toolkit Usage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-single-sentence-supervised-setting"><span class="toc-number">4.1.</span> <span class="toc-text"> 4.1 Single-sentence Supervised Setting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-low-resource-setting-%E5%8F%AF%E8%83%BD%E6%98%AF%E9%9C%80%E8%A6%81%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="toc-number">4.2.</span> <span class="toc-text"> 4.2 Low-resource Setting (可能是需要的功能！！！)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-document-level-setting"><span class="toc-number">4.3.</span> <span class="toc-text"> 4.3 Document-Level Setting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-multimodal-setting"><span class="toc-number">4.4.</span> <span class="toc-text"> 4.4 Multimodal Setting</span></a></li></ol></li></ol>
       </div>
     
 
