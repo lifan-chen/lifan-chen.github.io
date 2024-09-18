@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Can Knowledge Graphs Reduce Hallucinations in LLMs? : A Survey   Knowledge: human acquire discrete facts and skills through learning or experience. This acquired knowledge can be interconnected (相互关联)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Knowledge Graphs Reduce Hallucinations in LLMs">
+<meta property="og:url" content="http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="Can Knowledge Graphs Reduce Hallucinations in LLMs? : A Survey   Knowledge: human acquire discrete facts and skills through learning or experience. This acquired knowledge can be interconnected (相互关联)">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-20T07:45:41.000Z">
+<meta property="article:modified_time" content="2023-12-21T09:03:43.427Z">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Knowledge Graphs Reduce Hallucinations in LLMs</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/12/21/KAPING/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&text=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&is_video=false&description=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Knowledge Graphs Reduce Hallucinations in LLMs&body=Check out this article: http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&name=Knowledge Graphs Reduce Hallucinations in LLMs&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&t=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#knowledge-graph-enhanced-llms"><span class="toc-number">1.</span> <span class="toc-text"> Knowledge Graph-Enhanced LLMs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#knowledge-aware-inference"><span class="toc-number">1.1.</span> <span class="toc-text"> Knowledge-Aware Inference</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Knowledge Graphs Reduce Hallucinations in LLMs
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-20T07:45:41.000Z" class="dt-published" itemprop="datePublished">2023-12-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Note/">Note</a> › <a class="category-link" href="/categories/Note/AI/">AI</a> › <a class="category-link" href="/categories/Note/AI/NLP/">NLP</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2311.07914">Can Knowledge Graphs Reduce Hallucinations in LLMs? : A Survey</a></p>
+<ul>
+<li>
+<p>Knowledge: human acquire discrete facts and skills through learning or experience.</p>
+<p>This acquired knowledge can be interconnected (相互关联) and applied in a logical, multi-step reasoning process to draw conclusions or make judgments, a cognitive function commonly recognized as “<em>commonsense reasoning</em>” (常识推理).</p>
+</li>
+</ul>
+<p>Due to the stochastic decoding (随机解码) employed by these LLMs, their behavior is often considered probabilistic.</p>
+<p>Unlike a deterministic system providing a single answer for a given input, an LLM generates a spectrum of potential outputs, each associated with a likelihood or probability score.</p>
+<p>These probabilities are grounded in the patterns and associations the LLMs have learned from the extensive training data during the pre-training phase.</p>
+<p>This data may also contain <strong>misinformation, biases, or inaccuracies</strong>, leading to the generation of content that reinforces or reflects those biases.</p>
+<p>An other challenges is disambiguating certain phrases or terms, as the language is context-dependent.</p>
+<p>问题：</p>
+<ul>
+<li>
+<p>Hallucination: non-existent, unrelated, or wrong answers that are not factually accurate but still sound plausible.</p>
+<p>The hallucinations make these models less dependable.</p>
+<p>The inherent probabilistic nature of these models poses challenges in mitigating hallucination issues. Effectively addressing this concern requires focused research and development efforts in areas such as <strong>continuous knowledge updates, model fine-tuning, and incorporating fact-checking mechanisms (持续知识更新、模型微调以及纳入事实检查机制)</strong> to mitigate the generation of inaccurate or hallucinated content.</p>
+<p>Providing the model with more granular and contextually relevant, relevant, precise external knowledge can significantly aid the model in recalling essential information (显着帮助模型回忆基本信息).</p>
+</li>
+</ul>
+<p>解决思路：</p>
+<ul>
+<li>
+<p>Research Directions</p>
+<ul>
+<li>
+<p>Enhancing LLMs through the augmentation of external knowledge using knowledge representation tools like knowledge graphs.</p>
+<ul>
+<li>boost the model performance by augmenting comprehensive external knowledge and providing guidance for a more robust reasoning process</li>
+<li>break down complex, multi-step questions into more manageable sub-questions</li>
+</ul>
+</li>
+<li>
+<p>Using an external information retrieval system to extract knowledge precisely based on the context.</p>
+<ul>
+<li>
+<p>explore “chains of thoughts” to unlock the reasoning capabilities of LLMs</p>
+<p>They achieve this by providing intermediate steps through in-context few-shot learning examples via specific prompts.</p>
+</li>
+<li>
+<p>enhance the model’s pre-training phase to prevent the inclusion of falsehoods</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Hence, the exploration of augmenting external knowledge through knowledge graphs emerges as promising avenue for advancing the precision, reasoning, and generative capabilities of Large Language Models (LLMs).</p>
+<p>因此，通过知识图增强外部知识的探索成为提高大型语言模型（LLM）的精度、推理和生成能力的有前途的途径。</p>
+</li>
+<li>
+<p>Three Overarching Categories of Strategies</p>
+<ul>
+<li>Knowledge-Aware Inference: refining the inference-making process 细化推理过程</li>
+<li>Knowledge-Aware Learning: optimizing the learning mechanism 优化学习机制</li>
+<li>Knowledge-Aware Validation: establishing a means of validating the model’s decisions 建立验证模型决策的方法</li>
+</ul>
+</li>
+</ul>
+<h2 id="knowledge-graph-enhanced-llms"><a class="markdownIt-Anchor" href="#knowledge-graph-enhanced-llms"></a> Knowledge Graph-Enhanced LLMs</h2>
+<ul>
+<li>LLMs primarily have three points of failure 大型语言模型主要存在三个失败点
+<ul>
+<li>a failure to comprehend the question due to lack of context 由于缺乏上下文而无法理解问题</li>
+<li>insufficient knowledge to respond accurately 知识不足而无法准确回答</li>
+<li>an inability to recall specific facts 无法回忆起具体事实</li>
+</ul>
+</li>
+<li>Improving the cognitive capabilities of these models 提高这些模型的认知能力
+<ul>
+<li>refining their inference-making process 完善其推理过程</li>
+<li>optimizing learning mechanisms 优化学习机制</li>
+<li>establishing a mechanism to validate results 建立验证结果的机制</li>
+</ul>
+</li>
+</ul>
+<h3 id="knowledge-aware-inference"><a class="markdownIt-Anchor" href="#knowledge-aware-inference"></a> Knowledge-Aware Inference</h3>
+<p>The LLMs face challenges in inferencing, failure to provide correct output, or giving sub-optimal results.</p>
+<p>Different factors, such as ambiguous input or lack of clear context, may lead to these failures. The other reason could be a knowledge gap (知识鸿沟), training data biases, or an inability to generalize to new, unseen scenarios.</p>
+<p>Unlike humans, LLMs cannot often seek additional information to clarify questions for ambiguous queries and refine their understanding.</p>
+<p>Knowledge Graphs (KG) are an excellent source of structured representation of symbolic knowledge of real-world facts. Researchers are actively working on utilizing the existing knowledge graphs and <mark>augmenting the external knowledge at the input (or prompt level)</mark>, enabling the model to access relevant context and improve its reasoning capabilities.</p>
+<p>Classify such techniques further as</p>
+<ul>
+<li>
+<p><mark>KG-Augmented Retrieval</mark></p>
+<p>Retrieval-augmented generation models like RAG and RALM have gained popularity for enhancing the contextual awareness of large language models (LLMs) when tackling knowledge-intensive tasks.</p>
+<p>They provide relevant documents to the LLMs during the generation process and have effectively mitigated hallucination issues without changing the LLM architecture.</p>
+<ul>
+<li>
+<p>the Knowledge-Augmented language model PromptING (KAPING)</p>
+<p>Retrieves the relevant knowledge by matching the entity in question and extracts the related triples from knowledge graphs. These triples were augmented to the prompts for zero-shot question answering.</p>
+</li>
+<li>
+<p>Suggest that rewriting the extracted triples into well-textualized statements further improves the performance of large language models.</p>
+</li>
+<li>
+<p>similarity is insufficient to find relevant facts for complex questions.</p>
+<p>Sen et al. suggested using a retriever module based on a sequence-to-sequence knowledge graph question answering (KGQA) model to predict the distribution over multiple relations in a knowledge graph for question answering. The retrieved <em>top-k</em> triples are added as a context to the question given to the LLM.</p>
+</li>
+<li>
+<p>StructGPT uses three structured data sources: knowledge graphs, data tables, and structured databases.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>KG-Augmented Reasoning</p>
+</li>
+<li>
+<p>KG-Controlled Generation</p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#knowledge-graph-enhanced-llms"><span class="toc-number">1.</span> <span class="toc-text"> Knowledge Graph-Enhanced LLMs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#knowledge-aware-inference"><span class="toc-number">1.1.</span> <span class="toc-text"> Knowledge-Aware Inference</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&text=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&is_video=false&description=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Knowledge Graphs Reduce Hallucinations in LLMs&body=Check out this article: http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&title=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&name=Knowledge Graphs Reduce Hallucinations in LLMs&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/&t=Knowledge Graphs Reduce Hallucinations in LLMs"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

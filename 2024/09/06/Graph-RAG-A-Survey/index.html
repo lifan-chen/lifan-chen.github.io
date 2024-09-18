@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Background   LLM’s remarkable language comprehension and text generation capabilities   LLM’s limitations  a lack of domain-specific knowledge real-time updated information proprietary information  l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Graph RAG: A Survey">
+<meta property="og:url" content="http://example.com/2024/09/06/Graph-RAG-A-Survey/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="Background   LLM’s remarkable language comprehension and text generation capabilities   LLM’s limitations  a lack of domain-specific knowledge real-time updated information proprietary information  l">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2024/09/06/Graph-RAG-A-Survey/Graph-RAG-A-Survey/image-20240906165948487.png">
+<meta property="og:image" content="http://example.com/2024/09/06/Graph-RAG-A-Survey/Graph-RAG-A-Survey/image-20240907102759297.png">
+<meta property="og:image" content="http://example.com/2024/09/06/Graph-RAG-A-Survey/Graph-RAG-A-Survey/image-20240912225323748.png">
+<meta property="og:image" content="http://example.com/2024/09/06/Graph-RAG-A-Survey/Graph-RAG-A-Survey/image-20240913162000962.png">
+<meta property="article:published_time" content="2024-09-06T07:50:47.000Z">
+<meta property="article:modified_time" content="2024-09-17T08:12:08.127Z">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/09/06/Graph-RAG-A-Survey/Graph-RAG-A-Survey/image-20240906165948487.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Graph RAG: A Survey</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/09/01/GraphRAG-Microsoft/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2024/09/06/Graph-RAG-A-Survey/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&text=Graph RAG: A Survey"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&is_video=false&description=Graph RAG: A Survey"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Graph RAG: A Survey&body=Check out this article: http://example.com/2024/09/06/Graph-RAG-A-Survey/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&name=Graph RAG: A Survey&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2024/09/06/Graph-RAG-A-Survey/&t=Graph RAG: A Survey"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#background"><span class="toc-number">1.</span> <span class="toc-text"> Background</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#preliminaries"><span class="toc-number">2.</span> <span class="toc-text"> Preliminaries</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#text-attributed-graphs"><span class="toc-number">2.1.</span> <span class="toc-text"> Text-Attributed Graphs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#graphrag-workflow"><span class="toc-number">3.</span> <span class="toc-text"> GraphRAG Workflow</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#graph-based-index-g-indexing"><span class="toc-number">3.1.</span> <span class="toc-text"> Graph-Based Index (G-Indexing)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#graph-guided-retrieval-g-retrieval"><span class="toc-number">3.2.</span> <span class="toc-text"> Graph-Guided Retrieval (G-Retrieval)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#retrieval-enhancement"><span class="toc-number">3.2.1.</span> <span class="toc-text"> Retrieval Enhancement</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#retrieval-granularity"><span class="toc-number">3.2.2.</span> <span class="toc-text"> Retrieval Granularity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#retriever"><span class="toc-number">3.2.3.</span> <span class="toc-text"> Retriever</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#retrieval-paradigm-%E6%A3%80%E7%B4%A2%E8%8C%83%E5%BC%8F"><span class="toc-number">3.2.4.</span> <span class="toc-text"> Retrieval Paradigm 检索范式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#graph-enhanced-generation-g-generationimage-20240912225323748"><span class="toc-number">3.3.</span> <span class="toc-text"> Graph-Enhanced Generation (G-Generation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#generation-enhancement"><span class="toc-number">3.3.1.</span> <span class="toc-text"> Generation Enhancement</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph-formats"><span class="toc-number">3.3.2.</span> <span class="toc-text"> Graph Formats</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#generators"><span class="toc-number">3.3.3.</span> <span class="toc-text"> Generators</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#training"><span class="toc-number">4.</span> <span class="toc-text"> Training</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#training-strategies-of-retriever"><span class="toc-number">4.1.</span> <span class="toc-text"> Training Strategies of Retriever</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#evaluation"><span class="toc-number">5.</span> <span class="toc-text"> Evaluation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#future-research-directions"><span class="toc-number">6.</span> <span class="toc-text"> Future Research Directions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#from-local-to-global-a-graph-rag-approach-to-query-focused-summarization"><span class="toc-number">6.1.</span> <span class="toc-text"> From Local to Global: A Graph RAG Approach to Query-Focused Summarization</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Graph RAG: A Survey
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-09-06T07:50:47.000Z" class="dt-published" itemprop="datePublished">2024-09-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Note/">Note</a> › <a class="category-link" href="/categories/Note/RAG/">RAG</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="background"><a class="markdownIt-Anchor" href="#background"></a> Background</h2>
+<ul>
+<li>
+<p>LLM’s remarkable language comprehension and text generation capabilities</p>
+</li>
+<li>
+<p>LLM’s limitations</p>
+<ul>
+<li>a lack of domain-specific knowledge</li>
+<li>real-time updated information</li>
+<li>proprietary information</li>
+</ul>
+<p>lead to a phenomenon knowns as “hallucination”</p>
+</li>
+<li>
+<p>RAG</p>
+<p>supplement LLMs with external knowledge to mitigate this problem</p>
+<p>aims to enhance the quality and relevance of generated content by integrating a retrieval component within the generation process</p>
+<ul>
+<li>limitations
+<ul>
+<li>Neglecting Relationships 忽视关系: Traditional RAG fails to capture significant structured relational knowledge that cannot be represented through semantic similarity alone. 传统的RAG无法捕获仅通过语义相似度无法表示的重要结构化关系知识。</li>
+<li>Redundant Information 冗余信息: RAG often recounts content in the form of textual snippets when concatenated as prompts. This makes context become excessively lengthy, leading to the “lost in the middle” dilemma.</li>
+<li>Lacking Global Information</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>GraphRAG</p>
+<p>GraphRAG retrieves graph elements containing relational knowledge pertinent to a given query from a pre-constructed graph database. These elements may include nodes, triples, paths, or subgraphs, which are utilized to generate responses.</p>
+<ul>
+<li>consider the interconnections between texts, enabling a more accurate and comprehensive retrieval of relational information</li>
+<li>offer abstraction and summarization of textual data, thereby significantly shortening the length of the input text and mitigating concerns of verbosity</li>
+<li>by retrieving subgraphs or graph communities, access comprehensive information to effectively address the QFS challenge by capturing the broader context and interconnections within the graph structure.</li>
+</ul>
+</li>
+</ul>
+<h2 id="preliminaries"><a class="markdownIt-Anchor" href="#preliminaries"></a> Preliminaries</h2>
+<h3 id="text-attributed-graphs"><a class="markdownIt-Anchor" href="#text-attributed-graphs"></a> Text-Attributed Graphs</h3>
+<p>One typical kind of TAGs is Knowledge Graph (KGs), where nodes are entities, edges are relations among entities, and text attributes are the names of entities and relations.</p>
+<h2 id="graphrag-workflow"><a class="markdownIt-Anchor" href="#graphrag-workflow"></a> GraphRAG Workflow</h2>
+<p><img src="Graph-RAG-A-Survey/image-20240906165948487.png" alt="image-20240906165948487" /></p>
+<h3 id="graph-based-index-g-indexing"><a class="markdownIt-Anchor" href="#graph-based-index-g-indexing"></a> Graph-Based Index (G-Indexing)</h3>
+<ul>
+<li>
+<p>Graph Data</p>
+</li>
+<li>
+<p>Indexing</p>
+<ul>
+<li>
+<p>graph indexing</p>
+<p>the most commonly used approach</p>
+<p>During subsequent retrieval stages, classic graph search algorithm such as BFS and Shortest Path Algorithms can be employed to facilitate retrieval task.</p>
+</li>
+<li>
+<p>text indexing</p>
+<p>Text indexing involves converting graph data into textual descriptions to optimize retrieval processes.</p>
+<p>Some methods convert subgraph-level information into textual descriptions. For example, [Edge et al.](#From Local to Global: A Graph RAG Approach to Query-Focused Summarization) perform community detection on the graph and generate summaries for each community using LLMs.</p>
+</li>
+<li>
+<p>vector indexing</p>
+<p>Vector indexing transforms graph data into vector representations to enhance retrieval efficiency.</p>
+</li>
+</ul>
+<p>In practical applications, a hybrid approach combining these indexing methods is often preferred over relying solely on one.</p>
+</li>
+</ul>
+<h3 id="graph-guided-retrieval-g-retrieval"><a class="markdownIt-Anchor" href="#graph-guided-retrieval-g-retrieval"></a> Graph-Guided Retrieval (G-Retrieval)</h3>
+<p>Two significant challenges</p>
+<p>（1）Explosive Candidate Subgraphs</p>
+<p>（2）Insufficient Similarity Measurement</p>
+<p><img src="Graph-RAG-A-Survey/image-20240907102759297.png" alt="image-20240907102759297" /></p>
+<h4 id="retrieval-enhancement"><a class="markdownIt-Anchor" href="#retrieval-enhancement"></a> Retrieval Enhancement</h4>
+<ul>
+<li>
+<p>Query Enhancement</p>
+<ul>
+<li>
+<p>Query Expansion</p>
+<p>query: short length, limit information content</p>
+<p>Query expansion aims to improve search results by supplement or refining the original query with additional relevant terms or concepts.</p>
+<ul>
+<li>generate relation paths grounded by KGs with LLMs to enhance the retrieval relevant terms or concepts.</li>
+<li>adapt SPARQL to get all the aliases of the query entities from Wikidata</li>
+<li>a consensus-view knowledge retrieval method, which first discover sematically relevant queries, and then re-weight the original query terms</li>
+<li>utilize a large model to generate the hypothesis output of the question, concatenating the hypothesis output with the query as input to the retriever</li>
+</ul>
+</li>
+<li>
+<p>Query Decomposition</p>
+<p>Query decomposition techniques break down or decompose the original user query into smaller, more specific sub-queries.</p>
+<p>Each sub-query typically focuses on a particular aspect or component of the original query. For instance, break down the primary question into sub-sentences, each representing a distinct relation, and sequentially retrieves the pertinent triplets for each sub-sentence.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Knowledge Enhancement</p>
+<p>Knowledge enhancement strategies are employed to refine and improve the retriever’s results. These techniques aim to ensure that the final set of retrieved results is not only comprehensive but also highly relevant to the user’s information needs.</p>
+<ul>
+<li>
+<p>Knowledge Merging</p>
+<p>Knowledge merging retrieved information enables compression and aggregation of information, which assists in obtaining a more comprehensive view by consolidating relevant details from multiple sources.</p>
+<p>mitigate issues related to input length constraints in models 缓解了模型中与输入长度约束相关的问题</p>
+<ul>
+<li>merge nodes and condense the retrieved sub-graph through triple aggregation to enhance the reasoning efficiency</li>
+<li>merge the same entities from different subgraphs to form the final subgraph</li>
+<li>merge retrieved subgraphs based on relations, combining head entities and tail entities that satisfy the same relation into two distinct entity sets, ultimately forming a relation paths 合并检索到的基于关系的子图，将满足相同关系的头实体和尾实体合并为两个不同的实体集合，最终形成关系路径</li>
+</ul>
+</li>
+<li>
+<p>Knowledge Pruning</p>
+<p>Knowledge pruning involves filtering out less relevant or redundant retrieved information to refine the results.</p>
+<p>Previous approaches: (re)-ranking based approaches and LLM-based approaches.</p>
+<ul>
+<li>
+<p>Introduce stronger models for reranking: concatenate each retrieved triplet with the question-choice pair, and adapt a pre-trained cross-encoder to re-rank the retrieved triplets 将每个检索到的三元组与问题选择对进行拼接，并采用预训练的交叉编码器对检索到的三元组进行重排序</p>
+</li>
+<li>
+<p>Utilize the similarity between queries and retrieved information for ranking:</p>
+<p>Re-rank the candidate subgraphs based on the similarity for both relation and fine-grained concept between subgraphs and the query.</p>
+<p>First cluster the 2-hop neighbors and then delete the cluster with the lowest similarity score with the input query.</p>
+<p>Prune the retrieved subgraph according to the relevance score between the question context and the KG entity nodes calculated by a pre-trained language model. 根据问题上下文与预训练语言模型计算的KG实体结点之间的相关性得分，对检索到的子图进行剪枝</p>
+<p>Adapt Personalized PageRank algorithm to rank the retrieved candidate information for further filtering.</p>
+<p>First divide the retrieved subgraph into several smaller subgraphs, then compare the similarity between each smaller subgraph and the query. Subgraphs with low similarity are removed, and the remaining smaller subgraphs are merged into a larger subgraph.</p>
+</li>
+<li>
+<p>Propose new metrics for reranking:</p>
+<p>Propose a metric that measure both the impact and recency of the retrieved text chunks.</p>
+<p>Decompose the retrieved paths into triplets and reranks the paths based on the confidence score measured by the knowledge graph embedding (KGE) techniques. 将检索到的路径分解为三元组，并基于知识图谱嵌入（KGE）技术度量的置信度得分对路径进行重新排序</p>
+<p>Prune the irrelevant graph data by calling LLMs to check. 通过调用LLMs进行校验，对不相关的图数据进行剪枝</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="retrieval-granularity"><a class="markdownIt-Anchor" href="#retrieval-granularity"></a> Retrieval Granularity</h4>
+<ul>
+<li>Nodes</li>
+<li>Triplets</li>
+<li>Paths</li>
+<li>Subgraphs</li>
+<li>Hybrid Granularties</li>
+</ul>
+<h4 id="retriever"><a class="markdownIt-Anchor" href="#retriever"></a> Retriever</h4>
+<ul>
+<li>
+<p>Non-parametric Retriever</p>
+<p>Based on heuristic rules or traditional graph search algorithms exhibit good retrieval efficiency, but may suffer from inaccurate retrieval due to the lack of training on downstream tasks.</p>
+</li>
+<li>
+<p>LM-based Retriever</p>
+<p>discriminative and generative language model</p>
+<ul>
+<li>Expand from the topic entity and retrieve the relevant paths in a sequential decision process.</li>
+<li>Adapt LLMs to generate the set of top-K relevant relations of the specific entity.</li>
+<li>Utilize fine-tuned LLM to generate reasoning paths.</li>
+<li>Utilize LLMs to automatically invoke several pre-defined functions, by which relevant information can be retrieved and combined to assist further reasoning.</li>
+</ul>
+</li>
+<li>
+<p>GNN-based Retriever</p>
+<p>GNN-based retrievers typically encode graph data and subsequently score different retrieval granularities based on their similarity to the query.</p>
+<ul>
+<li>First encode the graph, assign a score to each entity, and retrieve entities relevant to the query based on a threshold.</li>
+<li>Iterate multiple times to retrieve relevant paths. During each iteration, it first uses LLM to select edges connecting the current node, then employ GNNs to obtain embeddings of the new layer of nodes for the next round of LLM selection.</li>
+</ul>
+</li>
+</ul>
+<p>Considering this complementarity, many methods propose hybrid retrieval approaches to improve both retrieval efficiency and accuracy.</p>
+<h4 id="retrieval-paradigm-检索范式"><a class="markdownIt-Anchor" href="#retrieval-paradigm-检索范式"></a> Retrieval Paradigm 检索范式</h4>
+<ul>
+<li>
+<p>Once retrieval</p>
+<p>Aim to gather all pertinent information in a single operation.</p>
+<ul>
+<li>Utilize embedding similarities to retrieve the most relevant pieces of information.</li>
+<li>Design pre-defined rules or patterns to directly extract specific structured information such as triples, paths or subgraphs from graph databases. 通过设计预定义的规则或模式，直接从图数据库中抽取特定的结构化信息，如三元组、路径或子图等</li>
+</ul>
+<p>We also include some multiple retrieval methods that involve decoupled and independent retrievals, allowing them to be computed in parallel and executed only once. 还包括一些设计解耦和独立检索的多种检索方法，允许它们并行计算，并且只执行一次</p>
+<ul>
+<li>First instruct LLMs to generate multiple reasoning paths and then use a BFS retriever to sequentially search for subgraphs in the knowledge graph that match each path.</li>
+<li>Decompose the original query into several sub-queries, retrieving relevant information for each sub-query in a single retrieval process.</li>
+</ul>
+</li>
+<li>
+<p>Iterative retrieval</p>
+<p>Conduct further searches based on previously retrieved information, progressively narrowing down to the most relevant results.</p>
+<ul>
+<li>
+<p>Non-adaptive retrieval</p>
+<p>Non-adaptive methods typically follow a fixed sequence of retrieval, and the termination of retrievals is determined by setting a maximum time or a threshold.</p>
+<ul>
+<li>Retrieve problems-relevant subgraphs through <em>T</em> iterations. In each iteration, the paper designs a retrieval rule to select a subset of retrieved entities, and then expands these entities by searching relevant edges in the knowledge graph.</li>
+<li>In each iteration, first select seed nodes based on the similarity between the context and the nodes in the graph. Then, use LLMs to summarize and update the context of the neighboring nodes of the seed nodes, which is utilized in the subsequent iteration.</li>
+</ul>
+</li>
+<li>
+<p>Adaptive retrieval</p>
+<p>Let models autonomously determine the optimal moments to finish the retrieval activities.</p>
+<ul>
+<li>Leverage on LM for hop prediction, which serves as an indicator to end the retrieval.</li>
+</ul>
+<p>Utilize model-generated special tokens or texts as termination signals for the retrieval process.</p>
+<ul>
+<li>ToG prompts the LLM agent to explore the multiple possible reasoning paths until the LLM determines the question can be answered based on the current reasoning path.</li>
+<li>Train a RoBERTa to expand a path from each topic entity. In the process, a virtual relation named as “[END]” is introduced to terminate the retrieval process.</li>
+</ul>
+<p>Treating the large model as an agent, enabling it to directly generate answers to questions to signal the end of iteration.</p>
+<ul>
+<li>Propose LLM-based agents to reason on graphs. These agents could autonomously determine the information for retrieval, invoke the pre-defined retrieval tools, and cease the retrieval process based on the retrieved information.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Multi-stage retrieval</p>
+<p>Multi-stage retrieval divides the retrieval process linearly into multiple stages, with additional steps such as retrieval enhancement, and even generation process occurring between these stages. 多阶段检索将检索过程线性地划分为多个阶段，并在这些阶段之间进行检索增强灯附加步骤，甚至生成过程。</p>
+<ul>
+<li>First utilize a non-parametric retriever to extract n-hop paths of entities in the query’s reasoning chain, then after a pruning stage, it further retrieves the one-hop neighbors of the entities in the pruned subgraph.</li>
+<li>Divide the retrieval process into two stages. In the first stage, it retrieves all 1-hop neighbors of the topic entity. In the second stage, it compares the similarity between these neighbor nodes and other nodes, selecting the top-k nodes with the highest similarity for retrieval.</li>
+<li>First employ GNNs to retrieve the top-k nodes most likely to be the answer. Subsequently, it retrieves all shortest paths between query entities and answer entities pairwise.</li>
+</ul>
+</li>
+</ul>
+<h3 id="graph-enhanced-generation-g-generationimage-20240912225323748"><a class="markdownIt-Anchor" href="#graph-enhanced-generation-g-generationimage-20240912225323748"></a> Graph-Enhanced Generation (G-Generation)<img src="Graph-RAG-A-Survey/image-20240912225323748.png" alt="image-20240912225323748" /></h3>
+<h4 id="generation-enhancement"><a class="markdownIt-Anchor" href="#generation-enhancement"></a> Generation Enhancement</h4>
+<ul>
+<li>
+<p>Pre-generation enhancement</p>
+<p>Focus on improving the quality of input data or representations before feeding them into generator.</p>
+<p>Semantically enrich the retrieved graph data.</p>
+<ul>
+<li>Employ LLMs to rewrite retrieved graph data, enhancing the naturalness and semantic richness of the transformed natural language output.</li>
+<li>Utilize teh retrieved graph data to rewrite the query.</li>
+<li>First leverage LLMs to generate a reasoning plan and answer queries according to the plan.</li>
+<li>Extract all nouns from the QA pairs (or the QA pairs themselves) and insert them as nodes into the retrieved subgraph.</li>
+<li>Prior to generation, decompose the representation of the query into multiple vectors termed “instructions”, each representation different features of the query. These instructions are used as conditions during message passing when applying GNNs to learn from retrieved subgraphs.</li>
+</ul>
+<p>Incorporate additional information beyond graph data.</p>
+<ul>
+<li>Incorporate documents relevant to entities.</li>
+<li>Retrieve other related questions.</li>
+</ul>
+</li>
+<li>
+<p>Mid-generation enhancement</p>
+<p>Techniques applied during the generation process.</p>
+<p>Typically adjust the generation strategies based on intermediate results or contextual cues. 根据中间结果或上下文线索来调整生成策略</p>
+<ul>
+<li>Introduce constrained decoding to control the output space and reduce generation errors.</li>
+</ul>
+<p>Adjust the prompts of LLMs to achieve multi-step reasoning.</p>
+<ul>
+<li>Not only produce answer but also generate the reasoning process.</li>
+</ul>
+</li>
+<li>
+<p>Post-generation enhancement</p>
+<p>Occur after the initial response is generated.</p>
+<p>Integrate multiple generated response to obtain the final response.</p>
+<p>Integrate outputs from the same generator under different conditions or inputs.</p>
+<ul>
+<li><mark>Generate a summary for each graph community, followed by generating responses to queries based on the summary, and then scoring these response using an LLM. Ultimately, the responses are sorted in descending order according to their scores and sequentially incorporated into the prompt until the token limit is reached. Subsequently, the LLM generate the final response.</mark></li>
+<li>First decompose the query into several sub-questions, then generate answers for each sub-question, and finally merge the answers of all sub-question to obtain the final answer.</li>
+</ul>
+<p>Combine the outputs or select responses generated by different models.</p>
+<ul>
+<li>
+<p>combine the outputs generated by both GNNs and LLMs to reach a synergistic effect.</p>
+</li>
+<li>
+<p>explore two methods for generating answers: one involves generating directly generates in Cypher Query Language to execute and obtain results, while the other method directly generates answers based on retrieved triplets. The final answer is determined through a dynamic selection mechanism.</p>
+</li>
+<li>
+<p>besides the learned scoring function, researchers additionally design a rule-based score based on the graph structures. These two scores are combined to find the answer entity</p>
+</li>
+<li>
+<p>combine answers based on retrieved graph data with responses generated according to the LLM’s own knowledge.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="graph-formats"><a class="markdownIt-Anchor" href="#graph-formats"></a> Graph Formats</h4>
+<p><img src="Graph-RAG-A-Survey/image-20240913162000962.png" alt="image-20240913162000962" /></p>
+<p>Graph translators are employed to convert the graph data into a format compatible with LMs.</p>
+<ul>
+<li>
+<p>Graph Languages</p>
+<blockquote>
+<p>Good Graph Languages</p>
+<ul>
+<li>
+<p>Complete 完整的: capture all essential information within the graph structure, ensuring no critical details are omitted.</p>
+</li>
+<li>
+<p>Concise 简洁的: avoid the “lost in the middle” phenomenon or exceeding the length limitations of LMs.</p>
+</li>
+<li>
+<p>Comprehensible 可理解的: ensure that the language used is easily understood by LLMs</p>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li>
+<p>Adjacency / Edge Table</p>
+<p>The adjacency table enumerates the immediate neighbors of each vertex.</p>
+<ul>
+<li>linearize the triples in the retrieved subgraph, which are then concatenated and fed into the LLMs.</li>
+</ul>
+<p>The edge table details all the edges within the graph.</p>
+</li>
+<li>
+<p>Natural Language</p>
+<p>Considering the outstanding natural language comprehension capabilities of LMs.</p>
+<p>Describe the retrieved graph data using natural language.</p>
+<ul>
+<li>Define a natural language template for each type of edge in advance and subsequently filling in the endpoints of each edge into the corresponding template based on its type.</li>
+<li>Employ natural language to describe the information of 1-hop and 2-hop neighboring nodes of the central node.</li>
+<li><mark>Adopt LMs to rewrite the edge table of retrieved subgraphs, generating a natural language description.</mark></li>
+<li>Explore different representations of nodes (e.g., Integer encoding, alphabet letters, names, etc.) and edges (e.g., parenthesis, arrows, incident, etc.)</li>
+<li>Integrate information from different granularities within the graph into prompts through natural language in the form of dialogue</li>
+</ul>
+</li>
+<li>
+<p>Code-Like Forms</p>
+<p>Natural descriptions and other 1-D sequences are inherently inadequate for directly representing the 2-D structure of graph data.</p>
+<p>Given the robust code comprehension capabilities of LMs.</p>
+<ul>
+<li>Graph Modeling Language (GML)</li>
+<li>Graph Markup Language (GraphML)</li>
+</ul>
+<p>These standardized languages are specifically designed for graph data, providing comprehensive descriptions that encompass nodes, edges, and their interrelationships.</p>
+</li>
+<li>
+<p>Syntax Tree</p>
+<p>Syntax trees possess a hierarchical structure and maintain a topological order.</p>
+<ul>
+<li>Transform the ego network of a central node into a graph-syntax tree format. This format not only encapsulates structural information but also integrates the features of the nodes. By traversing this syntax tree, it is possible to obtain a node sequence that maintains both topological order and hierarchical structure.</li>
+</ul>
+</li>
+<li>
+<p>Node Sequence</p>
+<p>Node Sequences are often generated using predefined rules.</p>
+<p>Compared to natural language descriptions, these node sequences are more concise and incorporate prior knowledge, specifically the structural information emphasized by the rules.</p>
+<ul>
+<li>
+<p>Transform the retrieved paths into node sequences and input them into an LLM to enhance the task performance</p>
+</li>
+<li>
+<p><mark>The Neighborhood Detail Template: offers a detailed examination of the central node along with its immediate surroundings. 提供了对中心节点和它的直接周边环境的详细检查</mark></p>
+<p><mark>The Hop-Field Overview Template, provides a summarized perspective of a node’s neighborhood, which can be expanded to encompass broader areas. 提供了一个节点邻域的总结视角，可以扩展到更广泛的领域</mark></p>
+</li>
+<li>
+<p>Inputs the retrieved reasoning paths into LMs in the form of node sequences as prompts.</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="generators"><a class="markdownIt-Anchor" href="#generators"></a> Generators</h4>
+<p>Generators</p>
+<ul>
+<li>
+<p>GNNs (暂不研究)</p>
+</li>
+<li>
+<p>LMs</p>
+<p>Encoder-only models, primary use in discriminative tasks.</p>
+<p>Encoder-decoder and decoder-only models are adapt at both discriminative and generative tasks.</p>
+</li>
+<li>
+<p>Hybrid Models (暂不研究)</p>
+</li>
+</ul>
+<h2 id="training"><a class="markdownIt-Anchor" href="#training"></a> Training</h2>
+<h3 id="training-strategies-of-retriever"><a class="markdownIt-Anchor" href="#training-strategies-of-retriever"></a> Training Strategies of Retriever</h3>
+<ul>
+<li>
+<p>Training-Free</p>
+<ul>
+<li>
+<p>Non-parametric retrieves: rely on pre-defined rules or traditional graph search algorithms rather than specific models.</p>
+</li>
+<li>
+<p>Utilize pre-trained LMs as retrieves</p>
+<p>Utilize pre-trained embedding models to encode the queries and perform retrieval directly based on the similarity between the query and graph elements.</p>
+<p>Adopt generative language models.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Training-based</p>
+</li>
+</ul>
+<h2 id="evaluation"><a class="markdownIt-Anchor" href="#evaluation"></a> Evaluation</h2>
+<ul>
+<li>
+<p>downstream task evaluation (generation quality)</p>
+<ul>
+<li>
+<p>KBQA</p>
+<p>Exact Match (EM), F1 score: commonly used to measure the accuracy of answering entities.</p>
+<p>BERT4Score, GPT4Score: mitigate instances where LLMs generate entities that are synonymous with the ground truth but not exact matches.</p>
+</li>
+<li>
+<p>CSQA</p>
+<p>Accuracy, BLEU, ROUGE-L, METEOR</p>
+</li>
+</ul>
+</li>
+<li>
+<p>retrieved quality</p>
+<p>coverage of answers / the size of the retrieval subgraph…</p>
+</li>
+</ul>
+<h2 id="future-research-directions"><a class="markdownIt-Anchor" href="#future-research-directions"></a> Future Research Directions</h2>
+<ul>
+<li>
+<p>Dynamic and Adaptive Graphs</p>
+<p>Most GraphRAG methods are built upon static databases; however, as time progresses, new entities and relationships inevitably emerge.</p>
+</li>
+<li>
+<p>Multi-Modality Information Integration</p>
+<p>Most knowledge graphs primarily encompass textual information, thereby lacking the inclusion of other modalities such as images, audio, and videos, which hold the potential to significantly enhance the overall quality and richness of the database.</p>
+</li>
+<li>
+<p>Scalable and Efficient Retrieval Mechanisms</p>
+</li>
+<li>
+<p>Combination with Graph Foundation Model</p>
+</li>
+<li>
+<p>Lossless Compression of Retrieved Context</p>
+<p>remove redundant information and compress lengthy sentences into shorter</p>
+<p>目前的工作只进行了权衡</p>
+</li>
+<li>
+<p>Standard Benchmarks</p>
+</li>
+<li>
+<p>Boarder Application</p>
+</li>
+</ul>
+<h3 id="from-local-to-global-a-graph-rag-approach-to-query-focused-summarization"><a class="markdownIt-Anchor" href="#from-local-to-global-a-graph-rag-approach-to-query-focused-summarization"></a> From Local to Global: A Graph RAG Approach to Query-Focused Summarization</h3>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#background"><span class="toc-number">1.</span> <span class="toc-text"> Background</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#preliminaries"><span class="toc-number">2.</span> <span class="toc-text"> Preliminaries</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#text-attributed-graphs"><span class="toc-number">2.1.</span> <span class="toc-text"> Text-Attributed Graphs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#graphrag-workflow"><span class="toc-number">3.</span> <span class="toc-text"> GraphRAG Workflow</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#graph-based-index-g-indexing"><span class="toc-number">3.1.</span> <span class="toc-text"> Graph-Based Index (G-Indexing)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#graph-guided-retrieval-g-retrieval"><span class="toc-number">3.2.</span> <span class="toc-text"> Graph-Guided Retrieval (G-Retrieval)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#retrieval-enhancement"><span class="toc-number">3.2.1.</span> <span class="toc-text"> Retrieval Enhancement</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#retrieval-granularity"><span class="toc-number">3.2.2.</span> <span class="toc-text"> Retrieval Granularity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#retriever"><span class="toc-number">3.2.3.</span> <span class="toc-text"> Retriever</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#retrieval-paradigm-%E6%A3%80%E7%B4%A2%E8%8C%83%E5%BC%8F"><span class="toc-number">3.2.4.</span> <span class="toc-text"> Retrieval Paradigm 检索范式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#graph-enhanced-generation-g-generationimage-20240912225323748"><span class="toc-number">3.3.</span> <span class="toc-text"> Graph-Enhanced Generation (G-Generation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#generation-enhancement"><span class="toc-number">3.3.1.</span> <span class="toc-text"> Generation Enhancement</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph-formats"><span class="toc-number">3.3.2.</span> <span class="toc-text"> Graph Formats</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#generators"><span class="toc-number">3.3.3.</span> <span class="toc-text"> Generators</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#training"><span class="toc-number">4.</span> <span class="toc-text"> Training</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#training-strategies-of-retriever"><span class="toc-number">4.1.</span> <span class="toc-text"> Training Strategies of Retriever</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#evaluation"><span class="toc-number">5.</span> <span class="toc-text"> Evaluation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#future-research-directions"><span class="toc-number">6.</span> <span class="toc-text"> Future Research Directions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#from-local-to-global-a-graph-rag-approach-to-query-focused-summarization"><span class="toc-number">6.1.</span> <span class="toc-text"> From Local to Global: A Graph RAG Approach to Query-Focused Summarization</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2024/09/06/Graph-RAG-A-Survey/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&text=Graph RAG: A Survey"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&is_video=false&description=Graph RAG: A Survey"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Graph RAG: A Survey&body=Check out this article: http://example.com/2024/09/06/Graph-RAG-A-Survey/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&title=Graph RAG: A Survey"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2024/09/06/Graph-RAG-A-Survey/&name=Graph RAG: A Survey&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2024/09/06/Graph-RAG-A-Survey/&t=Graph RAG: A Survey"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

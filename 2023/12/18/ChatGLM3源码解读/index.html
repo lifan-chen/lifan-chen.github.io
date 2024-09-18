@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="目前主要解读chat和stream_chat相关的内容  1 chat 方法 1234567891011121314151617181920212223242526# modeling_chatglm.pyclass ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):    ...    @torch.inference_mode()">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGLM3源码解读">
+<meta property="og:url" content="http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="目前主要解读chat和stream_chat相关的内容  1 chat 方法 1234567891011121314151617181920212223242526# modeling_chatglm.pyclass ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):    ...    @torch.inference_mode()">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-18T10:43:08.000Z">
+<meta property="article:modified_time" content="2023-12-18T12:50:32.663Z">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>ChatGLM3源码解读</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/11/28/Long-Contexts/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&text=ChatGLM3源码解读"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&is_video=false&description=ChatGLM3源码解读"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ChatGLM3源码解读&body=Check out this article: http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&name=ChatGLM3源码解读&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&t=ChatGLM3源码解读"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-chat-%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text"> 1 chat 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-logits-processor"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1. Logits Processor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-tokenizerbuild_chat_input"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 tokenizer.build_chat_input</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-stream_chat-%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text"> 2 stream_chat 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-stream_generation%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 stream_generation方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-process_response%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2 process_response方法</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        ChatGLM3源码解读
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-18T10:43:08.000Z" class="dt-published" itemprop="datePublished">2023-12-18</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Note/">Note</a> › <a class="category-link" href="/categories/Note/AI/">AI</a> › <a class="category-link" href="/categories/Note/AI/NLP/">NLP</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>目前主要解读<code>chat</code>和<code>stream_chat</code>相关的内容</p>
+<h2 id="1-chat-方法"><a class="markdownIt-Anchor" href="#1-chat-方法"></a> 1 chat 方法</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># modeling_chatglm.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatGLMForConditionalGeneration</span>(<span class="title class_ inherited__">ChatGLMPreTrainedModel</span>):</span><br><span class="line">    ...</span><br><span class="line"><span class="meta">    @torch.inference_mode()</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">chat</span>(<span class="params">self, tokenizer, query: <span class="built_in">str</span>, history: <span class="type">List</span>[<span class="type">Dict</span>] = <span class="literal">None</span>, role: <span class="built_in">str</span> = <span class="string">&quot;user&quot;</span>,</span></span><br><span class="line"><span class="params">             max_length: <span class="built_in">int</span> = <span class="number">8192</span>, num_beams=<span class="number">1</span>, do_sample=<span class="literal">True</span>, top_p=<span class="number">0.8</span>, temperature=<span class="number">0.8</span>, logits_processor=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">             **kwargs</span>):</span><br><span class="line">        <span class="comment"># 若没有历史对话，则初始化history</span></span><br><span class="line">        <span class="keyword">if</span> history <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            history = []</span><br><span class="line">        <span class="comment"># 定义 Logit Processor</span></span><br><span class="line">        <span class="keyword">if</span> logits_processor <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            logits_processor = LogitsProcessorList()</span><br><span class="line">        logits_processor.append(InvalidScoreLogitsProcessor())</span><br><span class="line">        gen_kwargs = &#123;<span class="string">&quot;max_length&quot;</span>: max_length, <span class="string">&quot;num_beams&quot;</span>: num_beams, <span class="string">&quot;do_sample&quot;</span>: do_sample, <span class="string">&quot;top_p&quot;</span>: top_p, <span class="string">&quot;temperature&quot;</span>: temperature, <span class="string">&quot;logits_processor&quot;</span>: logits_processor, **kwargs&#125;</span><br><span class="line">        inputs = tokenizer.build_chat_input(query, history=history, role=role)</span><br><span class="line">        inputs = inputs.to(self.device)</span><br><span class="line">        eos_token_id = [tokenizer.eos_token_id, tokenizer.get_command(<span class="string">&quot;&lt;|user|&gt;&quot;</span>),</span><br><span class="line">                        tokenizer.get_command(<span class="string">&quot;&lt;|observation|&gt;&quot;</span>)]</span><br><span class="line">        outputs = self.generate(**inputs, **gen_kwargs, eos_token_id=eos_token_id)</span><br><span class="line">        outputs = outputs.tolist()[<span class="number">0</span>][<span class="built_in">len</span>(inputs[<span class="string">&quot;input_ids&quot;</span>][<span class="number">0</span>]):-<span class="number">1</span>]</span><br><span class="line">        response = tokenizer.decode(outputs)</span><br><span class="line">        history.append(&#123;<span class="string">&quot;role&quot;</span>: role, <span class="string">&quot;content&quot;</span>: query&#125;)</span><br><span class="line">        response, history = self.process_response(response, history)</span><br><span class="line">        <span class="keyword">return</span> response, history</span><br></pre></td></tr></table></figure>
+<h3 id="11-logits-processor"><a class="markdownIt-Anchor" href="#11-logits-processor"></a> 1.1. Logits Processor</h3>
+<p>Logits processor 是在生成过程中，每一个step的score计算完成之后，对score进行进一步的加工，改变模型输出的概率分布，从而影响后续生成结果的处理。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># modeling_chatglm.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> transformers.generation.logits_process <span class="keyword">import</span> LogitsProcessor</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">InvalidScoreLogitsProcessor</span>(<span class="title class_ inherited__">LogitsProcessor</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, input_ids: torch.LongTensor, scores: torch.FloatTensor</span>) -&gt; torch.FloatTensor:</span><br><span class="line">        <span class="keyword">if</span> torch.isnan(scores).<span class="built_in">any</span>() <span class="keyword">or</span> torch.isinf(scores).<span class="built_in">any</span>():</span><br><span class="line">            scores.zero_()</span><br><span class="line">            scores[..., <span class="number">5</span>] = <span class="number">5e4</span></span><br><span class="line">        <span class="keyword">return</span> scores</span><br></pre></td></tr></table></figure>
+<p>使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> logits_processor <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    logits_processor = LogitsProcessorList()</span><br><span class="line">logits_processor.append(InvalidScoreLogitsProcessor())</span><br><span class="line">gen_kwargs = &#123;<span class="string">&quot;max_length&quot;</span>: max_length, <span class="string">&quot;num_beams&quot;</span>: num_beams, <span class="string">&quot;do_sample&quot;</span>: do_sample, <span class="string">&quot;top_p&quot;</span>: top_p,<span class="string">&quot;temperature&quot;</span>: temperature, <span class="string">&quot;logits_processor&quot;</span>: logits_processor, **kwargs&#125;</span><br><span class="line"></span><br><span class="line">outputs = self.generate(**inputs, **gen_kwargs, eos_token_id=eos_token_id)</span><br></pre></td></tr></table></figure>
+<h3 id="12-tokenizerbuild_chat_input"><a class="markdownIt-Anchor" href="#12-tokenizerbuild_chat_input"></a> 1.2 tokenizer.build_chat_input</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tokenization_chatglm.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatGLMTokenizer</span>(<span class="title class_ inherited__">PreTrainedTokenizer</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_command</span>(<span class="params">self, token</span>):</span><br><span class="line">        <span class="keyword">if</span> token <span class="keyword">in</span> self.special_tokens:</span><br><span class="line">            <span class="keyword">return</span> self.special_tokens[token]</span><br><span class="line">        <span class="keyword">assert</span> token <span class="keyword">in</span> self.tokenizer.special_tokens, <span class="string">f&quot;<span class="subst">&#123;token&#125;</span> is not a special token for <span class="subst">&#123;self.name&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> self.tokenizer.special_tokens[token]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 构建单条消息</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">build_single_message</span>(<span class="params">self, role, metadata, message</span>):</span><br><span class="line">        <span class="comment"># 若role不在列表里，报错</span></span><br><span class="line">        <span class="keyword">assert</span> role <span class="keyword">in</span> [<span class="string">&quot;system&quot;</span>, <span class="string">&quot;user&quot;</span>, <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;observation&quot;</span>], role</span><br><span class="line">        <span class="comment"># 获取role的tokens</span></span><br><span class="line">        role_tokens = [self.get_command(<span class="string">f&quot;&lt;|<span class="subst">&#123;role&#125;</span>|&gt;&quot;</span>)] + self.tokenizer.encode(<span class="string">f&quot;<span class="subst">&#123;metadata&#125;</span>\n&quot;</span>)</span><br><span class="line">        message_tokens = self.tokenizer.encode(message)</span><br><span class="line">        <span class="comment"># 最后得到的tokens是 role_tokens + message_tokens</span></span><br><span class="line">        tokens = role_tokens + message_tokens</span><br><span class="line">        <span class="keyword">return</span> tokens</span><br><span class="line">	</span><br><span class="line">    <span class="comment"># 构建对话的input</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">build_chat_input</span>(<span class="params">self, query, history=<span class="literal">None</span>, role=<span class="string">&quot;user&quot;</span></span>):</span><br><span class="line">        <span class="keyword">if</span> history <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            history = []</span><br><span class="line">            input_ids = []</span><br><span class="line">        <span class="comment"># 取出history中的所有conten，加入input</span></span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> history:</span><br><span class="line">            content = item[<span class="string">&quot;content&quot;</span>]</span><br><span class="line">            <span class="comment"># 若调用了工具，则在content中加入工具的信息</span></span><br><span class="line">            <span class="keyword">if</span> item[<span class="string">&quot;role&quot;</span>] == <span class="string">&quot;system&quot;</span> <span class="keyword">and</span> <span class="string">&quot;tools&quot;</span> <span class="keyword">in</span> item:</span><br><span class="line">                content = content + <span class="string">&quot;\n&quot;</span> + json.dumps(item[<span class="string">&quot;tools&quot;</span>], indent=<span class="number">4</span>, ensure_ascii=<span class="literal">False</span>)</span><br><span class="line">                input_ids.extend(self.build_single_message(item[<span class="string">&quot;role&quot;</span>], item.get(<span class="string">&quot;metadata&quot;</span>, <span class="string">&quot;&quot;</span>), content))</span><br><span class="line">        <span class="comment"># 将当前query加入input</span></span><br><span class="line">        input_ids.extend(self.build_single_message(role, <span class="string">&quot;&quot;</span>, query))</span><br><span class="line">        input_ids.extend([self.get_command(<span class="string">&quot;&lt;|assistant|&gt;&quot;</span>)])</span><br><span class="line">        <span class="comment"># batch_encode_plus方法继承自transformers.PreTrainedTokenizerBase类</span></span><br><span class="line">        <span class="keyword">return</span> self.batch_encode_plus([input_ids], return_tensors=<span class="string">&quot;pt&quot;</span>, is_split_into_words=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>transformers.PreTrainedTokenizerBase.batch_encode_plus
+<ul>
+<li>param
+<ul>
+<li><strong>batch_text_or_text_pairs</strong> (<code>List[str]</code>, <code>List[Tuple[str, str]]</code>, <code>List[List[str]]</code>, <code>List[Tuple[List[str], List[str]]]</code>, and for not-fast tokenizers, also <code>List[List[int]]</code>, <code>List[Tuple[List[int], List[int]]]</code>) — Batch of sequences or pair of sequences to be encoded. This can be a list of string/string-sequences/int-sequences or a list of pair of string/string-sequences/int-sequence (see details in <code>encode_plus</code>).</li>
+<li><strong>return_tensors</strong> (<code>str</code> or <a target="_blank" rel="noopener" href="https://huggingface.co/docs/transformers/main/en/internal/file_utils#transformers.TensorType">TensorType</a>, <em>optional</em>) — If set, will return tensors instead of list of python integers. Acceptable values are:<code>'tf'</code>: Return TensorFlow <code>tf.constant</code> objects.<code>'pt'</code>: Return PyTorch <code>torch.Tensor</code> objects.<code>'np'</code>: Return Numpy <code>np.ndarray</code> objects.</li>
+</ul>
+</li>
+<li>return
+<ul>
+<li>transformers.BatchEncoding: This class is derived from a python dictionary and can be used as a dictionary. In addition, this class exposes utility methods to map from word/character space to token space.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-stream_chat-方法"><a class="markdownIt-Anchor" href="#2-stream_chat-方法"></a> 2 stream_chat 方法</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># modeling_chatglm.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatGLMForConditionalGeneration</span>(<span class="title class_ inherited__">ChatGLMPreTrainedModel</span>):</span><br><span class="line">    ...</span><br><span class="line"><span class="meta">    @torch.inference_mode()</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">stream_chat</span>(<span class="params">self, tokenizer, query: <span class="built_in">str</span>, history: <span class="type">List</span>[<span class="type">Dict</span>] = <span class="literal">None</span>, role: <span class="built_in">str</span> = <span class="string">&quot;user&quot;</span>,</span></span><br><span class="line"><span class="params">    past_key_values=<span class="literal">None</span>,max_length: <span class="built_in">int</span> = <span class="number">8192</span>, do_sample=<span class="literal">True</span>, top_p=<span class="number">0.8</span>, temperature=<span class="number">0.8</span>,</span></span><br><span class="line"><span class="params">    logits_processor=<span class="literal">None</span>, return_past_key_values=<span class="literal">False</span>, **kwargs</span>):</span><br><span class="line">        <span class="keyword">if</span> history <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        	history = []</span><br><span class="line">        <span class="keyword">if</span> logits_processor <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        	logits_processor = LogitsProcessorList()</span><br><span class="line">        logits_processor.append(InvalidScoreLogitsProcessor())</span><br><span class="line">        eos_token_id = [tokenizer.eos_token_id, tokenizer.get_command(<span class="string">&quot;&lt;|user|&gt;&quot;</span>),</span><br><span class="line">        				tokenizer.get_command(<span class="string">&quot;&lt;|observation|&gt;&quot;</span>)]</span><br><span class="line">        gen_kwargs = &#123;<span class="string">&quot;max_length&quot;</span>: max_length, <span class="string">&quot;do_sample&quot;</span>: do_sample, <span class="string">&quot;top_p&quot;</span>: top_p,</span><br><span class="line">        	<span class="string">&quot;temperature&quot;</span>: temperature, <span class="string">&quot;logits_processor&quot;</span>: logits_processor, **kwargs&#125;</span><br><span class="line">        <span class="keyword">if</span> past_key_values <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        	inputs = tokenizer.build_chat_input(query, history=history, role=role)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">        	inputs = tokenizer.build_chat_input(query, role=role)</span><br><span class="line">        inputs = inputs.to(self.device)</span><br><span class="line">        <span class="keyword">if</span> past_key_values <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        	past_length = past_key_values[<span class="number">0</span>][<span class="number">0</span>].shape[<span class="number">0</span>]</span><br><span class="line">            <span class="comment"># 若之前的sequence长度不为None</span></span><br><span class="line">        	<span class="keyword">if</span> self.transformer.pre_seq_len <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="comment"># 已经运行过的长度=pre_seq_len</span></span><br><span class="line">                past_length -= self.transformer.pre_seq_len</span><br><span class="line">                <span class="comment"># 位置id从past_length的id开始</span></span><br><span class="line">                inputs.position_ids += past_length</span><br><span class="line">                attention_mask = inputs.attention_mask</span><br><span class="line">                <span class="comment"># 拼接张量</span></span><br><span class="line">                attention_mask = torch.cat((attention_mask.new_ones(<span class="number">1</span>, past_length), attention_mask), dim=<span class="number">1</span>)</span><br><span class="line">                inputs[<span class="string">&#x27;attention_mask&#x27;</span>] = attention_mask</span><br><span class="line">        history.append(&#123;<span class="string">&quot;role&quot;</span>: role, <span class="string">&quot;content&quot;</span>: query&#125;)</span><br><span class="line">        <span class="keyword">for</span> outputs <span class="keyword">in</span> self.stream_generate(**inputs, past_key_values=past_key_values,</span><br><span class="line">                eos_token_id=eos_token_id, return_past_key_values=return_past_key_values,</span><br><span class="line">                **gen_kwargs):</span><br><span class="line">            <span class="keyword">if</span> return_past_key_values:</span><br><span class="line">            	outputs, past_key_values = outputs</span><br><span class="line">            outputs = outputs.tolist()[<span class="number">0</span>][<span class="built_in">len</span>(inputs[<span class="string">&quot;input_ids&quot;</span>][<span class="number">0</span>]):-<span class="number">1</span>]</span><br><span class="line">            response = tokenizer.decode(outputs)</span><br><span class="line">            <span class="keyword">if</span> response <span class="keyword">and</span> response[-<span class="number">1</span>] != <span class="string">&quot;�&quot;</span>:</span><br><span class="line">            	response, new_history = self.process_response(response, history)</span><br><span class="line">            	<span class="keyword">if</span> return_past_key_values:</span><br><span class="line">            		<span class="keyword">yield</span> response, new_history, past_key_values</span><br><span class="line">            	<span class="keyword">else</span>:</span><br><span class="line">            		<span class="keyword">yield</span> response, new_history</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>对于几个变量的解释（啊啊啊，感觉要重新去看Transformer）</p>
+<ul>
+<li>
+<p>eos_token_id</p>
+<p>是序列结束时标记的id。可以选择使用一个列表来设置多个序列结束标记</p>
+</li>
+<li>
+<p>past_key_value</p>
+<p>只有Decoder模型在文本生成过程（训练过程用不上）中才能用到。顾名思义，它存储的是Decoder模型在 t 时刻前输入的token对应的key和value映射，用于减少计算，将input在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">W_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">W_v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>上的映射存储起来，进行下一个词预测时，就可以直接拿过来用了。它包括self_attention和cross_attention对应的key、value映射。</p>
+<p>单个key或者value单元shape：<code>[batch_size, n_heads, q_len-1, dim_per_head]</code></p>
+</li>
+<li>
+<p>past_key_values</p>
+<p>将每一层的past_key_value都存在其中</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="21-stream_generation方法"><a class="markdownIt-Anchor" href="#21-stream_generation方法"></a> 2.1 stream_generation方法</h3>
+<ul>
+<li>return
+<ul>
+<li>inputs_ids</li>
+<li>past_key_values</li>
+</ul>
+</li>
+</ul>
+<h3 id="22-process_response方法"><a class="markdownIt-Anchor" href="#22-process_response方法"></a> 2.2 process_response方法</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># modeling_chatglm.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatGLMForConditionalGeneration</span>(<span class="title class_ inherited__">ChatGLMPreTrainedModel</span>):</span><br><span class="line">    <span class="comment"># 处理response</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">process_response</span>(<span class="params">self, output, history</span>):</span><br><span class="line">        content = <span class="string">&quot;&quot;</span></span><br><span class="line">        history = deepcopy(history)</span><br><span class="line">        <span class="comment"># 将response字符串中存在的内容一一归类</span></span><br><span class="line">        <span class="keyword">for</span> response <span class="keyword">in</span> output.split(<span class="string">&quot;&lt;|assistant|&gt;&quot;</span>):</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;\n&quot;</span> <span class="keyword">in</span> response:  <span class="comment"># 好像s</span></span><br><span class="line">                metadata, content = response.split(<span class="string">&quot;\n&quot;</span>, maxsplit=<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                metadata, content = <span class="string">&quot;&quot;</span>, response</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> metadata.strip():</span><br><span class="line">                content = content.strip()</span><br><span class="line">                history.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;metadata&quot;</span>: metadata, <span class="string">&quot;content&quot;</span>: content&#125;)</span><br><span class="line">                content = content.replace(<span class="string">&quot;[[训练时间]]&quot;</span>, <span class="string">&quot;2023年&quot;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                history.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;metadata&quot;</span>: metadata, <span class="string">&quot;content&quot;</span>: content&#125;)</span><br><span class="line">                <span class="keyword">if</span> history[<span class="number">0</span>][<span class="string">&quot;role&quot;</span>] == <span class="string">&quot;system&quot;</span> <span class="keyword">and</span> <span class="string">&quot;tools&quot;</span> <span class="keyword">in</span> history[<span class="number">0</span>]:</span><br><span class="line">                    content = <span class="string">&quot;\n&quot;</span>.join(content.split(<span class="string">&quot;\n&quot;</span>)[<span class="number">1</span>:-<span class="number">1</span>])</span><br><span class="line">                    <span class="keyword">def</span> <span class="title function_">tool_call</span>(<span class="params">**kwargs</span>):</span><br><span class="line">                        <span class="keyword">return</span> kwargs</span><br><span class="line">                    parameters = <span class="built_in">eval</span>(content)</span><br><span class="line">                    content = &#123;<span class="string">&quot;name&quot;</span>: metadata.strip(), <span class="string">&quot;parameters&quot;</span>: parameters&#125;</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    content = &#123;<span class="string">&quot;name&quot;</span>: metadata.strip(), <span class="string">&quot;content&quot;</span>: content&#125;</span><br><span class="line">        <span class="keyword">return</span> content, history</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-chat-%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text"> 1 chat 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-logits-processor"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1. Logits Processor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-tokenizerbuild_chat_input"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 tokenizer.build_chat_input</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-stream_chat-%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text"> 2 stream_chat 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-stream_generation%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 stream_generation方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-process_response%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2 process_response方法</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&text=ChatGLM3源码解读"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&is_video=false&description=ChatGLM3源码解读"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ChatGLM3源码解读&body=Check out this article: http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&name=ChatGLM3源码解读&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&t=ChatGLM3源码解读"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
