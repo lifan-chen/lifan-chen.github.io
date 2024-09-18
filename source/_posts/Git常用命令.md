@@ -1,7 +1,7 @@
 ---
 title: Git常用命令
 tags:
-  - remark
+  - 命令查询
 abbrlink: 7065
 date: 2023-08-17 20:37:36
 ---

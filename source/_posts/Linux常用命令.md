@@ -1,9 +1,9 @@
 ---
 title: Linux常用命令
 tags:
-  - linux
-  - remark
-categories: Linux
+  - 命令查询
+categories:
+  - Linux
 abbrlink: 48230
 date: 2023-08-17 12:08:11
 ---
