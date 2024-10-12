@@ -60,8 +60,23 @@ categories:
     H^{(l+1)}=\sigma (\tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\frac{1}{2}} H^{(l)} W^{(l)})
     $$
     where the latent representations of the $l$ th layer are preserved in the matrix $H^{(l)} (H^{(0)})=X$ through an activation function $\sigma (\cdot)$ with a layer-specific trainable weight matrix $W^{(l)}$. Here, $\tilde{A}=A+I_n$, where $I_n$ denotes the identity matrix, and $\tilde{D}_{ii}=\sum_j\tilde{a}_{ij} \in \tilde{A}$.
+<<<<<<< HEAD
   
   * Community clustering with unsupervised network representation.
+=======
+
+    * Community clustering with unsupervised network representation.
+
+## Hierarchical Networks
+
+
+
+
+
+
+
+
+>>>>>>> d458109d25b68b76821b68eb3978bd202b084e46
 
 [^1]: 符号网络（Signed Network）是一种特殊类型的网络，其中不仅包含传统的无向或有向的边来表示实体（如人、组织、国家等）之间的关系，而且这些边带有正负符号，用以表示关系的类型是积极的（如友谊、合作）还是消极的（如敌意、竞争）。符号网络能够更准确地反映现实世界中的复杂关系，因为现实世界中的许多关系不仅仅是连接的存在与否，还包括连接的性质。 
 [^2]: 属性网络（Attributed Network）是一种网络数据结构，其中节点（顶点）和/或边（连接线）不仅由其在网络中的位置定义，还由关联的属性（特征）定义。这些属性可以是各种类型的信息，如文本、数字、类别或任何可以描述节点或边的实值数据。
