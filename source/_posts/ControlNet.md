@@ -27,9 +27,8 @@ ControlNet, a neural network architecture to add spatial conditioning controls t
   y_c = y.
   $$
   
-
-  <img src="D:\blog\source\_posts\ControlNet\image-20241012190140674.png" alt="image-20241012190140674" style="zoom:80%;" />
-
+  <img src=".\ControlNet\image-20241012190140674.png" alt="image-20241012190140674" style="zoom:80%;" />
+  
   * *network block*: refer to a set of neural layers that are commonly put together to form a single unit of a neural network (e.g., resnet block, conv-bn-relu block, multi-head attention block, transformer block, etc)
   * *zero convolution*: 1x1 convolution with both weight and bias initialized to zero. It can protect the backbone by eliminating random noise as gradients in the initial training steps.
   * The locked parameters preserve the production-ready model trained with billion of images, while the trainable copy reuses such large-scale pretrained model to establish a deep, robust and strong backbone for handling diverse input conditions.
@@ -38,7 +37,7 @@ ControlNet, a neural network architecture to add spatial conditioning controls t
 
 * Stable Diffusion
 
-  ![image-20241014184608848](D:\blog\source\_posts\ControlNet\image-20241014184608848.png)
+  ![image-20241014184608848](./ControlNet/image-20241014184608848.png)
 
   * encoder (12 blocks), middle (1 block) ,decoder (12 blocks)
   * 8 blocks of it are down-sampling or up-sampling conv layers, while the other 17 blocks are main blocks (each contain 4 resnet layers and 2 Vision Transformers (Vits))
@@ -93,7 +92,7 @@ ControlNet, a neural network architecture to add spatial conditioning controls t
 
 * Composing multiple ControlNets.
 
-  <img src="D:\blog\source\_posts\ControlNet\image-20241014195232863.png" alt="image-20241014195232863" style="zoom:80%;" />
+  <img src=".\ControlNet\image-20241014195232863.png" alt="image-20241014195232863" style="zoom:80%;" />
 
   * Apply multiple conditioning images (e.g., depth and pose) as a replacement for the prompt.
 
