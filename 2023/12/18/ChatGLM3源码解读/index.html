@@ -1,17 +1,48 @@
 <!DOCTYPE html>
-<html lang=en>
+
+<html lang=en class="no-js" data-blog-theme="cactus">
 <head>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="目前主要解读chat和stream_chat相关的内容  1 chat 方法 1234567891011121314151617181920212223242526# modeling_chatglm.pyclass ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):    ...    @torch.inference_mode()">
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","storageKey":"shimmer.theme.preference","themes":[{"id":"cactus","label":"Cactus","stylesheet":"","aliases":[]},{"id":"glass","label":"Glass","stylesheet":"css/themes/glass","aliases":["classic"]}]}</script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
+        var aliases = {};
+        var valid = {};
+        registry.themes.forEach(function (theme) {
+          valid[theme.id] = true;
+          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
+        });
+        var selected = registry.default;
+        try {
+          var raw = localStorage.getItem(registry.storageKey);
+          if (raw) {
+            var saved = JSON.parse(raw);
+            var candidate = typeof saved === 'string'
+              ? saved
+              : saved && saved.v === registry.version && saved.id;
+            candidate = aliases[candidate] || candidate;
+            if (valid[candidate]) selected = candidate;
+          }
+        } catch (_) {}
+        root.classList.remove('no-js');
+        root.classList.add('js');
+        root.setAttribute('data-blog-theme', selected);
+        window.__BLOG_THEME_REGISTRY__ = registry;
+        window.__BLOG_THEME_ID__ = selected;
+      })();
+    </script>
+    <meta name="description" content="目前主要解读chat和streamchat相关的内容">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ChatGLM3源码解读">
 <meta property="og:url" content="https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/index.html">
 <meta property="og:site_name" content="Shimmer">
-<meta property="og:description" content="目前主要解读chat和stream_chat相关的内容  1 chat 方法 1234567891011121314151617181920212223242526# modeling_chatglm.pyclass ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):    ...    @torch.inference_mode()">
+<meta property="og:description" content="目前主要解读chat和streamchat相关的内容">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-12-18T10:43:08.000Z">
 <meta property="article:modified_time" content="2023-12-18T10:43:08.000Z">
@@ -48,6 +79,13 @@
     
 <link rel="stylesheet" href="/css/style.css">
 
+    
+      
+    
+      
+<link rel="stylesheet" href="/css/themes/glass.css">
+
+    
     <!-- persian styles -->
     
     <!-- rss -->
@@ -68,7 +106,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-<body class="max-width mx-auto px3 ltr">
+<body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="post">
+    
     
       <div id="header-post">
   <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
@@ -117,7 +156,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&name=ChatGLM3源码解读&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&name=ChatGLM3源码解读&description=目前主要解读chat和streamchat相关的内容"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&t=ChatGLM3源码解读"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -132,9 +171,75 @@
 </div>
 
     
-    <div class="content index py4 ">
-        
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+    <div id="site-content" class="content index py4 " data-theme-slot="site-shell">
+        <header id="header" data-theme-slot="site-header">
+  <a class="u-url u-uid" href="/">
+  
+    
+      <img id="logo" alt class="u-logo" src="/images/logo.png" />
+    
+  
+    <div id="title">
+      <h1 class="p-name">Shimmer</h1>
+    </div>
+  </a>
+  <div id="nav" data-theme-slot="primary-nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li data-nav-key="home"><a href="/"><i class="nav-item-icon fa-solid fa-home" aria-hidden="true"></i><span class="nav-item-text">Home</span></a></li><!--
+   --><!--
+     --><li data-nav-key="articles"><a href="/archives/"><i class="nav-item-icon fa-solid fa-clock" aria-hidden="true"></i><span class="nav-item-text">Writing</span></a></li><!--
+   --><!--
+     --><li data-nav-key="category"><a href="/categories/"><i class="nav-item-icon fa-solid fa-cubes-stacked" aria-hidden="true"></i><span class="nav-item-text">Category</span></a></li><!--
+   --><!--
+     --><li data-nav-key="tag"><a href="/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
+   -->
+      
+<li class="blog-theme-selector" data-theme-slot="theme-selector">
+  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
+    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
+  </button>
+  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
+    
+  </div>
+</li>
+
+      <!--
+     --><li class="nav-search">
+          <form id="nav-search-form" role="search" data-search-path="/search.xml">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" id="nav-search-input" autocomplete="off" placeholder="Search..." aria-label="Search...">
+            <div id="nav-search-results" role="listbox" aria-label="Search..."></div>
+          </form>
+        </li><!--
+   -->
+    </ul>
+  </div>
+</header>
+
+        <main class="theme-page-flow" data-theme-slot="page-flow">
+          <div class="theme-post-layout" data-theme-slot="post-layout">
+  <aside class="theme-post-toc-position" data-theme-slot="post-toc-position" aria-label="Table of contents">
+    <div class="theme-post-toc" data-theme-slot="post-toc">
+      <div class="theme-post-toc-title">目录</div>
+      <ul><li><a href="#1-chat-方法">1 chat 方法</a><ul><li><a href="#11-logits-processor">1.1. Logits Processor</a></li><li><a href="#12-tokenizerbuild_chat_input">1.2 tokenizer.build_chat_input</a></li></ul></li><li><a href="#2-stream_chat-方法">2 stream_chat 方法</a><ul><li><a href="#21-stream_generation方法">2.1 stream_generation方法</a></li><li><a href="#22-process_response方法">2.2 process_response方法</a></li></ul></li></ul>
+    </div>
+  </aside>
+<article class="post h-entry" data-theme-slot="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="theme-post-banner" data-theme-slot="post-banner">
+    <div class="theme-post-banner-title"><span class="banner-title-en" lang="en">ChatGLM3</span><span class="banner-title-zh" lang="zh-CN">源码解读</span></div>
+    <div class="theme-post-banner-meta">
+      <span><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> 2023-12-18 18:43:08</span>
+      <span>|</span><span><i class="fa-solid fa-folder" aria-hidden="true"></i> NLP</span>
+    </div>
+  </div>
   <header>
     
     <h1 class="posttitle p-name" itemprop="name headline">
@@ -170,7 +275,7 @@
   </header>
   
 
-  <div class="content e-content" itemprop="articleBody">
+  <div class="content e-content" data-theme-slot="post-content" itemprop="articleBody">
     <p>目前主要解读<code>chat</code>和<code>stream_chat</code>相关的内容</p>
 <h2 id="1-chat-方法"><a class="markdownIt-Anchor" href="#1-chat-方法"></a> 1 chat 方法</h2>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># modeling_chatglm.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatGLMForConditionalGeneration</span>(<span class="title class_ inherited__">ChatGLMPreTrainedModel</span>):</span><br><span class="line">    ...</span><br><span class="line"><span class="meta">    @torch.inference_mode()</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">chat</span>(<span class="params">self, tokenizer, query: <span class="built_in">str</span>, history: <span class="type">List</span>[<span class="type">Dict</span>] = <span class="literal">None</span>, role: <span class="built_in">str</span> = <span class="string">&quot;user&quot;</span>,</span></span><br><span class="line"><span class="params">             max_length: <span class="built_in">int</span> = <span class="number">8192</span>, num_beams=<span class="number">1</span>, do_sample=<span class="literal">True</span>, top_p=<span class="number">0.8</span>, temperature=<span class="number">0.8</span>, logits_processor=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">             **kwargs</span>):</span><br><span class="line">        <span class="comment"># 若没有历史对话，则初始化history</span></span><br><span class="line">        <span class="keyword">if</span> history <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            history = []</span><br><span class="line">        <span class="comment"># 定义 Logit Processor</span></span><br><span class="line">        <span class="keyword">if</span> logits_processor <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            logits_processor = LogitsProcessorList()</span><br><span class="line">        logits_processor.append(InvalidScoreLogitsProcessor())</span><br><span class="line">        gen_kwargs = &#123;<span class="string">&quot;max_length&quot;</span>: max_length, <span class="string">&quot;num_beams&quot;</span>: num_beams, <span class="string">&quot;do_sample&quot;</span>: do_sample, <span class="string">&quot;top_p&quot;</span>: top_p, <span class="string">&quot;temperature&quot;</span>: temperature, <span class="string">&quot;logits_processor&quot;</span>: logits_processor, **kwargs&#125;</span><br><span class="line">        inputs = tokenizer.build_chat_input(query, history=history, role=role)</span><br><span class="line">        inputs = inputs.to(self.device)</span><br><span class="line">        eos_token_id = [tokenizer.eos_token_id, tokenizer.get_command(<span class="string">&quot;&lt;|user|&gt;&quot;</span>),</span><br><span class="line">                        tokenizer.get_command(<span class="string">&quot;&lt;|observation|&gt;&quot;</span>)]</span><br><span class="line">        outputs = self.generate(**inputs, **gen_kwargs, eos_token_id=eos_token_id)</span><br><span class="line">        outputs = outputs.tolist()[<span class="number">0</span>][<span class="built_in">len</span>(inputs[<span class="string">&quot;input_ids&quot;</span>][<span class="number">0</span>]):-<span class="number">1</span>]</span><br><span class="line">        response = tokenizer.decode(outputs)</span><br><span class="line">        history.append(&#123;<span class="string">&quot;role&quot;</span>: role, <span class="string">&quot;content&quot;</span>: query&#125;)</span><br><span class="line">        response, history = self.process_response(response, history)</span><br><span class="line">        <span class="keyword">return</span> response, history</span><br></pre></td></tr></table></figure>
@@ -234,11 +339,12 @@
 
   </div>
 </article>
+</div>
 
 
 
-        
-          <div id="footer-post-container">
+          
+            <div id="footer-post-container">
   <div id="footer-post">
 
     <div id="nav-footer" style="display: none">
@@ -273,7 +379,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&title=ChatGLM3源码解读"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&name=ChatGLM3源码解读&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&name=ChatGLM3源码解读&description=目前主要解读chat和streamchat相关的内容"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://lifan-chen.github.io/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/&t=ChatGLM3源码解读"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
@@ -291,7 +397,8 @@
   </div>
 </div>
 
-        
+          
+        </main>
         <footer id="footer">
   <div class="footer-left">
     Copyright &copy;
@@ -359,6 +466,17 @@
 
 
 <script src="/js/main.js"></script>
+
+
+<script src="/js/theme-manager.js"></script>
+
+
+<script src="/js/themes/glass-core.js"></script>
+
+
+
+<script src="/js/themes/glass-post.js"></script>
+
 
 
 

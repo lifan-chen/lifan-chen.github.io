@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-<html lang=en>
+
+<html lang=en class="no-js" data-blog-theme="cactus">
 <head>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","storageKey":"shimmer.theme.preference","themes":[{"id":"cactus","label":"Cactus","stylesheet":"","aliases":[]},{"id":"glass","label":"Glass","stylesheet":"css/themes/glass","aliases":["classic"]}]}</script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
+        var aliases = {};
+        var valid = {};
+        registry.themes.forEach(function (theme) {
+          valid[theme.id] = true;
+          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
+        });
+        var selected = registry.default;
+        try {
+          var raw = localStorage.getItem(registry.storageKey);
+          if (raw) {
+            var saved = JSON.parse(raw);
+            var candidate = typeof saved === 'string'
+              ? saved
+              : saved && saved.v === registry.version && saved.id;
+            candidate = aliases[candidate] || candidate;
+            if (valid[candidate]) selected = candidate;
+          }
+        } catch (_) {}
+        root.classList.remove('no-js');
+        root.classList.add('js');
+        root.setAttribute('data-blog-theme', selected);
+        window.__BLOG_THEME_REGISTRY__ = registry;
+        window.__BLOG_THEME_ID__ = selected;
+      })();
+    </script>
     <meta name="description" content="人类这个种族，需要有人面朝大地，也需要有人仰望星空">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Shimmer">
@@ -46,6 +77,13 @@
     
 <link rel="stylesheet" href="/css/style.css">
 
+    
+      
+    
+      
+<link rel="stylesheet" href="/css/themes/glass.css">
+
+    
     <!-- persian styles -->
     
     <!-- rss -->
@@ -66,11 +104,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-<body class="max-width mx-auto px3 ltr">
+<body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="home">
     
-    <div class="content index py4 h-card">
-        
-          <header id="header">
+      <section class="theme-hero" data-theme-slot="hero" aria-labelledby="glass-hero-title">
+        <div class="theme-hero-copy">
+          <h1 id="glass-hero-title">Shimmer</h1>
+          <p class="theme-hero-description" data-text="Hope is born in Shimmer">Hope is born in Shimmer</p>
+        </div>
+        <a class="theme-hero-scroll" href="#home-spacer" aria-label="Continue to recent posts">
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </a>
+      </section>
+      <div id="home-spacer" data-theme-slot="home-spacer" aria-hidden="true"></div>
+    
+    
+    <div id="site-content" class="content index py4 h-card" data-theme-slot="site-shell">
+        <header id="header" data-theme-slot="site-header">
   <a class="u-url u-uid" href="/">
   
     
@@ -81,20 +130,34 @@
       <h1 class="p-name">Shimmer</h1>
     </div>
   </a>
-  <div id="nav">
+  <div id="nav" data-theme-slot="primary-nav">
     <ul>
       <li class="icon">
         <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
       </li>
       <!--
-     --><li><a href="/">Home</a></li><!--
+     --><li data-nav-key="home"><a href="/"><i class="nav-item-icon fa-solid fa-home" aria-hidden="true"></i><span class="nav-item-text">Home</span></a></li><!--
    --><!--
-     --><li><a href="/archives/">Writing</a></li><!--
+     --><li data-nav-key="articles"><a href="/archives/"><i class="nav-item-icon fa-solid fa-clock" aria-hidden="true"></i><span class="nav-item-text">Writing</span></a></li><!--
    --><!--
-     --><li><a href="/categories/">Category</a></li><!--
+     --><li data-nav-key="category"><a href="/categories/"><i class="nav-item-icon fa-solid fa-cubes-stacked" aria-hidden="true"></i><span class="nav-item-text">Category</span></a></li><!--
    --><!--
-     --><li><a href="/tags/">Tag</a></li><!--
+     --><li data-nav-key="tag"><a href="/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
    -->
+      
+<li class="blog-theme-selector" data-theme-slot="theme-selector">
+  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
+    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
+  </button>
+  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
+    
+  </div>
+</li>
+
       <!--
      --><li class="nav-search">
           <form id="nav-search-form" role="search" data-search-path="/search.xml">
@@ -108,11 +171,12 @@
   </div>
 </header>
 
-        
-        <section id="about" class="p-note">
+        <main class="theme-page-flow" data-theme-slot="page-flow">
+          <section id="about" class="p-note" data-theme-slot="profile">
+  <div class="profile-name" data-theme-slot="profile-name">Zoe</div>
   
-    <p>人类这个种族，需要有人面朝大地，也需要有人仰望星空</p>
-
+    <div class="profile-motto" data-theme-slot="profile-motto"><p>人类这个种族，需要有人面朝大地，也需要有人仰望星空</p>
+</div>
   
   
     <p>
@@ -133,62 +197,36 @@
   
 </section>
 
-<section style="margin: 15px 0 -28px 0;">
+<section style="margin: 15px 0 -28px 0;" data-theme-slot="contribution">
     <img style=" margin-left: -40px"
-         src="https://ghchart.rshah.org/lifan-chen" alt="Zoe's Github Chart" width="110%"/>
+         src="https://ghchart.rshah.org/216e39/lifan-chen" alt="Zoe's Github Chart" width="110%"/>
 </section>
 
-<section id="writing">
+<section id="writing" data-theme-slot="home-posts" style="--excerpt-lines: 2">
   <span class="h1"><a href="/archives/">Recent</a></span>
   
-  <ul class="post-list">
+  <ul class="post-list" data-theme-slot="post-list">
     
     
       
     
     
-      <li class="post-item">
-        
-    <div class="meta">
       
-        
-          <time datetime="2026-09-08T13:35:55.000Z" class="dt-updated" itemprop="dateModified">2026-09-08 21:35:55</time>
-        
       
-    </div>
-
-
-        <span>
+      <li id="home-post-0" class="post-item home-post-index-0" data-theme-slot="post-card">
+        <div class="home-post-header" data-theme-slot="post-card-header">
+          <a class="home-post-category" href="/categories/Note/AI/">AI</a>
+          <span class="home-post-title">
     
-        <a class="" href="/2023/08/17/Conda%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">Conda常用命令</a>
+        <a class="" href="/2024/10/12/ControlNet/">ControlNet</a>
     
 
 
 </span>
-      </li>
-    
-      <li class="post-item">
-        
-    <div class="meta">
-      
-        
-          <time datetime="2026-09-08T13:35:55.000Z" class="dt-updated" itemprop="dateModified">2026-09-08 21:35:55</time>
-        
-      
-    </div>
-
-
-        <span>
-    
-        <a class="" href="/2023/08/15/hello-world/">Hello World !</a>
-    
-
-
-</span>
-      </li>
-    
-      <li class="post-item">
-        
+        </div>
+        <div class="home-post-excerpt" data-theme-slot="post-excerpt">ControlNet, a neural network architecture to add spatial conditioning controls to large, pretrained text-to-image diffusion models.</div>
+        <div class="home-post-addition" data-theme-slot="post-card-meta">
+          
     <div class="meta">
       
         
@@ -198,17 +236,27 @@
     </div>
 
 
-        <span>
+          
+          <a class="home-post-more" href="/2024/10/12/ControlNet/">Read more<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+      </li>
     
-        <a class="" href="/2024/10/12/ControlNet/">ControlNet</a>
+      
+      
+      <li id="home-post-1" class="post-item home-post-index-1" data-theme-slot="post-card">
+        <div class="home-post-header" data-theme-slot="post-card-header">
+          <a class="home-post-category" href="/categories/Note/NLP/">NLP</a>
+          <span class="home-post-title">
+    
+        <a class="" href="/2024/10/07/Word-Embedding/">Word Embedding</a>
     
 
 
 </span>
-      </li>
-    
-      <li class="post-item">
-        
+        </div>
+        <div class="home-post-excerpt" data-theme-slot="post-excerpt">simplicity, robustness and simple models trained on huge amounts of data outperform complex systems trained on less data. Example: N-grams model In recent years, it has become possible to train more complex models on much large data set, and they typically outperform the simple models.</div>
+        <div class="home-post-addition" data-theme-slot="post-card-meta">
+          
     <div class="meta">
       
         
@@ -218,17 +266,27 @@
     </div>
 
 
-        <span>
+          
+          <a class="home-post-more" href="/2024/10/07/Word-Embedding/">Read more<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+      </li>
     
-        <a class="" href="/2024/10/07/Word-Embedding/">Word Embedding</a>
+      
+      
+      <li id="home-post-2" class="post-item home-post-index-2" data-theme-slot="post-card">
+        <div class="home-post-header" data-theme-slot="post-card-header">
+          <a class="home-post-category" href="/categories/Note/AI/KG/">KG</a>
+          <span class="home-post-title">
+    
+        <a class="" href="/2024/09/29/Community-Detection/">Community Detection</a>
     
 
 
 </span>
-      </li>
-    
-      <li class="post-item">
-        
+        </div>
+        <div class="home-post-excerpt" data-theme-slot="post-excerpt">Definition 1 (Network)</div>
+        <div class="home-post-addition" data-theme-slot="post-card-meta">
+          
     <div class="meta">
       
         
@@ -238,17 +296,27 @@
     </div>
 
 
-        <span>
+          
+          <a class="home-post-more" href="/2024/09/29/Community-Detection/">Read more<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+      </li>
     
-        <a class="" href="/2024/09/29/Community-Detection/">Community Detection</a>
+      
+      
+      <li id="home-post-3" class="post-item home-post-index-3" data-theme-slot="post-card">
+        <div class="home-post-header" data-theme-slot="post-card-header">
+          <a class="home-post-category" href="/categories/Note/AI/NLP/">NLP</a>
+          <span class="home-post-title">
+    
+        <a class="" href="/2024/09/22/Lost-in-the-Middle/">Lost in the Middle</a>
     
 
 
 </span>
-      </li>
-    
-      <li class="post-item">
-        
+        </div>
+        <div class="home-post-excerpt" data-theme-slot="post-excerpt">If LM can robustly use information within long input contexts, then their performance should be minimally affected by the position of the relevant information in the input context.</div>
+        <div class="home-post-addition" data-theme-slot="post-card-meta">
+          
     <div class="meta">
       
         
@@ -258,17 +326,27 @@
     </div>
 
 
-        <span>
+          
+          <a class="home-post-more" href="/2024/09/22/Lost-in-the-Middle/">Read more<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+      </li>
     
-        <a class="" href="/2024/09/22/Lost-in-the-Middle/">Lost in the Middle</a>
+      
+      
+      <li id="home-post-4" class="post-item home-post-index-4" data-theme-slot="post-card">
+        <div class="home-post-header" data-theme-slot="post-card-header">
+          <a class="home-post-category" href="/categories/Note/RAG/">RAG</a>
+          <span class="home-post-title">
+    
+        <a class="" href="/2024/09/19/Evaluation-of-the-RAG-model/">Evaluation of the RAG model</a>
     
 
 
 </span>
-      </li>
-    
-      <li class="post-item">
-        
+        </div>
+        <div class="home-post-excerpt" data-theme-slot="post-excerpt">Auepora, A Unified Evaluation Process of RAG.</div>
+        <div class="home-post-addition" data-theme-slot="post-card-meta">
+          
     <div class="meta">
       
         
@@ -278,17 +356,27 @@
     </div>
 
 
-        <span>
+          
+          <a class="home-post-more" href="/2024/09/19/Evaluation-of-the-RAG-model/">Read more<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+      </li>
     
-        <a class="" href="/2024/09/19/Evaluation-of-the-RAG-model/">Evaluation of the RAG model</a>
+      
+      
+      <li id="home-post-5" class="post-item home-post-index-5" data-theme-slot="post-card">
+        <div class="home-post-header" data-theme-slot="post-card-header">
+          <a class="home-post-category" href="/categories/Note/RAG/">RAG</a>
+          <span class="home-post-title">
+    
+        <a class="" href="/2024/09/06/Graph-RAG-A-Survey/">Graph RAG: A Survey</a>
     
 
 
 </span>
-      </li>
-    
-      <li class="post-item">
-        
+        </div>
+        <div class="home-post-excerpt" data-theme-slot="post-excerpt">LLM&#39;s remarkable language comprehension and text generation capabilities</div>
+        <div class="home-post-addition" data-theme-slot="post-card-meta">
+          
     <div class="meta">
       
         
@@ -298,13 +386,71 @@
     </div>
 
 
-        <span>
+          
+          <a class="home-post-more" href="/2024/09/06/Graph-RAG-A-Survey/">Read more<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+      </li>
     
-        <a class="" href="/2024/09/06/Graph-RAG-A-Survey/">Graph RAG: A Survey</a>
+      
+      
+      <li id="home-post-6" class="post-item home-post-index-6" data-theme-slot="post-card">
+        <div class="home-post-header" data-theme-slot="post-card-header">
+          <a class="home-post-category" href="/categories/Note/RAG/">RAG</a>
+          <span class="home-post-title">
+    
+        <a class="" href="/2024/09/01/GraphRAG-Microsoft/">GraphRAG-Microsoft</a>
     
 
 
 </span>
+        </div>
+        <div class="home-post-excerpt" data-theme-slot="post-excerpt">Longer text chunks require fewer LLM calls for such extraction, but suffer from the recall degradation of longer LLM context windows.</div>
+        <div class="home-post-addition" data-theme-slot="post-card-meta">
+          
+    <div class="meta">
+      
+        
+          <time datetime="2024-09-01T10:10:22.000Z" class="dt-updated" itemprop="dateModified">2024-09-01 18:10:22</time>
+        
+      
+    </div>
+
+
+          
+          <a class="home-post-more" href="/2024/09/01/GraphRAG-Microsoft/">Read more<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+      </li>
+    
+      
+      
+      <li id="home-post-7" class="post-item home-post-index-7" data-theme-slot="post-card">
+        <div class="home-post-header" data-theme-slot="post-card-header">
+          
+          <span class="home-post-title">
+    
+        <a class="" href="/2024/07/01/%E4%B8%8D%E6%98%8E%E8%A7%89%E5%8E%89%E7%9A%84%E7%A0%94%E7%A9%B6/">不明觉厉的研究</a>
+    
+
+
+</span>
+        </div>
+        <div class="home-post-excerpt" data-theme-slot="post-excerpt">GNN</div>
+        <div class="home-post-addition" data-theme-slot="post-card-meta">
+          
+    <div class="meta">
+      
+        
+          <time datetime="2024-07-01T01:56:19.000Z" class="dt-updated" itemprop="dateModified">2024-07-01 09:56:19</time>
+        
+      
+    </div>
+
+
+          
+            <div class="home-post-tags"><a href="/tags/explore/"><i class="fa-solid fa-tag" aria-hidden="true"></i> explore</a></div>
+          
+          <a class="home-post-more" href="/2024/07/01/%E4%B8%8D%E6%98%8E%E8%A7%89%E5%8E%89%E7%9A%84%E7%A0%94%E7%A9%B6/">Read more<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a>
+        </div>
       </li>
     
   </ul>
@@ -313,7 +459,8 @@
 
 
 
-        
+          
+        </main>
         <footer id="footer">
   <div class="footer-left">
     Copyright &copy;
@@ -358,6 +505,17 @@
 
 
 <script src="/js/main.js"></script>
+
+
+<script src="/js/theme-manager.js"></script>
+
+
+<script src="/js/themes/glass-core.js"></script>
+
+
+<script src="/js/themes/glass-home.js"></script>
+
+
 
 
 

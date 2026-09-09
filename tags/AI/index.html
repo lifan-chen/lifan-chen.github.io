@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-<html lang=en>
+
+<html lang=en class="no-js" data-blog-theme="cactus">
 <head>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","storageKey":"shimmer.theme.preference","themes":[{"id":"cactus","label":"Cactus","stylesheet":"","aliases":[]},{"id":"glass","label":"Glass","stylesheet":"css/themes/glass","aliases":["classic"]}]}</script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
+        var aliases = {};
+        var valid = {};
+        registry.themes.forEach(function (theme) {
+          valid[theme.id] = true;
+          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
+        });
+        var selected = registry.default;
+        try {
+          var raw = localStorage.getItem(registry.storageKey);
+          if (raw) {
+            var saved = JSON.parse(raw);
+            var candidate = typeof saved === 'string'
+              ? saved
+              : saved && saved.v === registry.version && saved.id;
+            candidate = aliases[candidate] || candidate;
+            if (valid[candidate]) selected = candidate;
+          }
+        } catch (_) {}
+        root.classList.remove('no-js');
+        root.classList.add('js');
+        root.setAttribute('data-blog-theme', selected);
+        window.__BLOG_THEME_REGISTRY__ = registry;
+        window.__BLOG_THEME_ID__ = selected;
+      })();
+    </script>
     <meta name="description" content="人类这个种族，需要有人面朝大地，也需要有人仰望星空">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Shimmer">
@@ -46,6 +77,13 @@
     
 <link rel="stylesheet" href="/css/style.css">
 
+    
+      
+    
+      
+<link rel="stylesheet" href="/css/themes/glass.css">
+
+    
     <!-- persian styles -->
     
     <!-- rss -->
@@ -66,11 +104,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-<body class="max-width mx-auto px3 ltr">
+<body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="listing">
     
-    <div class="content index py4 ">
-        
-          <header id="header">
+    
+    <div id="site-content" class="content index py4 " data-theme-slot="site-shell">
+        <header id="header" data-theme-slot="site-header">
   <a class="u-url u-uid" href="/">
   
     
@@ -81,20 +119,34 @@
       <h1 class="p-name">Shimmer</h1>
     </div>
   </a>
-  <div id="nav">
+  <div id="nav" data-theme-slot="primary-nav">
     <ul>
       <li class="icon">
         <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
       </li>
       <!--
-     --><li><a href="/">Home</a></li><!--
+     --><li data-nav-key="home"><a href="/"><i class="nav-item-icon fa-solid fa-home" aria-hidden="true"></i><span class="nav-item-text">Home</span></a></li><!--
    --><!--
-     --><li><a href="/archives/">Writing</a></li><!--
+     --><li data-nav-key="articles"><a href="/archives/"><i class="nav-item-icon fa-solid fa-clock" aria-hidden="true"></i><span class="nav-item-text">Writing</span></a></li><!--
    --><!--
-     --><li><a href="/categories/">Category</a></li><!--
+     --><li data-nav-key="category"><a href="/categories/"><i class="nav-item-icon fa-solid fa-cubes-stacked" aria-hidden="true"></i><span class="nav-item-text">Category</span></a></li><!--
    --><!--
-     --><li><a href="/tags/">Tag</a></li><!--
+     --><li data-nav-key="tag"><a href="/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
    -->
+      
+<li class="blog-theme-selector" data-theme-slot="theme-selector">
+  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
+    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
+  </button>
+  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
+    
+  </div>
+</li>
+
       <!--
      --><li class="nav-search">
           <form id="nav-search-form" role="search" data-search-path="/search.xml">
@@ -108,10 +160,15 @@
   </div>
 </header>
 
-        
-        
-<div id="archive" class="">
-  <ul class="post-list">
+        <main class="theme-page-flow" data-theme-slot="page-flow">
+          
+
+<section class="theme-listing-banner theme-listing-banner-tag" data-theme-slot="listing-banner">
+  <h1><span class="banner-title-en" lang="en">AI</span></h1>
+</section>
+
+<div id="archive" class="" data-theme-slot="archive">
+  <ul class="post-list" data-theme-slot="post-list">
     
     
     
@@ -123,7 +180,7 @@
       
         <li class="post-year"><h2>2023</h2></li>
       
-      <li class="post-item">
+      <li class="post-item" data-theme-slot="post-card">
         <time datetime="2023-11-17T10:47:31.000Z" class="meta dt-published" itemprop="datePublished">2023-11-17 18:47:31</time>
         <span class="archive-post-title">
     
@@ -140,7 +197,8 @@
   
 </div>
 
-        
+          
+        </main>
         <footer id="footer">
   <div class="footer-left">
     Copyright &copy;
@@ -185,6 +243,15 @@
 
 
 <script src="/js/main.js"></script>
+
+
+<script src="/js/theme-manager.js"></script>
+
+
+<script src="/js/themes/glass-core.js"></script>
+
+
+
 
 
 

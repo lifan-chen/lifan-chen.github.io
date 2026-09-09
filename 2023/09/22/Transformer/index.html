@@ -1,17 +1,48 @@
 <!DOCTYPE html>
-<html lang=en>
+
+<html lang=en class="no-js" data-blog-theme="cactus">
 <head>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="1 相关内容 Attention Is All You Need The code we used to train and evaluate our models is available at https:&#x2F;&#x2F;github.com&#x2F;tensorflow&#x2F;tensor2tensor. 博客中用于解释结构的代码，来自于annotated-transformer 部分讲解来自https:&#x2F;&#x2F;you">
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","storageKey":"shimmer.theme.preference","themes":[{"id":"cactus","label":"Cactus","stylesheet":"","aliases":[]},{"id":"glass","label":"Glass","stylesheet":"css/themes/glass","aliases":["classic"]}]}</script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
+        var aliases = {};
+        var valid = {};
+        registry.themes.forEach(function (theme) {
+          valid[theme.id] = true;
+          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
+        });
+        var selected = registry.default;
+        try {
+          var raw = localStorage.getItem(registry.storageKey);
+          if (raw) {
+            var saved = JSON.parse(raw);
+            var candidate = typeof saved === 'string'
+              ? saved
+              : saved && saved.v === registry.version && saved.id;
+            candidate = aliases[candidate] || candidate;
+            if (valid[candidate]) selected = candidate;
+          }
+        } catch (_) {}
+        root.classList.remove('no-js');
+        root.classList.add('js');
+        root.setAttribute('data-blog-theme', selected);
+        window.__BLOG_THEME_REGISTRY__ = registry;
+        window.__BLOG_THEME_ID__ = selected;
+      })();
+    </script>
+    <meta name="description" content="Attention Is All You Need">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Transformer">
 <meta property="og:url" content="https://lifan-chen.github.io/2023/09/22/Transformer/index.html">
 <meta property="og:site_name" content="Shimmer">
-<meta property="og:description" content="1 相关内容 Attention Is All You Need The code we used to train and evaluate our models is available at https:&#x2F;&#x2F;github.com&#x2F;tensorflow&#x2F;tensor2tensor. 博客中用于解释结构的代码，来自于annotated-transformer 部分讲解来自https:&#x2F;&#x2F;you">
+<meta property="og:description" content="Attention Is All You Need">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://lifan-chen.github.io/2023/09/22/Transformer/image-20231020154258705.png">
 <meta property="og:image" content="https://lifan-chen.github.io/2023/09/22/Transformer/image-20231020154501476.png">
@@ -58,6 +89,13 @@
     
 <link rel="stylesheet" href="/css/style.css">
 
+    
+      
+    
+      
+<link rel="stylesheet" href="/css/themes/glass.css">
+
+    
     <!-- persian styles -->
     
     <!-- rss -->
@@ -78,7 +116,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-<body class="max-width mx-auto px3 ltr">
+<body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="post">
+    
     
       <div id="header-post">
   <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
@@ -127,7 +166,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://lifan-chen.github.io/2023/09/22/Transformer/&title=Transformer"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://lifan-chen.github.io/2023/09/22/Transformer/&title=Transformer"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://lifan-chen.github.io/2023/09/22/Transformer/&title=Transformer"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/2023/09/22/Transformer/&name=Transformer&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/2023/09/22/Transformer/&name=Transformer&description=Attention Is All You Need"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://lifan-chen.github.io/2023/09/22/Transformer/&t=Transformer"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -142,9 +181,75 @@
 </div>
 
     
-    <div class="content index py4 ">
-        
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+    <div id="site-content" class="content index py4 " data-theme-slot="site-shell">
+        <header id="header" data-theme-slot="site-header">
+  <a class="u-url u-uid" href="/">
+  
+    
+      <img id="logo" alt class="u-logo" src="/images/logo.png" />
+    
+  
+    <div id="title">
+      <h1 class="p-name">Shimmer</h1>
+    </div>
+  </a>
+  <div id="nav" data-theme-slot="primary-nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li data-nav-key="home"><a href="/"><i class="nav-item-icon fa-solid fa-home" aria-hidden="true"></i><span class="nav-item-text">Home</span></a></li><!--
+   --><!--
+     --><li data-nav-key="articles"><a href="/archives/"><i class="nav-item-icon fa-solid fa-clock" aria-hidden="true"></i><span class="nav-item-text">Writing</span></a></li><!--
+   --><!--
+     --><li data-nav-key="category"><a href="/categories/"><i class="nav-item-icon fa-solid fa-cubes-stacked" aria-hidden="true"></i><span class="nav-item-text">Category</span></a></li><!--
+   --><!--
+     --><li data-nav-key="tag"><a href="/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
+   -->
+      
+<li class="blog-theme-selector" data-theme-slot="theme-selector">
+  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
+    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
+  </button>
+  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
+    
+  </div>
+</li>
+
+      <!--
+     --><li class="nav-search">
+          <form id="nav-search-form" role="search" data-search-path="/search.xml">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" id="nav-search-input" autocomplete="off" placeholder="Search..." aria-label="Search...">
+            <div id="nav-search-results" role="listbox" aria-label="Search..."></div>
+          </form>
+        </li><!--
+   -->
+    </ul>
+  </div>
+</header>
+
+        <main class="theme-page-flow" data-theme-slot="page-flow">
+          <div class="theme-post-layout" data-theme-slot="post-layout">
+  <aside class="theme-post-toc-position" data-theme-slot="post-toc-position" aria-label="Table of contents">
+    <div class="theme-post-toc" data-theme-slot="post-toc">
+      <div class="theme-post-toc-title">目录</div>
+      <ul><li><a href="#1-相关内容">1 相关内容</a></li><li><a href="#encoder-and-decoder">Encoder and Decoder</a><ul><li><a href="#encoder">Encoder</a></li><li><a href="#decoder">Decoder</a></li></ul></li><li><a href="#2-attention">2 Attention</a><ul><li><a href="#21-scaled-dot-product-attention">2.1 Scaled Dot-Product Attention</a></li><li><a href="#22-multi-head-attention">2.2 Multi-Head Attention</a></li></ul></li><li><a href="#23-applications-of-attention-in-our-model">2.3 Applications of Attention in our Model</a></li><li><a href="#3-其他组件">3 其他组件</a><ul><li><a href="#31-position-wise-feed-forward-networks">3.1 Position-wise Feed-Forward Networks</a></li><li><a href="#32-embeddings-and-softmax">3.2 Embeddings and Softmax</a></li><li><a href="#33-positional-encoding">3.3 Positional Encoding</a></li></ul></li><li><a href="#4-encoder-and-decoder">4 Encoder and Decoder</a><ul><li><a href="#41-encoder">4.1 Encoder</a></li><li><a href="#42-decoder">4.2 Decoder</a></li></ul></li></ul>
+    </div>
+  </aside>
+<article class="post h-entry" data-theme-slot="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="theme-post-banner" data-theme-slot="post-banner">
+    <div class="theme-post-banner-title"><span class="banner-title-en" lang="en">Transformer</span></div>
+    <div class="theme-post-banner-meta">
+      <span><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> 2023-09-22 21:01:33</span>
+      <span>|</span><span><i class="fa-solid fa-folder" aria-hidden="true"></i> NLP</span>
+    </div>
+  </div>
   <header>
     
     <h1 class="posttitle p-name" itemprop="name headline">
@@ -180,7 +285,7 @@
   </header>
   
 
-  <div class="content e-content" itemprop="articleBody">
+  <div class="content e-content" data-theme-slot="post-content" itemprop="articleBody">
     <h2 id="1-相关内容"><a class="markdownIt-Anchor" href="#1-相关内容"></a> 1 相关内容</h2>
 <p>Attention Is All You Need</p>
 <p>The code we used to train and evaluate our models is available at <a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensor2tensor">https://github.com/tensorflow/tensor2tensor</a>.</p>
@@ -436,11 +541,12 @@ PE_{(pos, 2i+1)} = cos(pos/10000^{2i/d_{model}})
 
   </div>
 </article>
+</div>
 
 
 
-        
-          <div id="footer-post-container">
+          
+            <div id="footer-post-container">
   <div id="footer-post">
 
     <div id="nav-footer" style="display: none">
@@ -475,7 +581,7 @@ PE_{(pos, 2i+1)} = cos(pos/10000^{2i/d_{model}})
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://lifan-chen.github.io/2023/09/22/Transformer/&title=Transformer"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://lifan-chen.github.io/2023/09/22/Transformer/&title=Transformer"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://lifan-chen.github.io/2023/09/22/Transformer/&title=Transformer"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/2023/09/22/Transformer/&name=Transformer&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/2023/09/22/Transformer/&name=Transformer&description=Attention Is All You Need"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://lifan-chen.github.io/2023/09/22/Transformer/&t=Transformer"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
@@ -493,7 +599,8 @@ PE_{(pos, 2i+1)} = cos(pos/10000^{2i/d_{model}})
   </div>
 </div>
 
-        
+          
+        </main>
         <footer id="footer">
   <div class="footer-left">
     Copyright &copy;
@@ -561,6 +668,17 @@ PE_{(pos, 2i+1)} = cos(pos/10000^{2i/d_{model}})
 
 
 <script src="/js/main.js"></script>
+
+
+<script src="/js/theme-manager.js"></script>
+
+
+<script src="/js/themes/glass-core.js"></script>
+
+
+
+<script src="/js/themes/glass-post.js"></script>
+
 
 
 

@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-<html lang=en>
+
+<html lang=en class="no-js" data-blog-theme="cactus">
 <head>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","storageKey":"shimmer.theme.preference","themes":[{"id":"cactus","label":"Cactus","stylesheet":"","aliases":[]},{"id":"glass","label":"Glass","stylesheet":"css/themes/glass","aliases":["classic"]}]}</script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
+        var aliases = {};
+        var valid = {};
+        registry.themes.forEach(function (theme) {
+          valid[theme.id] = true;
+          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
+        });
+        var selected = registry.default;
+        try {
+          var raw = localStorage.getItem(registry.storageKey);
+          if (raw) {
+            var saved = JSON.parse(raw);
+            var candidate = typeof saved === 'string'
+              ? saved
+              : saved && saved.v === registry.version && saved.id;
+            candidate = aliases[candidate] || candidate;
+            if (valid[candidate]) selected = candidate;
+          }
+        } catch (_) {}
+        root.classList.remove('no-js');
+        root.classList.add('js');
+        root.setAttribute('data-blog-theme', selected);
+        window.__BLOG_THEME_REGISTRY__ = registry;
+        window.__BLOG_THEME_ID__ = selected;
+      })();
+    </script>
     <meta name="description" content="人类这个种族，需要有人面朝大地，也需要有人仰望星空">
 <meta property="og:type" content="website">
 <meta property="og:title" content="categories">
@@ -48,6 +79,13 @@
     
 <link rel="stylesheet" href="/css/style.css">
 
+    
+      
+    
+      
+<link rel="stylesheet" href="/css/themes/glass.css">
+
+    
     <!-- persian styles -->
     
     <!-- rss -->
@@ -68,11 +106,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-<body class="max-width mx-auto px3 ltr">
+<body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="listing">
     
-    <div class="content index py4 ">
-        
-          <header id="header">
+    
+    <div id="site-content" class="content index py4 " data-theme-slot="site-shell">
+        <header id="header" data-theme-slot="site-header">
   <a class="u-url u-uid" href="/">
   
     
@@ -83,20 +121,34 @@
       <h1 class="p-name">Shimmer</h1>
     </div>
   </a>
-  <div id="nav">
+  <div id="nav" data-theme-slot="primary-nav">
     <ul>
       <li class="icon">
         <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
       </li>
       <!--
-     --><li><a href="/">Home</a></li><!--
+     --><li data-nav-key="home"><a href="/"><i class="nav-item-icon fa-solid fa-home" aria-hidden="true"></i><span class="nav-item-text">Home</span></a></li><!--
    --><!--
-     --><li><a href="/archives/">Writing</a></li><!--
+     --><li data-nav-key="articles"><a href="/archives/"><i class="nav-item-icon fa-solid fa-clock" aria-hidden="true"></i><span class="nav-item-text">Writing</span></a></li><!--
    --><!--
-     --><li><a href="/categories/">Category</a></li><!--
+     --><li data-nav-key="category"><a href="/categories/"><i class="nav-item-icon fa-solid fa-cubes-stacked" aria-hidden="true"></i><span class="nav-item-text">Category</span></a></li><!--
    --><!--
-     --><li><a href="/tags/">Tag</a></li><!--
+     --><li data-nav-key="tag"><a href="/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
    -->
+      
+<li class="blog-theme-selector" data-theme-slot="theme-selector">
+  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
+    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
+  </button>
+  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
+    
+  </div>
+</li>
+
       <!--
      --><li class="nav-search">
           <form id="nav-search-form" role="search" data-search-path="/search.xml">
@@ -110,8 +162,13 @@
   </div>
 </header>
 
-        
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        <main class="theme-page-flow" data-theme-slot="page-flow">
+          
+<section class="theme-listing-banner theme-listing-banner-category" data-theme-slot="listing-banner">
+  <h1><span class="banner-title-en" lang="en">C A T E G O R I E S</span></h1>
+</section>
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   
 
   <div class="content" itemprop="articleBody">
@@ -121,7 +178,7 @@
             <div class="category-tree">
               <div class="category-tree-title">All Categories</div>
               <div class="category-list">
-                <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/">Note</a><span class="category-list-count">32</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/">AI</a><span class="category-list-count">25</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/KG/">KG</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/NLP/">NLP</a><span class="category-list-count">17</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/NLP/LLM/">LLM</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/NLP/tokenizer/">tokenizer</a><span class="category-list-count">3</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/NLP/">NLP</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/Python/">Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/RAG/">RAG</a><span class="category-list-count">3</span></li></ul></li></ul>
+                <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa-solid fa-feather" aria-hidden="true"></i> Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/"><i class="fa-solid fa-feather" aria-hidden="true"></i> Note</a><span class="category-list-count">32</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/"><i class="fa-solid fa-feather" aria-hidden="true"></i> AI</a><span class="category-list-count">25</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/KG/"><i class="fa-solid fa-feather" aria-hidden="true"></i> KG</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/NLP/"><i class="fa-solid fa-feather" aria-hidden="true"></i> NLP</a><span class="category-list-count">17</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/NLP/LLM/"><i class="fa-solid fa-feather" aria-hidden="true"></i> LLM</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/AI/NLP/tokenizer/"><i class="fa-solid fa-feather" aria-hidden="true"></i> tokenizer</a><span class="category-list-count">3</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/NLP/"><i class="fa-solid fa-feather" aria-hidden="true"></i> NLP</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/Python/"><i class="fa-solid fa-feather" aria-hidden="true"></i> Python</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Note/RAG/"><i class="fa-solid fa-feather" aria-hidden="true"></i> RAG</a><span class="category-list-count">3</span></li></ul></li></ul>
               </div>
             </div>
             <div class="category-featured-list">
@@ -225,12 +282,14 @@
                 </section>
               
             </div>
+            <script id="category-post-index" type="application/json">[{"name":"Note","path":"/categories/Note/","posts":[{"title":"ControlNet","path":"/2024/10/12/ControlNet/","date":"2024-10-12 17:58:24"},{"title":"Word Embedding","path":"/2024/10/07/Word-Embedding/","date":"2024-10-07 19:18:54"},{"title":"Community Detection","path":"/2024/09/29/Community-Detection/","date":"2024-09-29 15:51:58"},{"title":"Lost in the Middle","path":"/2024/09/22/Lost-in-the-Middle/","date":"2024-09-22 15:07:39"},{"title":"Evaluation of the RAG model","path":"/2024/09/19/Evaluation-of-the-RAG-model/","date":"2024-09-19 18:24:53"},{"title":"Graph RAG: A Survey","path":"/2024/09/06/Graph-RAG-A-Survey/","date":"2024-09-06 15:50:47"},{"title":"GraphRAG-Microsoft","path":"/2024/09/01/GraphRAG-Microsoft/","date":"2024-09-01 18:10:22"},{"title":"Scaling Laws","path":"/2024/05/09/Scaling-Laws/","date":"2024-05-09 11:26:41"},{"title":"LLM的涌现能力","path":"/2024/05/08/LLM%E7%9A%84%E6%B6%8C%E7%8E%B0%E8%83%BD%E5%8A%9B/","date":"2024-05-08 15:51:59"},{"title":"LLM","path":"/2024/05/08/LLM/","date":"2024-05-08 11:47:19"},{"title":"KAN","path":"/2024/05/08/KAN/","date":"2024-05-08 11:10:06"},{"title":"Streaming LLM","path":"/2024/05/07/Streaming-LLM/","date":"2024-05-07 18:25:54"},{"title":"KAPING","path":"/2023/12/21/KAPING/","date":"2023-12-21 17:04:45"},{"title":"Knowledge Graphs Reduce Hallucinations in LLMs","path":"/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/","date":"2023-12-20 15:45:41"},{"title":"ChatGLM3源码解读","path":"/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/","date":"2023-12-18 18:43:08"},{"title":"Long Contexts","path":"/2023/11/28/Long-Contexts/","date":"2023-11-28 17:25:33"},{"title":"Python进阶","path":"/2023/11/23/Python%E8%BF%9B%E9%98%B6/","date":"2023-11-23 17:13:24"},{"title":"Python设计模式","path":"/2023/11/23/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/","date":"2023-11-23 16:22:44"},{"title":"Generative Knowledge Graph Construction","path":"/2023/11/14/Generative-Knowledge-Graph-Construction/","date":"2023-11-14 16:01:23"},{"title":"KG-enhanced LLM inference","path":"/2023/10/30/KG-enhanced%20LLM%20inference/","date":"2023-10-30 18:10:29"},{"title":"LLM+KG","path":"/2023/10/28/LLM-KG/","date":"2023-10-28 20:37:42"},{"title":"P-Tuning","path":"/2023/10/24/P-Tuning/","date":"2023-10-24 16:18:52"},{"title":"Pre-tokenization","path":"/2023/10/20/Pre-tokenization/","date":"2023-10-20 21:17:17"},{"title":"The Tokenization Pipeline","path":"/2023/10/20/The%20Tokenization%20Pipeline/","date":"2023-10-20 21:12:30"},{"title":"书写系统","path":"/2023/10/20/%E4%B9%A6%E5%86%99%E7%B3%BB%E7%BB%9F/","date":"2023-10-20 17:44:00"},{"title":"Tokenization Operation","path":"/2023/10/20/Tokenization%20Overview/","date":"2023-10-20 16:07:50"},{"title":"ChatGLM","path":"/2023/10/17/ChatGLM/","date":"2023-10-17 16:39:22"},{"title":"大模型相关","path":"/2023/10/05/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9B%B8%E5%85%B3/","date":"2023-10-05 11:47:18"},{"title":"Transformer","path":"/2023/09/22/Transformer/","date":"2023-09-22 21:01:33"},{"title":"CPMBee","path":"/2023/09/20/CPMBee/","date":"2023-09-20 20:42:21"},{"title":"VisCPM","path":"/2023/09/14/VisCPM/","date":"2023-09-14 10:14:26"},{"title":"影像生成模型","path":"/2023/08/31/%E5%BD%B1%E5%83%8F%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/","date":"2023-08-31 23:16:32"}]},{"name":"AI","path":"/categories/Note/AI/","posts":[{"title":"ControlNet","path":"/2024/10/12/ControlNet/","date":"2024-10-12 17:58:24"},{"title":"Community Detection","path":"/2024/09/29/Community-Detection/","date":"2024-09-29 15:51:58"},{"title":"Lost in the Middle","path":"/2024/09/22/Lost-in-the-Middle/","date":"2024-09-22 15:07:39"},{"title":"Scaling Laws","path":"/2024/05/09/Scaling-Laws/","date":"2024-05-09 11:26:41"},{"title":"LLM的涌现能力","path":"/2024/05/08/LLM%E7%9A%84%E6%B6%8C%E7%8E%B0%E8%83%BD%E5%8A%9B/","date":"2024-05-08 15:51:59"},{"title":"LLM","path":"/2024/05/08/LLM/","date":"2024-05-08 11:47:19"},{"title":"KAN","path":"/2024/05/08/KAN/","date":"2024-05-08 11:10:06"},{"title":"Streaming LLM","path":"/2024/05/07/Streaming-LLM/","date":"2024-05-07 18:25:54"},{"title":"KAPING","path":"/2023/12/21/KAPING/","date":"2023-12-21 17:04:45"},{"title":"Knowledge Graphs Reduce Hallucinations in LLMs","path":"/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/","date":"2023-12-20 15:45:41"},{"title":"ChatGLM3源码解读","path":"/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/","date":"2023-12-18 18:43:08"},{"title":"Long Contexts","path":"/2023/11/28/Long-Contexts/","date":"2023-11-28 17:25:33"},{"title":"Generative Knowledge Graph Construction","path":"/2023/11/14/Generative-Knowledge-Graph-Construction/","date":"2023-11-14 16:01:23"},{"title":"KG-enhanced LLM inference","path":"/2023/10/30/KG-enhanced%20LLM%20inference/","date":"2023-10-30 18:10:29"},{"title":"LLM+KG","path":"/2023/10/28/LLM-KG/","date":"2023-10-28 20:37:42"},{"title":"P-Tuning","path":"/2023/10/24/P-Tuning/","date":"2023-10-24 16:18:52"},{"title":"Pre-tokenization","path":"/2023/10/20/Pre-tokenization/","date":"2023-10-20 21:17:17"},{"title":"The Tokenization Pipeline","path":"/2023/10/20/The%20Tokenization%20Pipeline/","date":"2023-10-20 21:12:30"},{"title":"Tokenization Operation","path":"/2023/10/20/Tokenization%20Overview/","date":"2023-10-20 16:07:50"},{"title":"ChatGLM","path":"/2023/10/17/ChatGLM/","date":"2023-10-17 16:39:22"},{"title":"大模型相关","path":"/2023/10/05/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9B%B8%E5%85%B3/","date":"2023-10-05 11:47:18"},{"title":"Transformer","path":"/2023/09/22/Transformer/","date":"2023-09-22 21:01:33"},{"title":"CPMBee","path":"/2023/09/20/CPMBee/","date":"2023-09-20 20:42:21"},{"title":"VisCPM","path":"/2023/09/14/VisCPM/","date":"2023-09-14 10:14:26"},{"title":"影像生成模型","path":"/2023/08/31/%E5%BD%B1%E5%83%8F%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/","date":"2023-08-31 23:16:32"}]},{"name":"RAG","path":"/categories/Note/RAG/","posts":[{"title":"Evaluation of the RAG model","path":"/2024/09/19/Evaluation-of-the-RAG-model/","date":"2024-09-19 18:24:53"},{"title":"Graph RAG: A Survey","path":"/2024/09/06/Graph-RAG-A-Survey/","date":"2024-09-06 15:50:47"},{"title":"GraphRAG-Microsoft","path":"/2024/09/01/GraphRAG-Microsoft/","date":"2024-09-01 18:10:22"}]},{"name":"KG","path":"/categories/Note/AI/KG/","posts":[{"title":"Community Detection","path":"/2024/09/29/Community-Detection/","date":"2024-09-29 15:51:58"},{"title":"Generative Knowledge Graph Construction","path":"/2023/11/14/Generative-Knowledge-Graph-Construction/","date":"2023-11-14 16:01:23"}]},{"name":"NLP","path":"/categories/Note/AI/NLP/","posts":[{"title":"Lost in the Middle","path":"/2024/09/22/Lost-in-the-Middle/","date":"2024-09-22 15:07:39"},{"title":"Scaling Laws","path":"/2024/05/09/Scaling-Laws/","date":"2024-05-09 11:26:41"},{"title":"LLM的涌现能力","path":"/2024/05/08/LLM%E7%9A%84%E6%B6%8C%E7%8E%B0%E8%83%BD%E5%8A%9B/","date":"2024-05-08 15:51:59"},{"title":"LLM","path":"/2024/05/08/LLM/","date":"2024-05-08 11:47:19"},{"title":"Streaming LLM","path":"/2024/05/07/Streaming-LLM/","date":"2024-05-07 18:25:54"},{"title":"KAPING","path":"/2023/12/21/KAPING/","date":"2023-12-21 17:04:45"},{"title":"Knowledge Graphs Reduce Hallucinations in LLMs","path":"/2023/12/20/Knowledge-Graphs-Reduce-Hallucinations-in-LLMs/","date":"2023-12-20 15:45:41"},{"title":"ChatGLM3源码解读","path":"/2023/12/18/ChatGLM3%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/","date":"2023-12-18 18:43:08"},{"title":"Long Contexts","path":"/2023/11/28/Long-Contexts/","date":"2023-11-28 17:25:33"},{"title":"P-Tuning","path":"/2023/10/24/P-Tuning/","date":"2023-10-24 16:18:52"},{"title":"Pre-tokenization","path":"/2023/10/20/Pre-tokenization/","date":"2023-10-20 21:17:17"},{"title":"The Tokenization Pipeline","path":"/2023/10/20/The%20Tokenization%20Pipeline/","date":"2023-10-20 21:12:30"},{"title":"Tokenization Operation","path":"/2023/10/20/Tokenization%20Overview/","date":"2023-10-20 16:07:50"},{"title":"ChatGLM","path":"/2023/10/17/ChatGLM/","date":"2023-10-17 16:39:22"},{"title":"大模型相关","path":"/2023/10/05/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9B%B8%E5%85%B3/","date":"2023-10-05 11:47:18"},{"title":"Transformer","path":"/2023/09/22/Transformer/","date":"2023-09-22 21:01:33"},{"title":"CPMBee","path":"/2023/09/20/CPMBee/","date":"2023-09-20 20:42:21"}]},{"name":"Linux","path":"/categories/Linux/","posts":[{"title":"Linux常用命令","path":"/2023/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/","date":"2023-08-17 12:08:11"}]},{"name":"Python","path":"/categories/Note/Python/","posts":[{"title":"Python进阶","path":"/2023/11/23/Python%E8%BF%9B%E9%98%B6/","date":"2023-11-23 17:13:24"},{"title":"Python设计模式","path":"/2023/11/23/Python%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/","date":"2023-11-23 16:22:44"}]},{"name":"tokenizer","path":"/categories/Note/AI/NLP/tokenizer/","posts":[{"title":"Pre-tokenization","path":"/2023/10/20/Pre-tokenization/","date":"2023-10-20 21:17:17"},{"title":"The Tokenization Pipeline","path":"/2023/10/20/The%20Tokenization%20Pipeline/","date":"2023-10-20 21:12:30"},{"title":"Tokenization Operation","path":"/2023/10/20/Tokenization%20Overview/","date":"2023-10-20 16:07:50"}]},{"name":"NLP","path":"/categories/Note/NLP/","posts":[{"title":"Word Embedding","path":"/2024/10/07/Word-Embedding/","date":"2024-10-07 19:18:54"}]},{"name":"LLM","path":"/categories/Note/AI/NLP/LLM/","posts":[{"title":"Scaling Laws","path":"/2024/05/09/Scaling-Laws/","date":"2024-05-09 11:26:41"},{"title":"LLM的涌现能力","path":"/2024/05/08/LLM%E7%9A%84%E6%B6%8C%E7%8E%B0%E8%83%BD%E5%8A%9B/","date":"2024-05-08 15:51:59"},{"title":"LLM","path":"/2024/05/08/LLM/","date":"2024-05-08 11:47:19"},{"title":"Streaming LLM","path":"/2024/05/07/Streaming-LLM/","date":"2024-05-07 18:25:54"}]}]</script>
           </div>
         
   </div>
 </article>
 
-        
+          
+        </main>
         <footer id="footer">
   <div class="footer-left">
     Copyright &copy;
@@ -275,6 +334,17 @@
 
 
 <script src="/js/main.js"></script>
+
+
+<script src="/js/theme-manager.js"></script>
+
+
+<script src="/js/themes/glass-core.js"></script>
+
+
+
+
+<script src="/js/themes/glass-categories.js"></script>
 
 
 
