@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang=en class="no-js" data-blog-theme="glass">
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","current":"glass","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]}</script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
+        var aliases = {};
+        var valid = {};
+        registry.themes.forEach(function (theme) {
+          valid[theme.id] = true;
+          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
+        });
+        var selected = registry.current;
+        function themeUrl(id) {
+          var currentTheme = registry.themes.filter(function (theme) { return theme.id === registry.current; })[0];
+          var targetTheme = registry.themes.filter(function (theme) { return theme.id === id; })[0];
+          if (!currentTheme || !targetTheme) return null;
+          var currentRoot = currentTheme.root || '/';
+          var logicalPath = location.pathname;
+          if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
+            logicalPath = '/' + logicalPath.slice(currentRoot.length);
+          }
+          return (targetTheme.root || '/').replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') + location.search + location.hash;
+        }
+        try {
+          var raw = localStorage.getItem(registry.storageKey);
+          if (raw) {
+            var saved = JSON.parse(raw);
+            var candidate = typeof saved === 'string'
+              ? saved
+              : saved && saved.v === registry.version && saved.id;
+            candidate = aliases[candidate] || candidate;
+            if (valid[candidate]) selected = candidate;
+          }
+        } catch (_) {}
+        if (selected !== registry.current) {
+          var destination = themeUrl(selected);
+          if (destination) {
+            location.replace(destination);
+            return;
+          }
+        }
+        root.classList.remove('no-js');
+        root.classList.add('js');
+        root.setAttribute('data-blog-theme', registry.current);
+        window.__BLOG_THEME_REGISTRY__ = registry;
+        window.__BLOG_THEME_ID__ = registry.current;
+      })();
+    </script>
+    <meta name="description" content="人类这个种族，需要有人面朝大地，也需要有人仰望星空">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Shimmer">
+<meta property="og:url" content="https://lifan-chen.github.io/__themes/glass/archives/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="人类这个种族，需要有人面朝大地，也需要有人仰望星空">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/__themes/glass/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/__themes/glass/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/__themes/glass/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Writing</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/__themes/glass/css/style.css">
+
+    
+<link rel="stylesheet" href="/__themes/glass/css/themes/glass.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="listing">
+    
+    
+    <div id="site-content" class="content index py4 " data-theme-slot="site-shell">
+        <header id="header" data-theme-slot="site-header">
+  <a class="u-url u-uid" href="/__themes/glass/">
+  
+    
+      <img id="logo" alt class="u-logo" src="/__themes/glass/images/logo.png" />
+    
+  
+    <div id="title">
+      <h1 class="p-name">Shimmer</h1>
+    </div>
+  </a>
+  <div id="nav" data-theme-slot="primary-nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li data-nav-key="home"><a href="/__themes/glass/"><i class="nav-item-icon fa-solid fa-home" aria-hidden="true"></i><span class="nav-item-text">Home</span></a></li><!--
+   --><!--
+     --><li data-nav-key="articles"><a href="/__themes/glass/archives/"><i class="nav-item-icon fa-solid fa-clock" aria-hidden="true"></i><span class="nav-item-text">Writing</span></a></li><!--
+   --><!--
+     --><li data-nav-key="category"><a href="/__themes/glass/categories/"><i class="nav-item-icon fa-solid fa-cubes-stacked" aria-hidden="true"></i><span class="nav-item-text">Category</span></a></li><!--
+   --><!--
+     --><li data-nav-key="tag"><a href="/__themes/glass/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
+   -->
+      
+<li class="blog-theme-selector" data-theme-slot="theme-selector">
+  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
+    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
+  </button>
+  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
+    
+  </div>
+</li>
+
+      <!--
+     --><li class="nav-search">
+          <form id="nav-search-form" role="search" data-search-path="/__themes/glass/search.xml">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" id="nav-search-input" autocomplete="off" placeholder="Search..." aria-label="Search...">
+            <div id="nav-search-results" role="listbox" aria-label="Search..."></div>
+          </form>
+        </li><!--
+   -->
+    </ul>
+  </div>
+</header>
+
+        <main class="theme-page-flow" data-theme-slot="page-flow">
+          
+
+<section class="theme-listing-banner theme-listing-banner-archive" data-theme-slot="listing-banner">
+  <h1><span class="banner-title-en" lang="en">W R I T I N G</span></h1>
+</section>
+
+<div id="archive" class="archive-infinite" data-theme-slot="archive">
+  <ul class="post-list" data-theme-slot="post-list">
+    
+    
+    
+    
+      
+      
+      
+      
+      
+        <li class="post-year"><h2>2024</h2></li>
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-10-12T09:58:24.000Z" class="meta dt-published" itemprop="datePublished">2024-10-12 17:58:24</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/10/12/ControlNet/">ControlNet</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-10-07T11:18:54.000Z" class="meta dt-published" itemprop="datePublished">2024-10-07 19:18:54</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/10/07/Word-Embedding/">Word Embedding</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-09-29T07:51:58.000Z" class="meta dt-published" itemprop="datePublished">2024-09-29 15:51:58</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/09/29/Community-Detection/">Community Detection</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-09-22T07:07:39.000Z" class="meta dt-published" itemprop="datePublished">2024-09-22 15:07:39</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/09/22/Lost-in-the-Middle/">Lost in the Middle</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-09-19T10:24:53.000Z" class="meta dt-published" itemprop="datePublished">2024-09-19 18:24:53</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/">Evaluation of the RAG model</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-09-06T07:50:47.000Z" class="meta dt-published" itemprop="datePublished">2024-09-06 15:50:47</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/09/06/Graph-RAG-A-Survey/">Graph RAG: A Survey</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-09-01T10:10:22.000Z" class="meta dt-published" itemprop="datePublished">2024-09-01 18:10:22</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/09/01/GraphRAG-Microsoft/">GraphRAG-Microsoft</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-07-01T01:56:19.000Z" class="meta dt-published" itemprop="datePublished">2024-07-01 09:56:19</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/07/01/%E4%B8%8D%E6%98%8E%E8%A7%89%E5%8E%89%E7%9A%84%E7%A0%94%E7%A9%B6/">不明觉厉的研究</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-05-09T03:26:41.000Z" class="meta dt-published" itemprop="datePublished">2024-05-09 11:26:41</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/05/09/Scaling-Laws/">Scaling Laws</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-05-08T07:51:59.000Z" class="meta dt-published" itemprop="datePublished">2024-05-08 15:51:59</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/05/08/LLM%E7%9A%84%E6%B6%8C%E7%8E%B0%E8%83%BD%E5%8A%9B/">LLM的涌现能力</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-05-08T03:47:19.000Z" class="meta dt-published" itemprop="datePublished">2024-05-08 11:47:19</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/05/08/LLM/">LLM</a>
+    
+
+
+</span>
+      </li>
+    
+      
+      
+      
+      
+      
+      <li class="post-item" data-theme-slot="post-card">
+        <time datetime="2024-05-08T03:10:06.000Z" class="meta dt-published" itemprop="datePublished">2024-05-08 11:10:06</time>
+        <span class="archive-post-title">
+    
+        <a class="" href="/__themes/glass/2024/05/08/KAN/">KAN</a>
+    
+
+
+</span>
+      </li>
+    
+  </ul>
+  
+    
+    <div class="pagination">
+        
+        <span class="page-list">
+            
+                
+                
+                    <span class="page-number active" aria-current="page">1</span>
+                
+            
+                
+                
+                    <a class="page-number" href="/__themes/glass/archives/page/2/">2</a>
+                
+            
+                
+                
+                    <a class="page-number" href="/__themes/glass/archives/page/3/">3</a>
+                
+            
+                
+                
+                    <a class="page-number" href="/__themes/glass/archives/page/4/">4</a>
+                
+            
+        </span>
+        
+            <a class="pagination-arrow" href="/__themes/glass/archives/page/2/" aria-label="Next page"><i class="fa-solid fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+
+  
+    <div class="archive-load-status" aria-live="polite"></div>
+  
+</div>
+
+          
+        </main>
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/__themes/glass/">Home</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+
+<script src="/__themes/glass/js/main.js"></script>
+
+
+<script src="/__themes/glass/js/theme-manager.js"></script>
+
+
+<script src="/__themes/glass/js/themes/glass-core.js"></script>
+
+
+
+
+
+  
+<script src="/__themes/glass/js/archive_infinite.js"></script>
+
+
+
+  
+<script src="/__themes/glass/js/nav_search.js"></script>
+
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+</body>
+</html>

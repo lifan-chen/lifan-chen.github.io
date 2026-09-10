@@ -1,0 +1,1211 @@
+@font-face {
+  font-family: "Glass-Insomniac-Comic-Dialogue";
+  src: url("/__themes/glass/fonts/themes/glass/insomniac-comic-dialogue.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "Glass-Sketchy-Times-Bold";
+  src: url("/__themes/glass/fonts/themes/glass/sketchy-times-bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "SketchyTimesBold";
+  src: url("/__themes/glass/fonts/themes/glass/sketchy-times-bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "Glass-Education-Pencil";
+  src: url("/__themes/glass/fonts/themes/glass/education-pencil.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "Glass-Unutterable-Regular";
+  src: url("/__themes/glass/fonts/themes/glass/unutterable-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "Glass-Barrett-Normal";
+  src: url("/__themes/glass/fonts/themes/glass/barrett-normal.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "Glass-Dynasty";
+  src: url("/__themes/glass/fonts/themes/glass/dynasty.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "Glass-Kangxi-Dictionary";
+  src: url("/__themes/glass/fonts/themes/glass/kangxi-zidian.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "康熙字典";
+  src: url("/__themes/glass/fonts/themes/glass/kangxi-zidian.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+@font-face {
+  font-family: "Glass-Shine-Typewriter";
+  src: url("/__themes/glass/fonts/themes/glass/shine-typewriter.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+}
+html[data-blog-theme="glass"] {
+  min-height: 100%;
+  border-top: 0;
+  background: #fff;
+}
+html[data-blog-theme="glass"] body {
+  position: relative;
+  display: flex;
+  height: auto;
+  min-height: 100%;
+  flex-direction: column;
+  max-width: none;
+  min-width: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #fff url("https://zoe-blog.netlify.app/assets/img/background.56e8a30f.jpg") center/100% 100% fixed no-repeat;
+  color: #111;
+  font-family: "Glass-Shine-Typewriter", "华文中宋", STZhongsong, serif;
+  font-size: 16px;
+}
+html[data-blog-theme="glass"] body:before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background: #fff url("https://zoe-blog.netlify.app/assets/img/background.56e8a30f.jpg") center/100% 100% no-repeat;
+  content: "";
+}
+html[data-blog-theme="glass"] .theme-hero {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: #00040f url("https://zoe-blog.netlify.app/assets/img/homebanner.f0bd99ad.png") center/cover no-repeat;
+  box-shadow: 0 1px 15px #111;
+  color: #fff;
+  font-family: "Glass-Education-Pencil";
+  text-align: center;
+  text-shadow: 0 0 5px #111;
+}
+html[data-blog-theme="glass"] .theme-hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+html[data-blog-theme="glass"] .theme-hero-copy h1 {
+  width: 100%;
+  margin: 0;
+  color: #fff;
+  font: 400 100px/normal "Glass-Education-Pencil";
+  letter-spacing: normal;
+}
+html[data-blog-theme="glass"] .theme-hero-copy .theme-hero-description-row {
+  display: inline-flex;
+  max-width: calc(100vw - 2rem);
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font: 400 clamp(20px, 7vw, 30px)/normal "Glass-Education-Pencil";
+  letter-spacing: normal;
+  white-space: nowrap;
+}
+html[data-blog-theme="glass"] .theme-hero-copy .theme-hero-description {
+  width: auto;
+  height: auto;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+}
+html[data-blog-theme="glass"] .theme-hero-copy .typed-cursor {
+  flex: 0 0 auto;
+}
+html[data-blog-theme="glass"] .theme-hero-scroll {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  padding-bottom: 5%;
+  transform: translateX(-50%);
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: 400 34px/normal "Glass-Education-Pencil";
+  text-shadow: 0 0 5px #111;
+  animation: glass-pulse 0.8s ease-in-out infinite;
+}
+html[data-blog-theme="glass"] [data-theme-slot="home-spacer"] {
+  display: block;
+  width: 100%;
+  height: 100px;
+}
+html[data-blog-theme="glass"] body > [data-theme-slot="site-shell"] {
+  position: relative;
+  z-index: 1;
+  width: 1000px;
+  max-width: calc(100% - 2rem);
+  min-width: 0;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+html[data-blog-theme="glass"] .theme-page-flow {
+  display: block;
+  flex: 0 0 auto;
+  margin-bottom: 150px;
+}
+html[data-blog-theme="glass"] body:not([data-page-kind="home"]) > [data-theme-slot="site-shell"] {
+  margin-top: 100px;
+  padding: 2.25rem 3rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.84);
+  box-shadow: 0 0 20px #111;
+}
+html[data-blog-theme="glass"] #header {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  align-items: stretch;
+  background: transparent;
+  box-shadow: none;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+html[data-blog-theme="glass"] #header .u-url {
+  display: block;
+  flex: 1;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  white-space: nowrap;
+}
+html[data-blog-theme="glass"] #header #logo {
+  display: none;
+}
+html[data-blog-theme="glass"] #header #title h1 {
+  color: #fff;
+  font: 500 40px/40px "Glass-Dynasty";
+  letter-spacing: normal;
+  text-shadow: 0 0 5px #111;
+}
+html[data-blog-theme="glass"] #header #nav {
+  flex: 0 0 auto;
+  min-width: 0;
+  color: #fff;
+}
+html[data-blog-theme="glass"] #header #nav > ul {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  align-items: stretch;
+  justify-content: space-around;
+}
+html[data-blog-theme="glass"] #header #nav > ul > li {
+  display: inline-block;
+  flex: 0 0 112px;
+  width: 112px;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  text-align: center;
+}
+html[data-blog-theme="glass"] #header #nav > ul > li > a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0 0.35rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: transparent;
+  color: #fff;
+  font-family: "Glass-Education-Pencil";
+  text-shadow: 0 0 5px #111;
+}
+html[data-blog-theme="glass"] #header #nav > ul > li > a:hover {
+  background: rgba(255,255,255,0.29);
+}
+html[data-blog-theme="glass"] #header #nav > ul .nav-item-icon {
+  display: inline-block !important;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.icon {
+  display: none;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search {
+  display: flex;
+  flex: 0 0 auto;
+  width: auto;
+  align-items: center;
+  margin: 0 1rem 0 0;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search form {
+  position: relative;
+  width: 14rem;
+  height: 2rem;
+  box-sizing: border-box;
+  border: 1px solid #cfd4db;
+  border-radius: 2rem;
+  background: #fff;
+  transition: border-color 0.2s ease;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search form > i {
+  position: absolute;
+  left: 1rem;
+  z-index: 1;
+  margin: 0;
+  color: #144a74;
+  font-size: 1rem;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search form input {
+  width: 100%;
+  height: 2rem;
+  padding: 0 1.25rem 0 2.8rem;
+  box-sizing: border-box;
+  border: 0;
+  background: transparent;
+  color: #144a74;
+  outline: none;
+  font: 400 0.9rem/2rem "Glass-Shine-Typewriter", "华文中宋";
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search form input::placeholder {
+  color: #144a74;
+  opacity: 0.72;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search form:focus-within {
+  border-color: #144a74;
+  box-shadow: 0 0 0 2px rgba(20,74,116,0.14);
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results {
+  top: 2.45rem;
+  right: 0;
+  width: 22rem;
+  max-height: 24rem;
+  padding: 6px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 10px 28px rgba(17,17,17,0.22);
+  color: #111;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  scrollbar-color: rgba(20,74,116,0.34) transparent;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results a.nav-search-result {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 7px;
+  background: transparent;
+  background-image: none;
+  color: #111;
+  outline: 0;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results a.nav-search-result:hover,
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results a.nav-search-result:focus-visible {
+  background: rgba(20,74,116,0.1);
+  background-image: none;
+  color: #144a74;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results a.nav-search-result:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(20,74,116,0.45);
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results a.nav-search-result:after {
+  right: 0.85rem;
+  left: 0.85rem;
+  background: rgba(20,74,116,0.18);
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results .nav-search-title {
+  color: #144a74;
+  font-weight: 700;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results .nav-search-excerpt {
+  color: #444;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results mark.nav-search-keyword,
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results .nav-search-keyword {
+  padding: 0;
+  background: rgba(20,74,116,0.1);
+  color: #144a74;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results .nav-search-empty {
+  padding: 0.85rem;
+  color: #144a74;
+  text-align: center;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results::-webkit-scrollbar {
+  width: 5px;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results::-webkit-scrollbar-track {
+  background: transparent;
+}
+html[data-blog-theme="glass"] #header #nav > ul li.nav-search #nav-search-results::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: rgba(20,74,116,0.34);
+}
+html[data-blog-theme="glass"] #header.is-scrolled {
+  background-color: rgba(255,255,255,0.2);
+  box-shadow: 0 0 15px #111;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] #header {
+  display: flex !important;
+}
+html[data-blog-theme="glass"] .blog-theme-selector {
+  display: flex !important;
+  flex: 0 0 112px !important;
+  width: 112px;
+  margin: 0 14px 0 0 !important;
+  padding: 0 !important;
+  justify-content: center;
+  align-items: center;
+}
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-trigger {
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  font-family: "Glass-Education-Pencil";
+  text-shadow: 0 0 5px #111;
+}
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-icon {
+  display: inline-block;
+  margin-right: 0.35rem;
+}
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-trigger:hover,
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-trigger[aria-expanded="true"] {
+  background: rgba(255,255,255,0.29);
+}
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu {
+  top: calc(100% + 0.35rem);
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.88);
+}
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button {
+  text-align: right;
+}
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button {
+  background: transparent;
+  color: #144a74;
+}
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button:hover,
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button:focus-visible,
+html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button[aria-checked="true"] {
+  background: rgba(20,74,116,0.12);
+}
+html[data-blog-theme="glass"] #about[data-theme-slot="profile"] {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #555 url("https://w.wallhaven.cc/full/m9/wallhaven-m9873y.jpg") 0 0/100% auto no-repeat;
+  box-shadow: 0 0 20px #111;
+  color: #fff;
+  font-family: "Glass-Insomniac-Comic-Dialogue", "华文中宋", STZhongsong, serif;
+  text-align: right;
+  text-shadow: 2px 2px 3px #111;
+}
+html[data-blog-theme="glass"] #about[data-theme-slot="profile"] .profile-name {
+  position: absolute;
+  top: 162px;
+  right: 130px;
+  display: block;
+  width: 500px;
+  font-size: 25px;
+  text-align: right;
+  text-transform: uppercase;
+}
+html[data-blog-theme="glass"] #about[data-theme-slot="profile"] .profile-motto {
+  position: absolute;
+  top: 197px;
+  right: 130px;
+  display: block;
+  width: 500px;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: right;
+}
+html[data-blog-theme="glass"] #about[data-theme-slot="profile"] .profile-motto p {
+  width: 100%;
+  margin: 0;
+  text-align: right;
+}
+html[data-blog-theme="glass"] #about[data-theme-slot="profile"] > p {
+  display: none;
+}
+html[data-blog-theme="glass"] #about[data-theme-slot="profile"]:after {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 100px;
+  height: 100px;
+  box-sizing: border-box;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.533) url("https://zoe-blog.netlify.app/assets/img/portrait.88802eb7.png") center/auto 100% no-repeat;
+  content: "";
+}
+html[data-blog-theme="glass"] [data-theme-slot="contribution"] {
+  margin: 20px 0 !important;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 0 5px #888;
+}
+html[data-blog-theme="glass"] [data-theme-slot="contribution"] img {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  margin: 0 !important;
+}
+html[data-blog-theme="glass"] #writing .h1,
+html[data-blog-theme="glass"] #writing > .h2,
+html[data-blog-theme="glass"] #writing > .widget {
+  display: none;
+}
+html[data-blog-theme="glass"] #writing [data-theme-slot="post-card"] {
+  display: flex;
+  width: 100%;
+  height: 200px;
+  margin: 20px 0;
+  padding: 20px 30px 0;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 20px #111;
+  color: #111;
+}
+html[data-blog-theme="glass"] #writing [data-theme-slot="post-card"]:nth-child(n+8) {
+  display: none;
+}
+html[data-blog-theme="glass"] #writing {
+  min-height: 1500px;
+}
+html[data-blog-theme="glass"] .home-post-header {
+  display: block;
+}
+html[data-blog-theme="glass"] .home-post-category,
+html[data-blog-theme="glass"] .home-post-title {
+  display: inline-block;
+  width: fit-content;
+  padding: 2px 10px;
+}
+html[data-blog-theme="glass"] .home-post-category {
+  border-radius: 5px;
+  background: rgba(255,255,255,0.8);
+  font-size: 14px;
+  line-height: 20px;
+}
+html[data-blog-theme="glass"] .home-post-title {
+  font-weight: 700;
+}
+html[data-blog-theme="glass"] .home-post-title a {
+  background-image: none;
+  text-decoration: none;
+}
+html[data-blog-theme="glass"] .home-post-title a:hover {
+  background-image: none;
+  color: #555;
+}
+html[data-blog-theme="glass"] .home-post-excerpt {
+  display: -webkit-box;
+  padding: 5px 20px;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 35px;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--excerpt-lines, 2);
+}
+html[data-blog-theme="glass"] .home-post-addition {
+  display: flex;
+  padding: 0 10px 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+html[data-blog-theme="glass"] .home-post-addition .meta {
+  display: inline-block;
+  flex: 0 0 auto;
+  margin-right: 20px;
+}
+html[data-blog-theme="glass"] .home-post-addition .home-post-tags {
+  display: flex;
+  visibility: visible;
+  flex: 10;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+html[data-blog-theme="glass"] .home-post-addition .home-post-tags a {
+  display: inline-block;
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background-image: none;
+  color: #111;
+  line-height: 24px;
+}
+html[data-blog-theme="glass"] .home-post-addition .home-post-tags a:hover {
+  background: rgba(20,74,116,0.08);
+}
+html[data-blog-theme="glass"] .home-post-addition .home-post-tags i {
+  color: #144a74;
+  text-shadow: 1px 1px 2px #888;
+}
+html[data-blog-theme="glass"] .home-post-addition .home-post-more {
+  display: inline-block;
+  flex: 0 0 auto;
+  padding: 5px;
+  border: 0;
+  background: transparent;
+  font-family: "Glass-Education-Pencil";
+}
+html[data-blog-theme="glass"] .home-post-addition .home-post-more i {
+  margin-left: 0.2rem;
+}
+html[data-blog-theme="glass"] #writing a,
+html[data-blog-theme="glass"] #about a {
+  color: #111;
+}
+html[data-blog-theme="glass"] #footer {
+  position: static;
+  display: flex;
+  width: 100vw;
+  min-height: 40px;
+  height: auto;
+  margin-top: auto;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: calc(50% - 50vw);
+  padding: 10px 5%;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 15px #111;
+  color: #fff;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  text-shadow: 0 0 2px #111;
+}
+html[data-blog-theme="glass"] #footer .footer-left {
+  float: none;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  align-self: center;
+  line-height: 20px;
+  text-align: center;
+}
+html[data-blog-theme="glass"] #footer .footer-right {
+  display: none;
+}
+html[data-blog-theme="glass"] .theme-footer-spacer {
+  display: block;
+  width: 100%;
+  height: 150px;
+  min-height: 150px;
+  flex: 0 0 150px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] > [data-theme-slot="site-shell"] {
+  width: 1250px;
+  max-width: calc(100% - 2rem);
+  margin-top: 100px;
+  min-height: calc(100vh - 100px);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-layout {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-toc-position {
+  position: relative;
+  display: block;
+  flex: 0 0 230px;
+  width: 230px;
+  padding-top: 360px;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-toc {
+  position: sticky;
+  top: 100px;
+  width: 230px;
+  max-height: calc(100vh - 120px);
+  padding: 30px 10px;
+  box-sizing: border-box;
+  overflow: auto;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 5px #111;
+  font-size: 14px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-toc .theme-post-toc-title {
+  font-size: 18px;
+  text-align: center;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-toc ol,
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-toc ul {
+  margin: 0;
+  padding-left: 10px;
+  list-style: none;
+  line-height: 20px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-toc a {
+  display: block;
+  color: #111;
+  background: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-toc a:hover,
+html[data-blog-theme="glass"] body[data-page-kind="post"] .theme-post-toc a.is-active {
+  color: #144a74;
+  font-weight: 700;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post {
+  width: 1000px;
+  min-width: 0;
+  min-height: 1500px;
+  margin: 0;
+  padding: 0 0 10px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 20px #111;
+  color: #111;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > header {
+  display: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post .theme-post-banner {
+  display: flex;
+  width: 100%;
+  height: 300px;
+  padding-top: 120px;
+  box-sizing: border-box;
+  flex-direction: column;
+  background: #333 url("https://w.wallhaven.cc/full/x8/wallhaven-x8oxez.png") 50% 85%/100% auto no-repeat;
+  color: #fff;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post .theme-post-banner-title {
+  width: 100%;
+  color: #fff;
+  font: 600 50px/normal "SketchyTimesBold", "康熙字典", serif;
+  text-align: center;
+  text-shadow: 0 0 3px #111;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post .theme-post-banner-title .banner-title-en {
+  font-family: "SketchyTimesBold", sans-serif;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post .theme-post-banner-title .banner-title-zh {
+  font-family: "康熙字典", "华文中宋", STZhongsong, serif;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post .theme-post-banner-meta {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content {
+  min-height: 1050px;
+  padding: 40px;
+  box-sizing: border-box;
+  color: #111;
+  font-family: "Glass-Shine-Typewriter", "华文中宋";
+  line-height: 1.7;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content img {
+  max-width: 100%;
+  height: auto;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h1,
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h2,
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h3,
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h4,
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h5,
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h6 {
+  position: relative;
+  margin: 2rem 0 1rem;
+  color: #111;
+  font-family: "Glass-Shine-Typewriter", "华文中宋", STZhongsong, serif;
+  font-weight: 700;
+  line-height: 1.35;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h2 {
+  font-size: 1.5rem;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h3 {
+  font-size: 1.25rem;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h4,
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h5,
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h6 {
+  font-size: 1.05rem;
+}
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h2:before,
+html[data-blog-theme="glass"] body[data-page-kind="post"] article.post > .content h3:before {
+  position: static;
+  margin-right: 0.35rem;
+  color: #144a74;
+  content: "#";
+  font-size: inherit;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] > [data-theme-slot="site-shell"] {
+  width: 1000px;
+  max-width: calc(100% - 2rem);
+  margin-top: 100px;
+  min-height: calc(100vh - 100px);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] > [data-theme-slot="site-shell"] > .theme-page-flow {
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 20px #111;
+}
+html[data-blog-theme="glass"] .theme-listing-banner {
+  display: flex;
+  width: 100%;
+  height: 300px;
+  padding-top: 120px;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px 10px 0 0;
+  background: #333 center/100% auto no-repeat;
+  color: #fff;
+  text-shadow: 0 0 3px #111;
+}
+html[data-blog-theme="glass"] .theme-listing-banner h1 {
+  margin: 0;
+  color: #fff;
+  font: 600 50px/normal "SketchyTimesBold", "康熙字典", serif;
+}
+html[data-blog-theme="glass"] .theme-listing-banner .banner-title-en {
+  font-family: "SketchyTimesBold", sans-serif;
+}
+html[data-blog-theme="glass"] .theme-listing-banner .banner-title-zh {
+  font-family: "康熙字典", "华文中宋", STZhongsong, serif;
+}
+html[data-blog-theme="glass"] .theme-listing-banner .theme-listing-banner-meta {
+  height: 40px;
+  line-height: 40px;
+}
+html[data-blog-theme="glass"] .theme-listing-banner-category {
+  background-image: url("https://w.wallhaven.cc/full/0w/wallhaven-0wy27r.jpg");
+  background-position: 50% 97%;
+}
+html[data-blog-theme="glass"] .theme-listing-banner-tag {
+  background-image: url("https://w.wallhaven.cc/full/9d/wallhaven-9d5mmk.jpg");
+  background-position: 50% 30%;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] > [data-theme-slot="site-shell"] > .theme-page-flow > article.post {
+  min-height: 630px;
+  margin: 0;
+  padding: 40px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive .post-list {
+  margin: 0;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive .archive-load-status.is-loading,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive.is-loading .archive-load-status,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive .post-year h2 {
+  color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive .post-year:before {
+  border-color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive .post-list:before {
+  background: rgba(20,74,116,0.35);
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive .post-list .post-item:before {
+  background: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive .post-list a:hover,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #archive .post-list a:focus-visible {
+  color: #144a74;
+  background-image: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search form {
+  position: relative;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search .search-input-icon {
+  position: absolute;
+  top: 50%;
+  left: 18px;
+  display: block;
+  color: #144a74;
+  transform: translateY(-50%);
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search .search-input {
+  padding: 10px 18px 10px 48px;
+  color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search .search-input::placeholder {
+  color: #144a74;
+  opacity: 0.72;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search .search-input:focus {
+  border-color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search #search-result a.search-result-title:hover,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search #search-result a.search-result-title:focus-visible,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search #search-result em.search-keyword {
+  color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #search #search-result em.search-keyword {
+  border-bottom-color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories {
+  display: flex;
+  height: 630px;
+  min-height: 630px;
+  box-sizing: border-box;
+  align-items: stretch;
+  justify-content: center;
+  overflow: hidden;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-tree,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-featured-list {
+  flex: 1;
+  margin: 0;
+  padding: 0 30px;
+  min-width: 0;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-tree {
+  overflow-y: auto;
+  scrollbar-width: none;
+  border-right: 3px solid #111;
+  font-family: "Glass-Unutterable-Regular", "华文中宋", STZhongsong, serif;
+  font-size: 18px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-tree::-webkit-scrollbar {
+  display: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-tree-title {
+  display: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-featured-list {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  font-family: "Glass-Sketchy-Times-Bold", "华文中宋", STZhongsong, serif;
+  font-size: 18px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .categoryName {
+  flex: 0 0 auto;
+  margin: 0 0 24px;
+  color: #111;
+  font: 700 30px/1.25 "Glass-Sketchy-Times-Bold", "华文中宋", STZhongsong, serif;
+  text-align: center;
+  text-transform: uppercase;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .categoryName:before {
+  display: none;
+  content: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-list a:hover,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-list a:focus-visible,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-list a.is-active,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-featured-main:hover .category-featured-name,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-featured-posts a:hover,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-featured-posts a:focus-visible,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-featured-count {
+  color: #144a74;
+  background-image: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-list .fa-feather {
+  width: 1em;
+  color: #144a74;
+  text-align: center;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-list a.is-active {
+  color: #144a74;
+  font-weight: 700;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-filter-posts {
+  flex: 1 1 auto;
+  margin: 1rem 0 0;
+  padding: 0 0 0 2.2rem;
+  overflow: hidden;
+  list-style: decimal;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-filter-posts li {
+  padding: 7px 0;
+  list-style: decimal;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-filter-posts a {
+  color: #111;
+  background-image: none;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-filter-posts a:hover {
+  color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-pagination {
+  display: flex;
+  margin-top: auto;
+  padding-top: 28px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-pagination-button {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #111;
+  cursor: pointer;
+  font: 16px/32px "Glass-Shine-Typewriter", "华文中宋", STZhongsong, serif;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-pagination-button:hover,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-pagination-button:focus-visible,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-pagination-button.is-current {
+  background: transparent;
+  color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-pagination-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #categories .category-featured-item {
+  border-color: rgba(17,17,17,0.2);
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud {
+  display: flex;
+  min-height: 420px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Glass-Sketchy-Times-Bold", "华文中宋", STZhongsong, serif;
+  text-align: center;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud .tag-cloud-tags {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud .tag-cloud-tags a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-image: none;
+  color: #111;
+  line-height: 1.4;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud .tag-cloud-tags a:hover,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud .tag-cloud-tags a:focus-visible {
+  color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud .tag-cloud-tags a:nth-child(7n) {
+  color: #111;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud .tag-cloud-tags a:nth-child(7n):hover,
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud .tag-cloud-tags a:nth-child(7n):focus-visible {
+  color: #144a74;
+}
+html[data-blog-theme="glass"] body[data-page-kind="listing"] #tag-cloud .tag-cloud-tags .fa-tag {
+  color: #144a74;
+}
+html[data-blog-theme="glass"] #nav-search-results a.nav-search-result:hover,
+html[data-blog-theme="glass"] #nav-search-results a.nav-search-result:focus-visible,
+html[data-blog-theme="glass"] #nav-search-results .nav-search-keyword,
+html[data-blog-theme="glass"] #nav-search-results .nav-search-empty {
+  color: #144a74;
+  background-image: none;
+}
+html[data-blog-theme="glass"] #header-post {
+  display: none !important;
+}
+html[data-blog-theme="glass"] .glass-bounce-in {
+  animation: glass-bounce-in 0.8s both;
+}
+@media (max-width: 1100px) {
+  html[data-blog-theme="glass"] #header #nav > ul > li {
+    flex-basis: auto;
+  }
+  html[data-blog-theme="glass"] body > [data-theme-slot="site-shell"] {
+    max-width: calc(100% - 2rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-blog-theme="glass"] .theme-hero-scroll,
+  html[data-blog-theme="glass"] .glass-bounce-in {
+    animation: none !important;
+  }
+}
+@-moz-keyframes glass-pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+@-webkit-keyframes glass-pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+@-o-keyframes glass-pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+@keyframes glass-pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+@-moz-keyframes glass-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes glass-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@-o-keyframes glass-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes glass-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

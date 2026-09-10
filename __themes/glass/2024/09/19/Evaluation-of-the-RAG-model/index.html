@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+<html lang=en class="no-js" data-blog-theme="glass">
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","current":"glass","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]}</script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
+        var aliases = {};
+        var valid = {};
+        registry.themes.forEach(function (theme) {
+          valid[theme.id] = true;
+          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
+        });
+        var selected = registry.current;
+        function themeUrl(id) {
+          var currentTheme = registry.themes.filter(function (theme) { return theme.id === registry.current; })[0];
+          var targetTheme = registry.themes.filter(function (theme) { return theme.id === id; })[0];
+          if (!currentTheme || !targetTheme) return null;
+          var currentRoot = currentTheme.root || '/';
+          var logicalPath = location.pathname;
+          if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
+            logicalPath = '/' + logicalPath.slice(currentRoot.length);
+          }
+          return (targetTheme.root || '/').replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') + location.search + location.hash;
+        }
+        try {
+          var raw = localStorage.getItem(registry.storageKey);
+          if (raw) {
+            var saved = JSON.parse(raw);
+            var candidate = typeof saved === 'string'
+              ? saved
+              : saved && saved.v === registry.version && saved.id;
+            candidate = aliases[candidate] || candidate;
+            if (valid[candidate]) selected = candidate;
+          }
+        } catch (_) {}
+        if (selected !== registry.current) {
+          var destination = themeUrl(selected);
+          if (destination) {
+            location.replace(destination);
+            return;
+          }
+        }
+        root.classList.remove('no-js');
+        root.classList.add('js');
+        root.setAttribute('data-blog-theme', registry.current);
+        window.__BLOG_THEME_REGISTRY__ = registry;
+        window.__BLOG_THEME_ID__ = registry.current;
+      })();
+    </script>
+    <meta name="description" content="Auepora, A Unified Evaluation Process of RAG.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evaluation of the RAG model">
+<meta property="og:url" content="https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="Auepora, A Unified Evaluation Process of RAG.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lifan-chen.github.io/2024/09/19/Evaluation-of-the-RAG-model/image-20240919192344355.png">
+<meta property="article:published_time" content="2024-09-19T10:24:53.000Z">
+<meta property="article:modified_time" content="2024-09-19T10:24:53.000Z">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifan-chen.github.io/2024/09/19/Evaluation-of-the-RAG-model/image-20240919192344355.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/__themes/glass/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/__themes/glass/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/__themes/glass/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Evaluation of the RAG model</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/__themes/glass/css/style.css">
+
+    
+<link rel="stylesheet" href="/__themes/glass/css/themes/glass.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="post">
+    
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/__themes/glass/">Home</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/__themes/glass/2024/09/22/Lost-in-the-Middle/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/__themes/glass/2024/09/06/Graph-RAG-A-Survey/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&text=Evaluation of the RAG model"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&is_video=false&description=Evaluation of the RAG model"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Evaluation of the RAG model&body=Check out this article: https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&name=Evaluation of the RAG model&description=Auepora, A Unified Evaluation Process of RAG."><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&t=Evaluation of the RAG model"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#evaluation-of-retrieval-augmented-generation-a-survey"><span class="toc-number">1.</span> <span class="toc-text"> Evaluation of Retrieval-Augmented Generation: A Survey</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ragas-automated-evaluation-of-retrieval-augmented-generation"><span class="toc-number">1.1.</span> <span class="toc-text"> RAGAS: Automated Evaluation of Retrieval Augmented Generation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#benchmarking-large-language-models-in-retrieval-augmented-generation"><span class="toc-number">2.</span> <span class="toc-text"> Benchmarking Large Language Models in Retrieval-Augmented Generation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#evaluating-retrieval-quality-in-retrieval-augmented-generation"><span class="toc-number">3.</span> <span class="toc-text"> Evaluating Retrieval Quality in Retrieval-Augmented Generation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#is-chatgpt-a-good-nlg-evaluator"><span class="toc-number">4.</span> <span class="toc-text"> Is ChatGPT a Good NLG Evaluator ?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#llm-as-a-judge"><span class="toc-number">5.</span> <span class="toc-text"> LLM as a Judge</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div id="site-content" class="content index py4 " data-theme-slot="site-shell">
+        <header id="header" data-theme-slot="site-header">
+  <a class="u-url u-uid" href="/__themes/glass/">
+  
+    
+      <img id="logo" alt class="u-logo" src="/__themes/glass/images/logo.png" />
+    
+  
+    <div id="title">
+      <h1 class="p-name">Shimmer</h1>
+    </div>
+  </a>
+  <div id="nav" data-theme-slot="primary-nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li data-nav-key="home"><a href="/__themes/glass/"><i class="nav-item-icon fa-solid fa-home" aria-hidden="true"></i><span class="nav-item-text">Home</span></a></li><!--
+   --><!--
+     --><li data-nav-key="articles"><a href="/__themes/glass/archives/"><i class="nav-item-icon fa-solid fa-clock" aria-hidden="true"></i><span class="nav-item-text">Writing</span></a></li><!--
+   --><!--
+     --><li data-nav-key="category"><a href="/__themes/glass/categories/"><i class="nav-item-icon fa-solid fa-cubes-stacked" aria-hidden="true"></i><span class="nav-item-text">Category</span></a></li><!--
+   --><!--
+     --><li data-nav-key="tag"><a href="/__themes/glass/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
+   -->
+      
+<li class="blog-theme-selector" data-theme-slot="theme-selector">
+  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
+    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
+  </button>
+  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
+    
+  </div>
+</li>
+
+      <!--
+     --><li class="nav-search">
+          <form id="nav-search-form" role="search" data-search-path="/__themes/glass/search.xml">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" id="nav-search-input" autocomplete="off" placeholder="Search..." aria-label="Search...">
+            <div id="nav-search-results" role="listbox" aria-label="Search..."></div>
+          </form>
+        </li><!--
+   -->
+    </ul>
+  </div>
+</header>
+
+        <main class="theme-page-flow" data-theme-slot="page-flow">
+          <div class="theme-post-layout" data-theme-slot="post-layout">
+  <aside class="theme-post-toc-position" data-theme-slot="post-toc-position" aria-label="Table of contents">
+    <div class="theme-post-toc" data-theme-slot="post-toc">
+      <div class="theme-post-toc-title">目录</div>
+      <ul><li><a href="#evaluation-of-retrieval-augmented-generation-a-survey">Evaluation of Retrieval-Augmented Generation: A Survey</a><ul><li><a href="#ragas-automated-evaluation-of-retrieval-augmented-generation">RAGAS: Automated Evaluation of Retrieval Augmented Generation</a></li></ul></li><li><a href="#benchmarking-large-language-models-in-retrieval-augmented-generation">Benchmarking Large Language Models in Retrieval-Augmented Generation</a></li><li><a href="#evaluating-retrieval-quality-in-retrieval-augmented-generation">Evaluating Retrieval Quality in Retrieval-Augmented Generation</a></li><li><a href="#is-chatgpt-a-good-nlg-evaluator">Is ChatGPT a Good NLG Evaluator ?</a></li><li><a href="#llm-as-a-judge">LLM as a Judge</a></li></ul>
+    </div>
+  </aside>
+<article class="post h-entry" data-theme-slot="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="theme-post-banner" data-theme-slot="post-banner">
+    <div class="theme-post-banner-title"><span class="banner-title-en" lang="en">Evaluation of the RAG model</span></div>
+    <div class="theme-post-banner-meta">
+      <span><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> 2024-09-19 18:24:53</span>
+      <span>|</span><span><i class="fa-solid fa-folder" aria-hidden="true"></i> RAG</span>
+    </div>
+  </div>
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Evaluation of the RAG model
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-09-19T10:24:53.000Z" class="dt-published" itemprop="datePublished">2024-09-19 18:24:53</time>
+        
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/__themes/glass/categories/Note/">Note</a> › <a class="category-link" href="/__themes/glass/categories/Note/RAG/">RAG</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" data-theme-slot="post-content" itemprop="articleBody">
+    <h2 id="evaluation-of-retrieval-augmented-generation-a-survey"><a class="markdownIt-Anchor" href="#evaluation-of-retrieval-augmented-generation-a-survey"></a> Evaluation of Retrieval-Augmented Generation: A Survey</h2>
+<ul>
+<li>
+<p>Auepora, A Unified Evaluation Process of RAG.</p>
+</li>
+<li>
+<p>What to Evaluate? (Target)</p>
+<p>The combination of “Evaluable Outputs” (EOs) and “Ground Truths” (GTs) in the RAG system can generate all possible targets.</p>
+<ul>
+<li>Retrieval
+<ul>
+<li>Relevance</li>
+<li>Accuracy</li>
+</ul>
+</li>
+<li>Generation
+<ul>
+<li>Relevance</li>
+<li>Faithfulness</li>
+<li>Correctness</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>How to Evaluate? (Dataset)</p>
+</li>
+<li>
+<p>How to Measure? (Metric)</p>
+<ul>
+<li>
+<p>Retrieval Metrics<br />
+*</p>
+</li>
+<li>
+<p>Generation Metrics</p>
+</li>
+</ul>
+</li>
+<li>
+<p>感觉没得看</p>
+</li>
+</ul>
+<h3 id="ragas-automated-evaluation-of-retrieval-augmented-generation"><a class="markdownIt-Anchor" href="#ragas-automated-evaluation-of-retrieval-augmented-generation"></a> RAGAS: Automated Evaluation of Retrieval Augmented Generation</h3>
+<ul>
+<li>
+<p>Contributions</p>
+<p>Introduce RAGAs, a framework for reference-free evaluation of RAG pipeline. 无基准评估框架</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/explodinggradients/ragas">https://github.com/explodinggradients/ragas</a></p>
+<p><mark>Provides an integration with both llamaindex and Langchain.</mark></p>
+<p>Put forward a suite of metrics, without having to rely on ground truth human annotations.</p>
+</li>
+<li>
+<p>对现有研究说明</p>
+<p>RAG的实施需要大量调整，因此自动评估至关重要。</p>
+</li>
+<li>
+<p>A standard RAG setting</p>
+<p>a question <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span></span></span></span></p>
+<p>the system first retrieves some context <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">c(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span></p>
+<p>and then uses the retrieved context to generate an answer <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>s</mi></msub><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">a_s(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span>.</p>
+</li>
+<li>
+<p>3 Quality Aspects</p>
+<ul>
+<li>
+<p>Faithfulness: the answer should be grounded in the given context.</p>
+<p>We say that the answer <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>s</mi></msub><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">a_s(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> is faithful to the context <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">c(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> if the claims that are made the answer can be inferred from the context.</p>
+<ol>
+<li>
+<p>Use an LLM to extract a set of statements, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false">(</mo><msub><mi>a</mi><mi>s</mi></msub><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">S(a_s(q))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span>.</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Given a question and answer, create one or more statements from each sentence in the given answer.</span></span><br><span class="line"><span class="string">question: [question]</span></span><br><span class="line"><span class="string">answer: [answer]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>The aim of this step is to decompose longer sentences into shorter and more focused assertions.</p>
+</li>
+<li>
+<p>For each statement <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">s_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> in <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span>, the LLM determines if <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">s_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> can be inferred from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">c(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> using a verification function <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>c</mi><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">v(s_i,c(q))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span>.</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Consider the given context and following statements, then determine whether they are supported by the information present in the context. Provide a brief explanation for each statement before arriving at the verdict (Yes/No). Provide a final verdict for each statement in order at the end in the given format. Do not deviate from the specified format.</span></span><br><span class="line"><span class="string">statement: [statement 1]</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"><span class="string">statement: [statement n]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>The final faithfulness score, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">F</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span></span></span></span>, is then computed as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>=</mo><mfrac><mrow><mi mathvariant="normal">∣</mi><mi>V</mi><mi mathvariant="normal">∣</mi></mrow><mrow><mi mathvariant="normal">∣</mi><mi>S</mi><mi mathvariant="normal">∣</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">F = \frac{|V|}{|S|}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∣</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mord mtight">∣</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∣</span><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span><span class="mord mtight">∣</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>, where <span class='katex-error' title='ParseError: KaTeX parse error: Undefined control sequence: \abs at position 1: \̲a̲b̲s̲{V}'>\abs{V}</span> is the number of statements that were supported according to the LLM and <span class='katex-error' title='ParseError: KaTeX parse error: Undefined control sequence: \abs at position 1: \̲a̲b̲s̲{S}'>\abs{S}</span> is the total number of statements.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Answer Relevance: the generated answer should address the actual question that was provided.</p>
+<p>(Our assessment of answer relevance does <strong>not take into account factuality</strong>, but penalises cases where the answer is incomplete or where it contains redundant information.)</p>
+<p>We say that the answer <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>s</mi></msub><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">a_s(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> is relevant if it directly addresses the question in an appropriate way.</p>
+<ol>
+<li>
+<p>To estimate answer relevance, for the given answer <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>s</mi></msub><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">a_s(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span>, we prompt the LLM to generate <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span> potential question <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">q_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> based on <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>s</mi></msub><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">a_s(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span>.</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Generate a question for the given answer.</span></span><br><span class="line"><span class="string">answer: [answer]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Obtain embeddings for all questions using the <code>text-embedding-ada-002</code> model, available from the OpenAI API. For each <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">q_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, we calculate the cosine similarity <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi></mrow><mo stretchy="false">(</mo><mi mathvariant="normal">q</mi><mo separator="true">,</mo><msub><mi mathvariant="normal">q</mi><mi mathvariant="normal">i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rm{sim} (q,q_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">s</span><span class="mord mathrm">i</span><span class="mord mathrm">m</span></span><span class="mopen">(</span><span class="mord mathrm">q</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathrm">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31750199999999995em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathrm mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> with the original question <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span></span></span></span>,.</p>
+</li>
+<li>
+<p>The answer relevance score, AR, for question <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span></span></span></span> is then computed as :</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mi mathvariant="normal">A</mi><mi mathvariant="normal">R</mi></mrow><mo>=</mo><mfrac><mn>1</mn><mi mathvariant="normal">n</mi></mfrac><munderover><mo>∑</mo><mrow><mi mathvariant="normal">i</mi><mo>=</mo><mn>1</mn></mrow><mi mathvariant="normal">n</mi></munderover><mi mathvariant="normal">s</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi><mo stretchy="false">(</mo><mi mathvariant="normal">q</mi><mo separator="true">,</mo><msub><mi mathvariant="normal">q</mi><mi mathvariant="normal">i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rm{AR} = \frac{1}{n}\sum\limits^{n}_{i=1}sim(q,q_i)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.9349040000000004em;vertical-align:-1.283507em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">A</span><span class="mord mathrm">R</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathrm">n</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathrm">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.866493em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">i</span><span class="mrel mtight">=</span><span class="mord mathrm mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.283507em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">s</span><span class="mord mathrm">i</span><span class="mord mathrm">m</span><span class="mopen">(</span><span class="mord mathrm">q</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathrm">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31750199999999995em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathrm mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></span></p>
+</li>
+</ol>
+</li>
+<li>
+<p>Context Relevance: the retrieved context should be focused, containing as little irrelevant information as possible. 检索到的内容是聚焦的，包含尽可能少的无关信息</p>
+<p>The context <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">c(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> is considered relevant to the extent that it exclusively contains information that is needed to answer the question. (This metric aims to penalise the inclusion of redundant information)</p>
+<ol>
+<li>
+<p>Given a question <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span></span></span></span> and its context <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">c(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span>, the LLM extracts a subset of sentences, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mrow><mi>e</mi><mi>x</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">S_{ext}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">x</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">c(q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> that are crucial to answer <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span></span></span></span>.</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Please extract relevant sentences from the provided context that can potentially help answer the following question. If no relevant sentences are found, or if you believe the question cannot be answered from the given context, return the phrase &quot;Insufficient Information&quot;. While extracting candidate sentences you’re not allowed to make any changes to sentences from given context.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>The context relevance score is then computed as:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">R</mi></mrow><mo>=</mo><mfrac><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">b</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mtext>  </mtext><mi mathvariant="normal">o</mi><mi mathvariant="normal">f</mi><mtext>  </mtext><mi mathvariant="normal">e</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi><mtext>  </mtext><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi></mrow><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi><mtext>  </mtext><mi mathvariant="normal">n</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">b</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mtext>  </mtext><mi mathvariant="normal">o</mi><mi mathvariant="normal">f</mi><mtext>  </mtext><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi><mtext>  </mtext><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mtext>  </mtext><mi mathvariant="normal">c</mi><mo stretchy="false">(</mo><mi mathvariant="normal">q</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\rm{CR} = \frac{number\;of\;extracted\;sentences}{total\;number\;of\;sentences\;in\;c(q)}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.30744em;vertical-align:-0.936em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">C</span><span class="mord mathrm">R</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.37144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathrm">t</span><span class="mord mathrm">o</span><span class="mord mathrm">t</span><span class="mord mathrm">a</span><span class="mord mathrm">l</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathrm">n</span><span class="mord mathrm">u</span><span class="mord mathrm">m</span><span class="mord mathrm">b</span><span class="mord mathrm">e</span><span class="mord mathrm">r</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathrm">o</span><span class="mord mathrm" style="margin-right:0.07778em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathrm">s</span><span class="mord mathrm">e</span><span class="mord mathrm">n</span><span class="mord mathrm">t</span><span class="mord mathrm">e</span><span class="mord mathrm">n</span><span class="mord mathrm">c</span><span class="mord mathrm">e</span><span class="mord mathrm">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathrm">i</span><span class="mord mathrm">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathrm">c</span><span class="mopen">(</span><span class="mord mathrm">q</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathrm">n</span><span class="mord mathrm">u</span><span class="mord mathrm">m</span><span class="mord mathrm">b</span><span class="mord mathrm">e</span><span class="mord mathrm">r</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathrm">o</span><span class="mord mathrm" style="margin-right:0.07778em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathrm">e</span><span class="mord mathrm">x</span><span class="mord mathrm">t</span><span class="mord mathrm">r</span><span class="mord mathrm">a</span><span class="mord mathrm">c</span><span class="mord mathrm">t</span><span class="mord mathrm">e</span><span class="mord mathrm">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathrm">s</span><span class="mord mathrm">e</span><span class="mord mathrm">n</span><span class="mord mathrm">t</span><span class="mord mathrm">e</span><span class="mord mathrm">n</span><span class="mord mathrm">c</span><span class="mord mathrm">e</span><span class="mord mathrm">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></span></p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>The WikiEval Dataset</p>
+</li>
+<li>
+<p>My opinion</p>
+<p>阅读到目前为止，觉得这个评估方法是比较容易实现的，实现步骤论文中已经讲得很清楚了。但是我认为提到得评估维度和指标还是略微粗浅了。</p>
+<p>在评估维度方面，虽然提到了检索到的内容应该是聚焦的，但是无法判断是否检索到了知识库中最相关的内容。</p>
+<p>在指标方面，特别是最后一个上下文相关度的评分。我觉得太抽象了。要是LLM把多个相关的内容都写进了一个句子里，就完全不准确了。</p>
+<p>还有一点就是结合了微软的 GraphRAG 论文里说的，没有办法评价 RAG 模型对知识库中知识的概括能力。</p>
+</li>
+</ul>
+<h2 id="benchmarking-large-language-models-in-retrieval-augmented-generation"><a class="markdownIt-Anchor" href="#benchmarking-large-language-models-in-retrieval-augmented-generation"></a> Benchmarking Large Language Models in Retrieval-Augmented Generation</h2>
+<p><img src="/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/image-20240919192344355.png" alt="image-20240919192344355" /></p>
+<p>Establish RGB, a new corpus for RAG evaluation in both English and Chinese.</p>
+<ul>
+<li>
+<p>4 Specific Abilities</p>
+<ul>
+<li>
+<p>Noise Robustness</p>
+<p>As retrievers are not perfect, the external knowledge they retrieve often contains a significant amount of noise. LLMs must be able to extract the necessary information.</p>
+</li>
+<li>
+<p>Negative Rejection</p>
+<p>In real-world situations, the search engine often fails to retrieve documents containing the answers. The model should have the capability to reject recognition and avoid generating misleading content.</p>
+</li>
+<li>
+<p>Information Integration</p>
+<p>In many cases, the answer to a question may be contained in multiple documents.</p>
+</li>
+<li>
+<p>Counterfactual Robustness</p>
+<p>In the real world, there is an abundance of false information on the internet.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Evaluation Metrics</p>
+<ul>
+<li>
+<p>Accuracy %</p>
+<p>measure noise robustness and information integration</p>
+<p>Employ an exact match approach where if the generated text contains an exact match to the answer, it is considered as a correct answer.</p>
+</li>
+<li>
+<p>Rejection rate %</p>
+<p>measure negative rejection</p>
+<p>When only noisy documents are provided, if the model generates “I can not answer the question …”, it indicates a successful rejection.</p>
+</li>
+<li>
+<p>Error detection rate %</p>
+<p>measure whether the model can detect the factual errors in the documents for counterfactual robustness</p>
+<p>When the provided documents contain factual errors, if the model generates “There are factual errors in the provided documents”, it indicates that the model has detected erroneous information in the document.</p>
+</li>
+<li>
+<p>Error correction rate %</p>
+<p>measure whether the model can provide the correct answer after identifying errors for counterfactual robustness</p>
+<p>After identifying the factual errors, if the model generates the correct answer, it indicates that the model is capable of correcting errors in the document.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>My Opinion</p>
+<p>模型的能力很有道理，但是都用百分比作为指标，太粗糙了。</p>
+<p>同样也无法评估概括性的问题。</p>
+</li>
+</ul>
+<h2 id="evaluating-retrieval-quality-in-retrieval-augmented-generation"><a class="markdownIt-Anchor" href="#evaluating-retrieval-quality-in-retrieval-augmented-generation"></a> Evaluating Retrieval Quality in Retrieval-Augmented Generation</h2>
+<ul>
+<li>
+<p>对现有研究的说明</p>
+<p>End-to-end evaluation lacks transparency, resource-intensive. Many ranking systems rely on interleaving for evaluation and optimization.</p>
+<p>Human annotations: accurate annotations are often challenging and costly to obtain.</p>
+<p>A lack of meaningful relationship between the evaluated metrics and the downstream performance of RAG.</p>
+</li>
+<li>
+<p>Propose eRAG, a new approach for evaluating retrievers in RAG systems.</p>
+</li>
+<li>
+<p>不想看</p>
+</li>
+</ul>
+<h2 id="is-chatgpt-a-good-nlg-evaluator"><a class="markdownIt-Anchor" href="#is-chatgpt-a-good-nlg-evaluator"></a> Is ChatGPT a Good NLG Evaluator ?</h2>
+<ul>
+<li>
+<p>NLG Metrics</p>
+<ul>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>-gram-based Metrics</p>
+<p>Aim to measure the lexical overlap between a generated text and a reference text.</p>
+<p>The standard <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>-gram overlap-based metrics generally include ROUGE, BLUE, Distinct-n and METEOR.</p>
+<ul>
+<li>ROUGE is the dominant metric in the summarization evaluation area. 是文摘评价领域的主导度量</li>
+<li>BLUE metric is the common practice for the machine translation evaluation area.</li>
+</ul>
+</li>
+<li>
+<p>Embedding-based Metrics</p>
+<ul>
+<li>WMD based on the word embedding</li>
+<li>BERTScore and MoverScore based on the sentence embeddings</li>
+</ul>
+</li>
+<li>
+<p>LLM-based Metrics</p>
+</li>
+<li>
+<p>…</p>
+</li>
+</ul>
+</li>
+<li>
+<p>ChatGPT for NLG Evaluation</p>
+<ul>
+<li>
+<p>Reference-free Metric</p>
+<p>Regard ChatGPT as a human evaluator and give it evaluation instruction via different prompts. Each  prompt should specify (1) which NLG task (e.g., summarization) needs to be evaluated and (2) which aspect (e.g., fluency) of the generation result should be assessed currently.</p>
+<p>Where <code>[task-ins]</code> and <code>[aspect-ins]</code> are the instruction of the current task and aspect, respectively.</p>
+<p><code>[aspect]</code> and <code>[ant-aspect]</code> denote the evaluated aspect and its antonym, respectively.</p>
+<p><code>[Conditioned Text]</code> is the input of NLG models while <code>[Generated Text]</code> is the output.</p>
+<ul>
+<li>
+<p>Direct assessment (DA)</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Score the following [task-ins] with respect to [aspect] on a continuous scale from 0 to 100, where a score of zero means “[ant-aspect]” and score of one hundred means “perfect [aspect]”. Note that [aspect] measures [aspect-ins].</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Conditioned Text]</span></span><br><span class="line"><span class="string">[Generated Text]</span></span><br><span class="line"><span class="string">Scores:</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>For example, when evaluating news summarization models in terms of fluency, the DA prompt may be like this:</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Score the following [news summarization given the corresponding news] with respect to [fluency] on a continuous scale from 0 to 100, where a score of zero means &quot;[disfluency]&quot; and score of one hundred means &quot;perfect [fluency]&quot;. Note that [fluency] measures [the quality of individual sentences, are they well-written and grammatically correct. Consider the quality of individual sentences].</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">News: [a news article] </span></span><br><span class="line"><span class="string">Summary: [one generated summary] </span></span><br><span class="line"><span class="string">Scores:</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>One-to-five stars ranking (star)</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Score the following [task-ins] with respect to [aspect] with one to five stars, where one star means “[ant-aspect]” and five stars means “perfect [aspect]”. Note that [aspect] measures [aspect-ins].</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Conditioned Text]</span></span><br><span class="line"><span class="string">[Generated Text]</span></span><br><span class="line"><span class="string">Stars:</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>Reference-based Metric</p>
+<p>Explicitly mention the golden references in the prompts.</p>
+<ul>
+<li>
+<p>DA</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Score the following [task-ins] with respect to [aspect] on a continuous scale from 0 to 100, where a score of zero means “[ant-aspect]” and score of one hundred means “perfect [aspect]”. Note that [aspect] measures [aspect-ins].</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Conditioned Text]</span></span><br><span class="line"><span class="string">Human reference: [A Reference] </span></span><br><span class="line"><span class="string">[Generated Text] Scores:</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>star</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Score the following [task-ins] with respect to [aspect] with one to five stars, where one star means “[ant-aspect]” and five stars means “perfect [aspect]”. Note that [aspect] measures [aspect-ins]. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Conditioned Text]</span></span><br><span class="line"><span class="string">Human reference: [A Reference] </span></span><br><span class="line"><span class="string">[Generated Text] Stars:</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Experiments</p>
+<ul>
+<li>
+<p>Experimental Setup</p>
+<ul>
+<li>
+<p>Metrics</p>
+<p>Adopt 3 widely-used correlation measures.</p>
+<ol>
+<li>Spearman correlation: assess the montonic relationships between two variables 评估两个变量之间的单调关系</li>
+<li>Pearson correlation: measure the linear relationships between two sets of data</li>
+<li>Kendall’s Tau: evaluate the ordinal association between two measured quantities 评价两个测量量之间的有序关联</li>
+</ol>
+</li>
+<li>
+<p>Evaluation Strategy</p>
+<p>When calculating the correlation scores, there are different aggregation methods.</p>
+<p>Given a set of conditioned text <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><msub><mi>c</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>c</mi><mn>2</mn></msub><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><msub><mi>c</mi><mi>n</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{c_1,c_2,...,c_n\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span> (e.g., source documents in text summarization task) and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span> NLG models. The generated text of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">m</span></span></span></span>-th model for the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathnormal">i</span></span></span></span>-th condition text is denoted as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>m</mi></mrow></msub></mrow><annotation encoding="application/x-tex">g_{i,m}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>.</p>
+<ol>
+<li>
+<p><em>Sample-level</em> evaluation strategy calculates the correlation scores as follows:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi><msub><mi mathvariant="normal">r</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi></mrow></msub></mrow><mo>=</mo><mfrac><mn>1</mn><mi mathvariant="normal">n</mi></mfrac><munderover><mo>∑</mo><mn>1</mn><mi mathvariant="normal">n</mi></munderover><mo stretchy="false">(</mo><mi>ρ</mi><mo stretchy="false">(</mo><mo stretchy="false">[</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi></mrow></msub><mo stretchy="false">(</mo><msub><mi mathvariant="normal">g</mi><mrow><mi mathvariant="normal">i</mi><mo separator="true">,</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi></mrow></msub><mo stretchy="false">(</mo><msub><mi mathvariant="normal">g</mi><mrow><mi mathvariant="normal">i</mi><mo separator="true">,</mo><mi mathvariant="normal">M</mi></mrow></msub><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo separator="true">,</mo><mo stretchy="false">[</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">n</mi></mrow></msub><mo stretchy="false">(</mo><msub><mi mathvariant="normal">g</mi><mrow><mi mathvariant="normal">i</mi><mo separator="true">,</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">n</mi></mrow></msub><mo stretchy="false">(</mo><msub><mi mathvariant="normal">g</mi><mrow><mi mathvariant="normal">i</mi><mo separator="true">,</mo><mi mathvariant="normal">M</mi></mrow></msub><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rm{Corr_{sample}} = \frac{1}{n}\sum\limits_{1}^{n}(\rho ([\mathit{f}_{auto}(g_{i,1}),...,\mathit{f}_{auto}(g_{i,M})],[\mathit{f}_{human}(g_{i,1}),...,\mathit{f}_{human}(g_{i,M})]))
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.9185100000000004em;vertical-align:-1.267113em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">C</span><span class="mord mathrm">o</span><span class="mord mathrm">r</span><span class="mord"><span class="mord mathrm">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">s</span><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">m</span><span class="mord mathrm mtight">p</span><span class="mord mathrm mtight">l</span><span class="mord mathrm mtight">e</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathrm">n</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathrm">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">ρ</span><span class="mopen">(</span><span class="mopen">[</span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">u</span><span class="mord mathrm mtight">t</span><span class="mord mathrm mtight">o</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.317502em;"><span style="top:-2.5500000000000003em;margin-left:-0.01389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathrm mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">u</span><span class="mord mathrm mtight">t</span><span class="mord mathrm mtight">o</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.01389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathrm mtight">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">h</span><span class="mord mathrm mtight">u</span><span class="mord mathrm mtight">m</span><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.317502em;"><span style="top:-2.5500000000000003em;margin-left:-0.01389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathrm mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">h</span><span class="mord mathrm mtight">u</span><span class="mord mathrm mtight">m</span><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.01389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathrm mtight">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></span></p>
+<p>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi></mrow><annotation encoding="application/x-tex">\rho</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">ρ</span></span></span></span> denotes the correlation metrics like Spearman collelation. <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mrow><mi>a</mi><mi>u</mi><mi>t</mi><mi>o</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\mathit{f}_{auto}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">o</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mrow><mi>h</mi><mi>u</mi><mi>m</mi><mi>a</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\mathit{f}_{human}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> indicate the automatic evaluation and human judgment functions, respectively.</p>
+</li>
+<li>
+<p><em>Dataset-level</em> evaluation strategy calculates the correlation as follows:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi><msub><mi mathvariant="normal">r</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi></mrow></msub></mrow><mo>=</mo><mi>ρ</mi><mo stretchy="false">(</mo><mo stretchy="false">[</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi></mrow></msub><mo stretchy="false">(</mo><msub><mi mathvariant="normal">g</mi><mrow><mn>1</mn><mo separator="true">,</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi></mrow></msub><mo stretchy="false">(</mo><msub><mi mathvariant="normal">g</mi><mrow><mi mathvariant="normal">n</mi><mo separator="true">,</mo><mi mathvariant="normal">M</mi></mrow></msub><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo separator="true">,</mo><mo stretchy="false">[</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">n</mi></mrow></msub><mo stretchy="false">(</mo><msub><mi mathvariant="normal">g</mi><mrow><mn>1</mn><mo separator="true">,</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><msub><mi>f</mi><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">n</mi></mrow></msub><mo stretchy="false">(</mo><msub><mi mathvariant="normal">g</mi><mrow><mi mathvariant="normal">n</mi><mo separator="true">,</mo><mi mathvariant="normal">M</mi></mrow></msub><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rm{Corr_{dataset}} =\rho ([\mathit{f}_{auto}(g_{1,1}),...,\mathit{f}_{auto}(g_{n,M})],[\mathit{f}_{human}(g_{1,1}),...,\mathit{f}_{human}(g_{n,M})])
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">C</span><span class="mord mathrm">o</span><span class="mord mathrm">r</span><span class="mord"><span class="mord mathrm">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">d</span><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">t</span><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">s</span><span class="mord mathrm mtight">e</span><span class="mord mathrm mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathnormal">ρ</span><span class="mopen">(</span><span class="mopen">[</span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">u</span><span class="mord mathrm mtight">t</span><span class="mord mathrm mtight">o</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.01389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">1</span><span class="mpunct mtight">,</span><span class="mord mathrm mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">u</span><span class="mord mathrm mtight">t</span><span class="mord mathrm mtight">o</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.01389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">n</span><span class="mpunct mtight">,</span><span class="mord mathrm mtight">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">h</span><span class="mord mathrm mtight">u</span><span class="mord mathrm mtight">m</span><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.01389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">1</span><span class="mpunct mtight">,</span><span class="mord mathrm mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathit">f</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">h</span><span class="mord mathrm mtight">u</span><span class="mord mathrm mtight">m</span><span class="mord mathrm mtight">a</span><span class="mord mathrm mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.01389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">n</span><span class="mpunct mtight">,</span><span class="mord mathrm mtight">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span><span class="mclose">)</span></span></span></span></span></span></p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Conclusion</p>
+<ul>
+<li>论文得出结论，ChatGPT 有潜力作为一个通用的、可靠的 NLG 评估指标。</li>
+<li>作者指出，ChatGPT 作为评估器的性能受到提示（prompt）设计的显著影响，不同的任务或方面需要精心设计的提示。</li>
+<li>论文还指出了 ChatGPT 作为 NLG 评估指标的局限性，并提出了未来工作的方向，包括探索更强大的提示、扩展到其他主流 NLG 任务和语言、以及在更具挑战性的数据集上测试 ChatGPT 评估器的性能。</li>
+</ul>
+</li>
+</ul>
+<h2 id="llm-as-a-judge"><a class="markdownIt-Anchor" href="#llm-as-a-judge"></a> LLM as a Judge</h2>
+<p>传统基准和开放式问题的错位 underscores the core problem driving this paper: the need for a robust and scalable automated method to evaluate LLM alignment with human preferences. 需要一种稳健的、可扩展的自动化评估方法来评估LLM与人类偏好的一致性</p>
+<ul>
+<li>
+<p>Types of LLM-as-a-Judge</p>
+<ul>
+<li>
+<p>Pairwise comparison</p>
+<p>An LLM judge is presented with a question and two answers, and tasked to determine which one is better or declare a tie.</p>
+<p>This method may lack scalability when the number of players increases, given that the number of possible pairs grows quadratically.</p>
+</li>
+<li>
+<p>Single answer grading</p>
+<p>An LLM judge is asked to directly assign a score to a single answer.</p>
+<p>Single answer grading may be unable to discern subtle differences between specific pairs, and its results may become unstable, as absolute scores are likely to fluctuate more than relative pairwise results of the judge model changes.</p>
+</li>
+<li>
+<p>Reference-guided grading</p>
+<p>Provided a reference solution.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Advantages of LLM-as-a-Judge</p>
+<ul>
+<li>
+<p>Scalability 可扩展性</p>
+<p>It reduces the need for human involvement, enabling scalable benchmarks and fast iterations.</p>
+</li>
+<li>
+<p>Explainability 可解释性</p>
+<p>LLM judges provide not only scores but also explanations, making their outputs interpretable.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Limitations of LLM-as-a-Judge</p>
+<ul>
+<li>
+<p>Position bias 位置偏见</p>
+<p>Position bias is when an LLM exhibits a propensity to favor certain positions over others. This bias is not unique to our context and has been seen in human decision-making and other ML domains. 位置偏见是指LLM表现出对某些位置的偏爱</p>
+<p>e.g.</p>
+<p>When GPT-3.5’s answer is positioned first, GPT-4 considers GPT 3.5’s answer more detailed and superior. However, upon switching the position of the two responses, GPT-4’s judgment flips, favoring Vicuna’s answer.</p>
+</li>
+<li>
+<p>Verbosity bias 多义性偏误</p>
+<p>Verbosity bias is when an LLM judge favors longer, verbose responses, even if they are not as clear, high-quality, or accurate as shorter alternatives.</p>
+</li>
+<li>
+<p>Self-enhancement bias</p>
+<p>LLM judges may favor the answers generated by themselves.</p>
+</li>
+<li>
+<p>Limited capability in grading math and reasoning questions</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Addressing limitations</p>
+<ul>
+<li>
+<p>Swapping positions</p>
+<p>Call a judge twice by swapping the order of two answers and only declare a win when an answer is preferred in both orders. If the results are inconsistent after swapping, we can call it a tie.</p>
+<p>Another more aggressive approach is to assign positions randomly, which can be effective at a large scale with the correct expectations.</p>
+</li>
+<li>
+<p>Few-shot judge</p>
+<p>The few-shot judge can significantly increase the consistency. However, high consistency may not imply high accuracy and we are not sure whether the few-shot examples will introduce new bias.</p>
+</li>
+<li>
+<p>Chain-of-thought and reference-guided judge</p>
+<p>在有思维链的情况下，LLM judge还是会受到错误答案的影响。</p>
+<p>In the reference-guided method we first generate LLM judge’s answer independently, and then display it as a reference answer in the judge prompt. 这种方法显著降低了失败率。</p>
+</li>
+<li>
+<p>Fine-tuning a judge model</p>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+</div>
+
+
+
+          
+            <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/__themes/glass/">Home</a></li>
+        
+          <li><a href="/__themes/glass/archives/">Writing</a></li>
+        
+          <li><a href="/__themes/glass/categories/">Category</a></li>
+        
+          <li><a href="/__themes/glass/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#evaluation-of-retrieval-augmented-generation-a-survey"><span class="toc-number">1.</span> <span class="toc-text"> Evaluation of Retrieval-Augmented Generation: A Survey</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ragas-automated-evaluation-of-retrieval-augmented-generation"><span class="toc-number">1.1.</span> <span class="toc-text"> RAGAS: Automated Evaluation of Retrieval Augmented Generation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#benchmarking-large-language-models-in-retrieval-augmented-generation"><span class="toc-number">2.</span> <span class="toc-text"> Benchmarking Large Language Models in Retrieval-Augmented Generation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#evaluating-retrieval-quality-in-retrieval-augmented-generation"><span class="toc-number">3.</span> <span class="toc-text"> Evaluating Retrieval Quality in Retrieval-Augmented Generation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#is-chatgpt-a-good-nlg-evaluator"><span class="toc-number">4.</span> <span class="toc-text"> Is ChatGPT a Good NLG Evaluator ?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#llm-as-a-judge"><span class="toc-number">5.</span> <span class="toc-text"> LLM as a Judge</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&text=Evaluation of the RAG model"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&is_video=false&description=Evaluation of the RAG model"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Evaluation of the RAG model&body=Check out this article: https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&title=Evaluation of the RAG model"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&name=Evaluation of the RAG model&description=Auepora, A Unified Evaluation Process of RAG."><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://lifan-chen.github.io/__themes/glass/2024/09/19/Evaluation-of-the-RAG-model/&t=Evaluation of the RAG model"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+          
+        </main>
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/__themes/glass/">Home</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/__themes/glass/js/main.js"></script>
+
+
+<script src="/__themes/glass/js/theme-manager.js"></script>
+
+
+<script src="/__themes/glass/js/themes/glass-core.js"></script>
+
+
+
+<script src="/__themes/glass/js/themes/glass-post.js"></script>
+
+
+
+
+  
+<script src="/__themes/glass/js/nav_search.js"></script>
+
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html lang=en class="no-js" data-blog-theme="glass">
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","current":"glass","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]}</script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
+        var aliases = {};
+        var valid = {};
+        registry.themes.forEach(function (theme) {
+          valid[theme.id] = true;
+          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
+        });
+        var selected = registry.current;
+        function themeUrl(id) {
+          var currentTheme = registry.themes.filter(function (theme) { return theme.id === registry.current; })[0];
+          var targetTheme = registry.themes.filter(function (theme) { return theme.id === id; })[0];
+          if (!currentTheme || !targetTheme) return null;
+          var currentRoot = currentTheme.root || '/';
+          var logicalPath = location.pathname;
+          if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
+            logicalPath = '/' + logicalPath.slice(currentRoot.length);
+          }
+          return (targetTheme.root || '/').replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') + location.search + location.hash;
+        }
+        try {
+          var raw = localStorage.getItem(registry.storageKey);
+          if (raw) {
+            var saved = JSON.parse(raw);
+            var candidate = typeof saved === 'string'
+              ? saved
+              : saved && saved.v === registry.version && saved.id;
+            candidate = aliases[candidate] || candidate;
+            if (valid[candidate]) selected = candidate;
+          }
+        } catch (_) {}
+        if (selected !== registry.current) {
+          var destination = themeUrl(selected);
+          if (destination) {
+            location.replace(destination);
+            return;
+          }
+        }
+        root.classList.remove('no-js');
+        root.classList.add('js');
+        root.setAttribute('data-blog-theme', registry.current);
+        window.__BLOG_THEME_REGISTRY__ = registry;
+        window.__BLOG_THEME_ID__ = registry.current;
+      })();
+    </script>
+    <meta name="description" content="ControlNet, a neural network architecture to add spatial conditioning controls to large, pretrained text-to-image diffusion models.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ControlNet">
+<meta property="og:url" content="https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/index.html">
+<meta property="og:site_name" content="Shimmer">
+<meta property="og:description" content="ControlNet, a neural network architecture to add spatial conditioning controls to large, pretrained text-to-image diffusion models.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lifan-chen.github.io/2024/10/12/ControlNet/image-20241012190140674.png">
+<meta property="og:image" content="https://lifan-chen.github.io/2024/10/12/ControlNet/image-20241014184608848.png">
+<meta property="og:image" content="https://lifan-chen.github.io/2024/10/12/ControlNet/image-20241014195232863.png">
+<meta property="article:published_time" content="2024-10-12T09:58:24.000Z">
+<meta property="article:modified_time" content="2024-10-12T09:58:24.000Z">
+<meta property="article:author" content="Zoe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifan-chen.github.io/2024/10/12/ControlNet/image-20241012190140674.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/__themes/glass/images/favicon.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/__themes/glass/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/__themes/glass/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>ControlNet</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/__themes/glass/css/style.css">
+
+    
+<link rel="stylesheet" href="/__themes/glass/css/themes/glass.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="post">
+    
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/__themes/glass/">Home</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/__themes/glass/2024/10/07/Word-Embedding/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&text=ControlNet"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&is_video=false&description=ControlNet"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ControlNet&body=Check out this article: https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&name=ControlNet&description=ControlNet, a neural network architecture to add spatial conditioning controls to large, pretrained text-to-image diffusion models."><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&t=ControlNet"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#controlnet"><span class="toc-number">1.</span> <span class="toc-text"> ControlNet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#controlnet-for-text-to-image-diffusion"><span class="toc-number">2.</span> <span class="toc-text"> ControlNet for Text-to-Image Diffusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#training"><span class="toc-number">3.</span> <span class="toc-text"> Training</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#inference"><span class="toc-number">4.</span> <span class="toc-text"> Inference</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div id="site-content" class="content index py4 " data-theme-slot="site-shell">
+        <header id="header" data-theme-slot="site-header">
+  <a class="u-url u-uid" href="/__themes/glass/">
+  
+    
+      <img id="logo" alt class="u-logo" src="/__themes/glass/images/logo.png" />
+    
+  
+    <div id="title">
+      <h1 class="p-name">Shimmer</h1>
+    </div>
+  </a>
+  <div id="nav" data-theme-slot="primary-nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li data-nav-key="home"><a href="/__themes/glass/"><i class="nav-item-icon fa-solid fa-home" aria-hidden="true"></i><span class="nav-item-text">Home</span></a></li><!--
+   --><!--
+     --><li data-nav-key="articles"><a href="/__themes/glass/archives/"><i class="nav-item-icon fa-solid fa-clock" aria-hidden="true"></i><span class="nav-item-text">Writing</span></a></li><!--
+   --><!--
+     --><li data-nav-key="category"><a href="/__themes/glass/categories/"><i class="nav-item-icon fa-solid fa-cubes-stacked" aria-hidden="true"></i><span class="nav-item-text">Category</span></a></li><!--
+   --><!--
+     --><li data-nav-key="tag"><a href="/__themes/glass/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
+   -->
+      
+<li class="blog-theme-selector" data-theme-slot="theme-selector">
+  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
+    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
+  </button>
+  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
+    
+      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
+    
+  </div>
+</li>
+
+      <!--
+     --><li class="nav-search">
+          <form id="nav-search-form" role="search" data-search-path="/__themes/glass/search.xml">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" id="nav-search-input" autocomplete="off" placeholder="Search..." aria-label="Search...">
+            <div id="nav-search-results" role="listbox" aria-label="Search..."></div>
+          </form>
+        </li><!--
+   -->
+    </ul>
+  </div>
+</header>
+
+        <main class="theme-page-flow" data-theme-slot="page-flow">
+          <div class="theme-post-layout" data-theme-slot="post-layout">
+  <aside class="theme-post-toc-position" data-theme-slot="post-toc-position" aria-label="Table of contents">
+    <div class="theme-post-toc" data-theme-slot="post-toc">
+      <div class="theme-post-toc-title">目录</div>
+      <ul><li><a href="#controlnet">ControlNet</a></li><li><a href="#controlnet-for-text-to-image-diffusion">ControlNet for Text-to-Image Diffusion</a></li><li><a href="#training">Training</a></li><li><a href="#inference">Inference</a></li></ul>
+    </div>
+  </aside>
+<article class="post h-entry" data-theme-slot="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="theme-post-banner" data-theme-slot="post-banner">
+    <div class="theme-post-banner-title"><span class="banner-title-en" lang="en">ControlNet</span></div>
+    <div class="theme-post-banner-meta">
+      <span><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> 2024-10-12 17:58:24</span>
+      <span>|</span><span><i class="fa-solid fa-folder" aria-hidden="true"></i> AI</span>
+    </div>
+  </div>
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        ControlNet
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Zoe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-10-12T09:58:24.000Z" class="dt-published" itemprop="datePublished">2024-10-12 17:58:24</time>
+        
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/__themes/glass/categories/Note/">Note</a> › <a class="category-link" href="/__themes/glass/categories/Note/AI/">AI</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" data-theme-slot="post-content" itemprop="articleBody">
+    <p>ControlNet, a neural network architecture to add spatial conditioning controls to large, pretrained text-to-image diffusion models.</p>
+<h2 id="controlnet"><a class="markdownIt-Anchor" href="#controlnet"></a> ControlNet</h2>
+<ul>
+<li>
+<p>Inject additional conditions into the blocks of a neural network.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><mrow><mi mathvariant="script">F</mi><mo stretchy="false">(</mo><mi mathvariant="script">x</mi><mo separator="true">;</mo><mi mathvariant="script">Θ</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mrow><annotation encoding="application/x-tex">y = \cal{F}(x;\Theta),
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathcal" style="margin-right:0.09931em;">F</span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">Θ</span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span></span></span></p>
+<p>Suppose <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">F</mi><mo stretchy="false">(</mo><mo>⋅</mo><mo separator="true">;</mo><mi mathvariant="script">Θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\cal{F}(\cdot;\Theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathcal" style="margin-right:0.09931em;">F</span></span><span class="mopen">(</span><span class="mord">⋅</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">Θ</span><span class="mclose">)</span></span></span></span></span> is a trained neural block, with parameters <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi></mrow><annotation encoding="application/x-tex">\Theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Θ</span></span></span></span>, that transforms an input feature map <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span>, into another feature map <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span>.</p>
+<p>Use two instances of zero convolutions with parameters <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Θ</mi><mrow><mi>z</mi><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">\Theta_{z1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord">Θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mrow><mi>z</mi><mn>2</mn></mrow></mrow><annotation encoding="application/x-tex">\Theta{z2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Θ</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mord">2</span></span></span></span></span> respectively. The complete ControlNet then computes</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>y</mi><mi>c</mi></msub><mo>=</mo><mrow><mi mathvariant="script">F</mi><mo stretchy="false">(</mo><mi mathvariant="script">x</mi><mo separator="true">;</mo><mi mathvariant="script">Θ</mi><mo stretchy="false">)</mo><mo>+</mo><mrow><mi mathvariant="script">Z</mi><mo stretchy="false">(</mo><mi mathvariant="script">x</mi><mo>+</mo><mi mathvariant="script">Z</mi><mo stretchy="false">(</mo><mi mathvariant="script">c</mi><mo separator="true">;</mo><msub><mi mathvariant="script">Θ</mi><mrow><mi mathvariant="script">z</mi><mn mathvariant="script">1</mn></mrow></msub><mo stretchy="false">)</mo><mo separator="true">;</mo><msub><mi mathvariant="script">Θ</mi><mrow><mi mathvariant="script">z</mi><mn mathvariant="script">2</mn></mrow></msub><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">y_c = \cal{F}(x;\Theta)+\cal{Z}(x+Z(c;\Theta_{z1});\Theta_{z2}),
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathcal" style="margin-right:0.09931em;">F</span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">Θ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord"><span class="mord mathcal" style="margin-right:0.07944em;">Z</span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathcal" style="margin-right:0.07944em;">Z</span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord">Θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord">Θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span></span></span></span></p>
+<p>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">y_c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the output of the ControlNet block.</p>
+<p>In the first training step, since both the weight and bias parameters of a zero convolution layer are initialized to zero, both of the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">Z</mi><mo stretchy="false">(</mo><mo>⋅</mo><mo separator="true">;</mo><mo>⋅</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\cal{Z}(\cdot;\cdot)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathcal" style="margin-right:0.07944em;">Z</span></span><span class="mopen">(</span><span class="mord">⋅</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">⋅</span><span class="mclose">)</span></span></span></span></span> terms in the above equation to zero, and</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>y</mi><mi>c</mi></msub><mo>=</mo><mi>y</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">y_c = y.
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord">.</span></span></span></span></span></p>
+<img src="/__themes/glass/2024/10/12/ControlNet/image-20241012190140674.png" alt="image-20241012190140674" style="zoom:80%;" />
+<ul>
+<li><em>network block</em>: refer to a set of neural layers that are commonly put together to form a single unit of a neural network (e.g., resnet block, conv-bn-relu block, multi-head attention block, transformer block, etc)</li>
+<li><em>zero convolution</em>: 1x1 convolution with both weight and bias initialized to zero. It can protect the backbone by eliminating random noise as gradients in the initial training steps.</li>
+<li>The locked parameters preserve the production-ready model trained with billion of images, while the trainable copy reuses such large-scale pretrained model to establish a deep, robust and strong backbone for handling diverse input conditions.</li>
+</ul>
+</li>
+</ul>
+<h2 id="controlnet-for-text-to-image-diffusion"><a class="markdownIt-Anchor" href="#controlnet-for-text-to-image-diffusion"></a> ControlNet for Text-to-Image Diffusion</h2>
+<ul>
+<li>
+<p>Stable Diffusion</p>
+<p><img src="/__themes/glass/2024/10/12/ControlNet/image-20241014184608848.png" alt="image-20241014184608848" /></p>
+<ul>
+<li>encoder (12 blocks), middle (1 block) ,decoder (12 blocks)</li>
+<li>8 blocks of it are down-sampling or up-sampling conv layers, while the other 17 blocks are main blocks (each contain 4 resnet layers and 2 Vision Transformers (Vits))
+<ul>
+<li>Vit: contain several cross-attention and self-attention mechanisms</li>
+</ul>
+</li>
+<li>Text prompts are encoded using the CLIP text encoder</li>
+<li>Diffusion timesteps are encoded with a time encoder using positional encoding.</li>
+</ul>
+</li>
+<li>
+<p>ControlNet</p>
+<ul>
+<li>Create a trainable of the 12 encoding blocks and 1 middle block of Stable Diffusion.</li>
+<li>The outputs are adds to the 12 skip-connections and 1 middle block of the U-net.</li>
+</ul>
+</li>
+<li>
+<p>This approach speeds up training and saves GPU memory. As tested on a single <strong>NVIDIA A100 PCIE 40GB</strong>, optimizing Stable Diffusion with ControlNet requires only about 23% more GPU memory and 34% more time in each training iteration, compared to optimizing Stable Diffusion without ControlNet.</p>
+</li>
+<li>
+<p>To add ControlNet to Stable Diffusion:</p>
+<ul>
+<li>
+<p>Convert each input conditioning image (e.g., edge, pose, depth, <em>etc</em>) from an input size of 512x512 into a 64x64 feature space vector that matches the size of Stable Diffusion.</p>
+</li>
+<li>
+<p>In particular, we use a tiny network <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">E</mi><mo stretchy="false">(</mo><mo>⋅</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\cal{E}(\cdot)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathcal" style="margin-right:0.08944em;">E</span></span><span class="mopen">(</span><span class="mord">⋅</span><span class="mclose">)</span></span></span></span></span> of <strong>four conv layers with 4x4 kernels and 2x2 strides</strong> (activated by <strong>ReLU</strong>, using <strong>16, 32, 64, 128, channels</strong> respectively, intitialized with <strong>Gaussian weights</strong> and trained jointly with the full model) to encode an image-space condition <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">c_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> into a feature space conditioning vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">c_f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> as,</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>c</mi><mi>f</mi></msub><mo>=</mo><mrow><mi mathvariant="script">E</mi><mo stretchy="false">(</mo><mi mathvariant="script">c</mi><mi mathvariant="script">i</mi><mo stretchy="false">)</mo><mi mathvariant="script">.</mi></mrow></mrow><annotation encoding="application/x-tex">c_f = \cal{E}(c{i}).
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathcal" style="margin-right:0.08944em;">E</span></span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mord"><span class="mord mathnormal">i</span></span><span class="mclose">)</span><span class="mord">.</span></span></span></span></span></span></p>
+<p>The conditioning vectors <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">c_f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> is passed into the ControlNet.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="training"><a class="markdownIt-Anchor" href="#training"></a> Training</h2>
+<ul>
+<li>
+<p>Given an input image <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">z_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, image diffusion algorithms progressively add noise to the image and produce a noisy image <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">z_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> (where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathnormal">t</span></span></span></span> represents the number of times noise is added)</p>
+</li>
+<li>
+<p>Given a set of conditions including time step <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathnormal">t</span></span></span></span>, text prompts <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">c_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, as well as a task-specific condition <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">c_f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>, image diffusion algorithms learn a network <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϵ</mi><mi>θ</mi></msub></mrow><annotation encoding="application/x-tex">\epsilon_\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> to predict the noise added to the noisy image <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">z_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> with</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">L</mi><mo>=</mo><msub><mi mathvariant="double-struck">E</mi><mrow><msub><mi mathvariant="script">z</mi><mn mathvariant="script">0</mn></msub><mo separator="true">,</mo><mi mathvariant="script">t</mi><mo separator="true">,</mo><msub><mi mathvariant="script">c</mi><mi mathvariant="script">t</mi></msub><mo separator="true">,</mo><msub><mi mathvariant="script">c</mi><mi mathvariant="script">f</mi></msub><mo>∼</mo><mrow><mi mathvariant="script">N</mi><mo stretchy="false">(</mo><mn mathvariant="script">0</mn><mo separator="true">,</mo><mn mathvariant="script">1</mn><mo stretchy="false">)</mo></mrow></mrow></msub><mrow><mo fence="true">[</mo><mi mathvariant="script">∣</mi><mi mathvariant="script">∣</mi><mi mathvariant="script">ϵ</mi><mo>−</mo><msub><mi mathvariant="script">ϵ</mi><mi mathvariant="script">θ</mi></msub><mrow><mo fence="true">(</mo><msub><mi mathvariant="script">z</mi><mi mathvariant="script">t</mi></msub><mo separator="true">,</mo><mi mathvariant="script">t</mi><mo separator="true">,</mo><msub><mi mathvariant="script">c</mi><mi mathvariant="script">t</mi></msub><mo separator="true">,</mo><msub><mi mathvariant="script">c</mi><mi mathvariant="script">f</mi></msub><mo fence="true">)</mo></mrow><mi mathvariant="script">∣</mi><msubsup><mi mathvariant="script">∣</mi><mn mathvariant="script">2</mn><mn mathvariant="script">2</mn></msubsup><mo fence="true">]</mo></mrow><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\cal{L} = \mathbb{E}_{z_0,t,c_t,c_f\sim\cal{N}(0,1)}\left[||\epsilon-\epsilon_\theta\left(z_t,t,c_t,c_f\right)||_2^2\right],
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2473879999999997em;vertical-align:-0.38327999999999984em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">E</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.5198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.04398em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.29634285714285713em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29011428571428566em;"><span></span></span></span></span></span></span><span class="mrel mtight">∼</span><span class="mord mtight"><span class="mord mtight"><span class="mord mathcal mtight" style="margin-right:0.14736em;">N</span></span><span class="mopen mtight">(</span><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.38327999999999984em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">[</span></span><span class="mord">∣</span><span class="mord">∣</span><span class="mord mathnormal">ϵ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathnormal">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">t</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">]</span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span></span></span></span></span></span></p>
+<p>where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">L</mi></mrow><annotation encoding="application/x-tex">\cal{L}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathcal">L</span></span></span></span></span></span> is the overall learning objective of the entire diffusion model.</p>
+</li>
+<li>
+<p>In the training process</p>
+<ul>
+<li>
+<p>Randomly replace 50% text prompts <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">c_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> with empty strings.</p>
+<p>The approach increases ControlNet’s ability to directly recognize semantics in the input conditioning images (<em>e.g.</em>, edges, poses, depth, <em>etc.</em>) as a replacement for the prompt.</p>
+</li>
+<li>
+<p>Since zero conv do not add noise to the network, the model should always be able to predict high-quality images.</p>
+</li>
+<li>
+<p>Sudden convergence phenomenon</p>
+<p>Observe that the model does not gradually learn the control conditions but abruptly succeeds in following the input conditioning images.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="inference"><a class="markdownIt-Anchor" href="#inference"></a> Inference</h2>
+<p>2 way to control the extra conditions of ControlNet affect denoising diffusion process</p>
+<ul>
+<li>
+<p>Classifier-free guidance resolution weighting.</p>
+</li>
+<li>
+<p>Composing multiple ControlNets.</p>
+<img src="/__themes/glass/2024/10/12/ControlNet/image-20241014195232863.png" alt="image-20241014195232863" style="zoom:80%;" />
+<ul>
+<li>
+<p>Apply multiple conditioning images (e.g., depth and pose) as a replacement for the prompt.</p>
+</li>
+<li>
+<p>Directly add the outputs of the corresponding ControlNets to the Stable Diffusion model. (No extra weighting or linear interpolation in necessary for such composition)</p>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+</div>
+
+
+
+          
+            <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/__themes/glass/">Home</a></li>
+        
+          <li><a href="/__themes/glass/archives/">Writing</a></li>
+        
+          <li><a href="/__themes/glass/categories/">Category</a></li>
+        
+          <li><a href="/__themes/glass/tags/">Tag</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#controlnet"><span class="toc-number">1.</span> <span class="toc-text"> ControlNet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#controlnet-for-text-to-image-diffusion"><span class="toc-number">2.</span> <span class="toc-text"> ControlNet for Text-to-Image Diffusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#training"><span class="toc-number">3.</span> <span class="toc-text"> Training</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#inference"><span class="toc-number">4.</span> <span class="toc-text"> Inference</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&text=ControlNet"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&is_video=false&description=ControlNet"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ControlNet&body=Check out this article: https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&title=ControlNet"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&name=ControlNet&description=ControlNet, a neural network architecture to add spatial conditioning controls to large, pretrained text-to-image diffusion models."><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://lifan-chen.github.io/__themes/glass/2024/10/12/ControlNet/&t=ControlNet"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+          
+        </main>
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-present
+    Zoe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/__themes/glass/">Home</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/__themes/glass/tags/">Tag</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/__themes/glass/js/main.js"></script>
+
+
+<script src="/__themes/glass/js/theme-manager.js"></script>
+
+
+<script src="/__themes/glass/js/themes/glass-core.js"></script>
+
+
+
+<script src="/__themes/glass/js/themes/glass-post.js"></script>
+
+
+
+
+  
+<script src="/__themes/glass/js/nav_search.js"></script>
+
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+</body>
+</html>

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","storageKey":"shimmer.theme.preference","themes":[{"id":"cactus","label":"Cactus","stylesheet":"","aliases":[]},{"id":"glass","label":"Glass","stylesheet":"css/themes/glass","aliases":["classic"]}]}</script>
+    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","current":"cactus","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]}</script>
     <script>
       (function () {
         var root = document.documentElement;
@@ -18,7 +18,18 @@
           valid[theme.id] = true;
           theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
         });
-        var selected = registry.default;
+        var selected = registry.current;
+        function themeUrl(id) {
+          var currentTheme = registry.themes.filter(function (theme) { return theme.id === registry.current; })[0];
+          var targetTheme = registry.themes.filter(function (theme) { return theme.id === id; })[0];
+          if (!currentTheme || !targetTheme) return null;
+          var currentRoot = currentTheme.root || '/';
+          var logicalPath = location.pathname;
+          if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
+            logicalPath = '/' + logicalPath.slice(currentRoot.length);
+          }
+          return (targetTheme.root || '/').replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') + location.search + location.hash;
+        }
         try {
           var raw = localStorage.getItem(registry.storageKey);
           if (raw) {
@@ -30,11 +41,18 @@
             if (valid[candidate]) selected = candidate;
           }
         } catch (_) {}
+        if (selected !== registry.current) {
+          var destination = themeUrl(selected);
+          if (destination) {
+            location.replace(destination);
+            return;
+          }
+        }
         root.classList.remove('no-js');
         root.classList.add('js');
-        root.setAttribute('data-blog-theme', selected);
+        root.setAttribute('data-blog-theme', registry.current);
         window.__BLOG_THEME_REGISTRY__ = registry;
-        window.__BLOG_THEME_ID__ = selected;
+        window.__BLOG_THEME_ID__ = registry.current;
       })();
     </script>
     <meta name="description" content="人类这个种族，需要有人面朝大地，也需要有人仰望星空">
@@ -77,13 +95,6 @@
     
 <link rel="stylesheet" href="/css/style.css">
 
-    
-      
-    
-      
-<link rel="stylesheet" href="/css/themes/glass.css">
-
-    
     <!-- persian styles -->
     
     <!-- rss -->
@@ -105,7 +116,6 @@
 <meta name="generator" content="Hexo 6.3.0"></head>
 
 <body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="listing">
-    
     
     <div id="site-content" class="content index py4 " data-theme-slot="site-shell">
         <header id="header" data-theme-slot="site-header">
@@ -262,12 +272,6 @@
 
 
 <script src="/js/theme-manager.js"></script>
-
-
-<script src="/js/themes/glass-core.js"></script>
-
-
-
 
 
 

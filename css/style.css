@@ -1659,9 +1659,6 @@ html[data-blog-theme="cactus"] body[data-page-kind="post"] #header > .u-url,
 html[data-blog-theme="cactus"] body[data-page-kind="post"] #header #nav > ul > li:not(.blog-theme-selector) {
   display: none;
 }
-html[data-blog-theme="cactus"] body[data-page-kind="post"] #header .blog-theme-selector {
-  display: none;
-}
 .profile-name {
   display: none;
 }
