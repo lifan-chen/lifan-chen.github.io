@@ -1,0 +1,97 @@
+[data-double-exposure-switcher] {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  list-style: none;
+}
+
+[data-double-exposure-switcher] *,
+[data-double-exposure-switcher] *::before,
+[data-double-exposure-switcher] *::after {
+  box-sizing: border-box;
+}
+
+.double-exposure-switcher__trigger,
+.double-exposure-switcher__choice {
+  border: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.double-exposure-switcher__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.double-exposure-switcher__icon {
+  display: inline-flex;
+  width: 1em;
+  height: 1em;
+  align-items: center;
+  justify-content: center;
+}
+
+.double-exposure-switcher__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.double-exposure-switcher__menu {
+  position: absolute;
+  z-index: 10000;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  min-width: max(8rem, 100%);
+  padding: 0.3rem;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  color: inherit;
+  background: Canvas;
+  box-shadow: 0 0.35rem 1rem rgb(0 0 0 / 18%);
+}
+
+.double-exposure-switcher__menu[hidden] {
+  display: none !important;
+}
+
+.double-exposure-switcher__choice {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.18rem;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.double-exposure-switcher__choice:hover,
+.double-exposure-switcher__choice:focus-visible,
+.double-exposure-switcher__choice[aria-checked="true"] {
+  background: rgb(127 127 127 / 16%);
+}
+
+.double-exposure-switcher__trigger:focus-visible,
+.double-exposure-switcher__choice:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+html.no-js [data-double-exposure-switcher] {
+  display: none !important;
+}
+
+@media (forced-colors: active) {
+  .double-exposure-switcher__menu {
+    border-color: ButtonText;
+  }
+
+  .double-exposure-switcher__choice[aria-checked="true"] {
+    outline: 1px solid ButtonText;
+  }
+}

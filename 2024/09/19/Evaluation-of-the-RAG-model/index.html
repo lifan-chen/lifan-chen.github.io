@@ -1,60 +1,77 @@
 <!DOCTYPE html>
-
 <html lang=en class="no-js" data-blog-theme="cactus">
-<head>
+<head><script id="double-exposure-config" type="application/json">{"registry":{"version":1,"default":"cactus","current":"cactus","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]},"current":"cactus","switcher":{"presentation":{"label":"Theme","icon":"palette"},"mounts":[{"id":"primary-search","target":"#header #nav \u003e ul \u003e .nav-search","insert":"before","wrapper":"li","unlessPresent":"#header-post"},{"id":"primary","target":"#header #nav \u003e ul","insert":"append","wrapper":"li","unlessPresent":["#header-post","#header #nav \u003e ul \u003e .nav-search"]},{"id":"post-desktop","target":"#header-post #nav \u003e ul","insert":"append","wrapper":"li"},{"id":"post-mobile","target":"#nav-footer \u003e ul","insert":"append","wrapper":"li"}]}}</script><script data-double-exposure-bootstrap>(function () {
+  'use strict';
+
+  var element = document.getElementById('double-exposure-config');
+  if (!element) return;
+  var state;
+  try { state = JSON.parse(element.textContent); } catch (_) { return; }
+  window.__DOUBLE_EXPOSURE__ = state;
+
+  var registry = state.registry || {};
+  var themes = {};
+  var aliases = {};
+  (registry.themes || []).forEach(function (theme) {
+    themes[theme.id] = theme;
+    (theme.aliases || []).forEach(function (alias) { aliases[alias] = theme.id; });
+  });
+
+  function normalize(id) {
+    var candidate = aliases[id] || id;
+    return themes[candidate] ? candidate : null;
+  }
+
+  function parseSaved(raw) {
+    if (!raw) return null;
+    try {
+      var saved = JSON.parse(raw);
+      return normalize(typeof saved === 'string' ? saved : saved && saved.id);
+    } catch (_) {
+      return normalize(raw);
+    }
+  }
+
+  function readCookie(name) {
+    var prefix = encodeURIComponent(name) + '=';
+    var cookies = document.cookie ? document.cookie.split('; ') : [];
+    for (var index = 0; index < cookies.length; index += 1) {
+      if (cookies[index].indexOf(prefix) === 0) {
+        try { return decodeURIComponent(cookies[index].slice(prefix.length)); } catch (_) { return null; }
+      }
+    }
+    return null;
+  }
+
+  var selected = null;
+  try { selected = parseSaved(localStorage.getItem(registry.storageKey)); } catch (_) {}
+  if (!selected) selected = parseSaved(readCookie(registry.storageKey));
+  if (!selected) selected = normalize(registry.default) || registry.current;
+
+  var root = document.documentElement;
+  root.classList.remove('no-js');
+  root.classList.add('js');
+  root.setAttribute('data-de-theme', registry.current);
+  root.setAttribute('data-blog-theme', registry.current);
+
+  if (selected !== registry.current && themes[selected] && themes[registry.current]) {
+    var currentRoot = themes[registry.current].root || '/';
+    var targetRoot = themes[selected].root || '/';
+    var logicalPath = location.pathname;
+    if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
+      logicalPath = '/' + logicalPath.slice(currentRoot.length);
+    }
+    var destination = targetRoot.replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') +
+      location.search + location.hash;
+    location.replace(destination);
+  }
+})();
+</script>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","current":"cactus","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]}</script>
-    <script>
-      (function () {
-        var root = document.documentElement;
-        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
-        var aliases = {};
-        var valid = {};
-        registry.themes.forEach(function (theme) {
-          valid[theme.id] = true;
-          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
-        });
-        var selected = registry.current;
-        function themeUrl(id) {
-          var currentTheme = registry.themes.filter(function (theme) { return theme.id === registry.current; })[0];
-          var targetTheme = registry.themes.filter(function (theme) { return theme.id === id; })[0];
-          if (!currentTheme || !targetTheme) return null;
-          var currentRoot = currentTheme.root || '/';
-          var logicalPath = location.pathname;
-          if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
-            logicalPath = '/' + logicalPath.slice(currentRoot.length);
-          }
-          return (targetTheme.root || '/').replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') + location.search + location.hash;
-        }
-        try {
-          var raw = localStorage.getItem(registry.storageKey);
-          if (raw) {
-            var saved = JSON.parse(raw);
-            var candidate = typeof saved === 'string'
-              ? saved
-              : saved && saved.v === registry.version && saved.id;
-            candidate = aliases[candidate] || candidate;
-            if (valid[candidate]) selected = candidate;
-          }
-        } catch (_) {}
-        if (selected !== registry.current) {
-          var destination = themeUrl(selected);
-          if (destination) {
-            location.replace(destination);
-            return;
-          }
-        }
-        root.classList.remove('no-js');
-        root.classList.add('js');
-        root.setAttribute('data-blog-theme', registry.current);
-        window.__BLOG_THEME_REGISTRY__ = registry;
-        window.__BLOG_THEME_ID__ = registry.current;
-      })();
-    </script>
     <meta name="description" content="Auepora, A Unified Evaluation Process of RAG.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Evaluation of the RAG model">
@@ -117,7 +134,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 	
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/double-exposure/switcher-base.css?v=b8f9b4faeeae" data-double-exposure-style="base"><link rel="stylesheet" href="/double-exposure/switcher-adapter.css?v=b8f9b4faeeae" data-double-exposure-style="adapter"></head>
 
 <body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="post">
     
@@ -209,20 +226,6 @@
    --><!--
      --><li data-nav-key="tag"><a href="/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
    -->
-      
-<li class="blog-theme-selector" data-theme-slot="theme-selector">
-  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
-    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
-  </button>
-  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
-    
-      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
-    
-      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
-    
-  </div>
-</li>
-
       <!--
      --><li class="nav-search">
           <form id="nav-search-form" role="search" data-search-path="/search.xml">
@@ -814,9 +817,6 @@
 <script src="/js/main.js"></script>
 
 
-<script src="/js/theme-manager.js"></script>
-
-
 
   
 <script src="/js/nav_search.js"></script>
@@ -833,5 +833,5 @@
 <!-- utterances Comments -->
 
 
-</body>
+<script src="/double-exposure/switcher.js?v=b8f9b4faeeae" defer data-double-exposure-runtime></script></body>
 </html>

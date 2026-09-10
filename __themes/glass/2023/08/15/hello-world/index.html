@@ -1,60 +1,77 @@
 <!DOCTYPE html>
-
 <html lang=en class="no-js" data-blog-theme="glass">
-<head>
+<head><script id="double-exposure-config" type="application/json">{"registry":{"version":1,"default":"cactus","current":"glass","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]},"current":"glass","switcher":{"presentation":{"label":"Theme","icon":"palette"},"mounts":[{"id":"primary-search","target":"#header #nav \u003e ul \u003e .nav-search","insert":"before","wrapper":"li"},{"id":"primary","target":"#header #nav \u003e ul","insert":"append","wrapper":"li","unlessPresent":"#header #nav \u003e ul \u003e .nav-search"}]}}</script><script data-double-exposure-bootstrap>(function () {
+  'use strict';
+
+  var element = document.getElementById('double-exposure-config');
+  if (!element) return;
+  var state;
+  try { state = JSON.parse(element.textContent); } catch (_) { return; }
+  window.__DOUBLE_EXPOSURE__ = state;
+
+  var registry = state.registry || {};
+  var themes = {};
+  var aliases = {};
+  (registry.themes || []).forEach(function (theme) {
+    themes[theme.id] = theme;
+    (theme.aliases || []).forEach(function (alias) { aliases[alias] = theme.id; });
+  });
+
+  function normalize(id) {
+    var candidate = aliases[id] || id;
+    return themes[candidate] ? candidate : null;
+  }
+
+  function parseSaved(raw) {
+    if (!raw) return null;
+    try {
+      var saved = JSON.parse(raw);
+      return normalize(typeof saved === 'string' ? saved : saved && saved.id);
+    } catch (_) {
+      return normalize(raw);
+    }
+  }
+
+  function readCookie(name) {
+    var prefix = encodeURIComponent(name) + '=';
+    var cookies = document.cookie ? document.cookie.split('; ') : [];
+    for (var index = 0; index < cookies.length; index += 1) {
+      if (cookies[index].indexOf(prefix) === 0) {
+        try { return decodeURIComponent(cookies[index].slice(prefix.length)); } catch (_) { return null; }
+      }
+    }
+    return null;
+  }
+
+  var selected = null;
+  try { selected = parseSaved(localStorage.getItem(registry.storageKey)); } catch (_) {}
+  if (!selected) selected = parseSaved(readCookie(registry.storageKey));
+  if (!selected) selected = normalize(registry.default) || registry.current;
+
+  var root = document.documentElement;
+  root.classList.remove('no-js');
+  root.classList.add('js');
+  root.setAttribute('data-de-theme', registry.current);
+  root.setAttribute('data-blog-theme', registry.current);
+
+  if (selected !== registry.current && themes[selected] && themes[registry.current]) {
+    var currentRoot = themes[registry.current].root || '/';
+    var targetRoot = themes[selected].root || '/';
+    var logicalPath = location.pathname;
+    if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
+      logicalPath = '/' + logicalPath.slice(currentRoot.length);
+    }
+    var destination = targetRoot.replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') +
+      location.search + location.hash;
+    location.replace(destination);
+  }
+})();
+</script>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","current":"glass","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]}</script>
-    <script>
-      (function () {
-        var root = document.documentElement;
-        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
-        var aliases = {};
-        var valid = {};
-        registry.themes.forEach(function (theme) {
-          valid[theme.id] = true;
-          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
-        });
-        var selected = registry.current;
-        function themeUrl(id) {
-          var currentTheme = registry.themes.filter(function (theme) { return theme.id === registry.current; })[0];
-          var targetTheme = registry.themes.filter(function (theme) { return theme.id === id; })[0];
-          if (!currentTheme || !targetTheme) return null;
-          var currentRoot = currentTheme.root || '/';
-          var logicalPath = location.pathname;
-          if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
-            logicalPath = '/' + logicalPath.slice(currentRoot.length);
-          }
-          return (targetTheme.root || '/').replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') + location.search + location.hash;
-        }
-        try {
-          var raw = localStorage.getItem(registry.storageKey);
-          if (raw) {
-            var saved = JSON.parse(raw);
-            var candidate = typeof saved === 'string'
-              ? saved
-              : saved && saved.v === registry.version && saved.id;
-            candidate = aliases[candidate] || candidate;
-            if (valid[candidate]) selected = candidate;
-          }
-        } catch (_) {}
-        if (selected !== registry.current) {
-          var destination = themeUrl(selected);
-          if (destination) {
-            location.replace(destination);
-            return;
-          }
-        }
-        root.classList.remove('no-js');
-        root.classList.add('js');
-        root.setAttribute('data-blog-theme', registry.current);
-        window.__BLOG_THEME_REGISTRY__ = registry;
-        window.__BLOG_THEME_ID__ = registry.current;
-      })();
-    </script>
     <meta name="description" content="这篇文章记录本博客的日常维护流程。当前采用以下结构：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hello World !">
@@ -119,7 +136,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 	
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/__themes/glass/double-exposure/switcher-base.css?v=05449df4afeb" data-double-exposure-style="base"><link rel="stylesheet" href="/__themes/glass/double-exposure/switcher-adapter.css?v=05449df4afeb" data-double-exposure-style="adapter"></head>
 
 <body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="post">
     
@@ -210,20 +227,6 @@
    --><!--
      --><li data-nav-key="tag"><a href="/__themes/glass/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
    -->
-      
-<li class="blog-theme-selector" data-theme-slot="theme-selector">
-  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
-    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
-  </button>
-  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
-    
-      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
-    
-      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
-    
-  </div>
-</li>
-
       <!--
      --><li class="nav-search">
           <form id="nav-search-form" role="search" data-search-path="/__themes/glass/search.xml">
@@ -333,17 +336,23 @@
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
 <p>生成结果位于 <code>public/</code>，它不需要提交到私有源码仓库。</p>
 <h2 id="五-保存文章或博客代码"><a class="markdownIt-Anchor" href="#五-保存文章或博客代码"></a> 五、保存文章或博客代码</h2>
-<p>文章、图片、主题、配置和脚本的修改都提交到私有源码仓库。提交前先检查变更：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br><span class="line">git <span class="built_in">diff</span></span><br></pre></td></tr></table></figure>
-<p>确认没有密码、私钥、临时日志或其他不应提交的文件后，再提交：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add source/_posts</span><br><span class="line">git commit <span class="literal">-m</span> <span class="string">&quot;Add My New Post&quot;</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-<p>如果修改的是博客代码或配置，可以按实际文件选择性暂存，例如：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add _config.yml themes scripts package.json package<span class="literal">-lock</span>.json</span><br><span class="line">git commit <span class="literal">-m</span> <span class="string">&quot;Update blog configuration&quot;</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-<p>不要习惯性使用 <code>git add .</code>，避免把无关文件或本地敏感文件一起提交。推送到私有仓库的 <code>main</code> 分支后，GitHub Actions 会自动构建并发布网站。</p>
+<p>文章和博客代码使用不同的分支，避免相互影响：</p>
+<ul>
+<li><code>main</code>：只写文章和管理文章图片。</li>
+<li><code>dev</code>：修改主题、配置和脚本。</li>
+</ul>
+<p>写完文章后，只需要执行：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="built_in">update-post</span></span><br></pre></td></tr></table></figure>
+<p>该命令只接受 <code>source/_posts/</code> 中的文章和配套图片改动，会自动同步<br />
+<code>origin/main</code>、构建 Cactus 与 Glass、生成提交并推送。如果当前不在<br />
+<code>main</code>，或者检测到主题、配置、脚本等代码改动，它会停止发布。</p>
+<p>维护博客代码时切换到 <code>dev</code>，验证后再提交：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">switch</span> dev</span><br><span class="line">git add _config.yml themes scripts package.json package<span class="literal">-lock</span>.json</span><br><span class="line">git commit <span class="literal">-m</span> <span class="string">&quot;Update blog configuration&quot;</span></span><br><span class="line">git push origin dev</span><br></pre></td></tr></table></figure>
+<p>代码在 <code>dev</code> 验证完成后再合并到 <code>main</code>。只有推送到 <code>main</code> 才会触发公开网站更新。</p>
 <h2 id="六-发布到公开网站"><a class="markdownIt-Anchor" href="#六-发布到公开网站"></a> 六、发布到公开网站</h2>
-<p>正常情况下，在本地执行下面这条命令就会自动发布：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-<p>它会把源码推送到私有仓库，并自动触发 GitHub Actions 的 <strong>Publish Hexo site</strong> 工作流。工作流会安装依赖、构建 Hexo，再把 <code>public/</code> 中的生成结果推送到公开仓库 <code>lifan-chen/lifan-chen.github.io</code> 的 <code>main</code> 分支。GitHub Pages 随后会更新，通常还需要等待片刻并刷新浏览器缓存。</p>
+<p>正常情况下，写完文章后执行下面这条命令就会自动发布：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="built_in">update-post</span></span><br></pre></td></tr></table></figure>
+<p>它会完成文章提交和源码推送，并自动触发 GitHub Actions 的 <strong>Publish Hexo site</strong> 工作流。工作流会安装依赖、构建 Hexo，再把 <code>public/</code> 中的生成结果推送到公开仓库 <code>lifan-chen/lifan-chen.github.io</code> 的 <code>main</code> 分支。GitHub Pages 随后会更新，通常还需要等待片刻并刷新浏览器缓存。</p>
 <p>如果自动发布失败，或者需要在没有新提交的情况下重新发布，可以手动重跑：</p>
 <ol>
 <li>打开私有仓库 <code>lifan-chen/hexo-blog-source</code>。</li>
@@ -357,14 +366,14 @@
 <p>项目已经移除了 <code>hexo-deployer-git</code>，发布应统一通过私有仓库中的 GitHub Actions 完成。</p>
 <h2 id="七-最常用的完整流程"><a class="markdownIt-Anchor" href="#七-最常用的完整流程"></a> 七、最常用的完整流程</h2>
 <h3 id="发布一篇新文章"><a class="markdownIt-Anchor" href="#发布一篇新文章"></a> 发布一篇新文章</h3>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">switch</span> main</span><br><span class="line">git pull <span class="literal">--ff-only</span> origin main</span><br><span class="line">hexo new post <span class="string">&quot;My New Post&quot;</span></span><br><span class="line"><span class="comment"># 使用 Typora 写文章并添加图片</span></span><br><span class="line">hexo server</span><br><span class="line">git status</span><br><span class="line">git <span class="built_in">diff</span></span><br><span class="line">git add source/_posts</span><br><span class="line">git commit <span class="literal">-m</span> <span class="string">&quot;Add My New Post&quot;</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-<p><code>git push origin main</code> 成功后会自动开始发布。稍后检查线上页面即可。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">switch</span> main</span><br><span class="line">hexo new post <span class="string">&quot;My New Post&quot;</span></span><br><span class="line"><span class="comment"># 使用 Typora 写文章并添加图片</span></span><br><span class="line">hexo server</span><br><span class="line">hexo <span class="built_in">update-post</span></span><br></pre></td></tr></table></figure>
+<p><code>hexo update-post</code> 成功后会自动开始发布。稍后检查线上页面即可。</p>
 <h3 id="更新已有文章"><a class="markdownIt-Anchor" href="#更新已有文章"></a> 更新已有文章</h3>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">switch</span> main</span><br><span class="line">git pull <span class="literal">--ff-only</span> origin main</span><br><span class="line"><span class="comment"># 使用 Typora 修改文章</span></span><br><span class="line">hexo server</span><br><span class="line">git status</span><br><span class="line">git <span class="built_in">diff</span></span><br><span class="line">git add source/_posts</span><br><span class="line">git commit <span class="literal">-m</span> <span class="string">&quot;Update article&quot;</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-<p><code>git push origin main</code> 成功后会自动同步线上网站。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">switch</span> main</span><br><span class="line"><span class="comment"># 使用 Typora 修改文章</span></span><br><span class="line">hexo server</span><br><span class="line">hexo <span class="built_in">update-post</span></span><br></pre></td></tr></table></figure>
+<p><code>hexo update-post</code> 成功后会自动同步线上网站。</p>
 <h3 id="更新博客主题-配置或脚本"><a class="markdownIt-Anchor" href="#更新博客主题-配置或脚本"></a> 更新博客主题、配置或脚本</h3>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">switch</span> main</span><br><span class="line">git pull <span class="literal">--ff-only</span> origin main</span><br><span class="line"><span class="comment"># 修改代码</span></span><br><span class="line">hexo clean</span><br><span class="line">hexo generate</span><br><span class="line">git status</span><br><span class="line">git <span class="built_in">diff</span></span><br><span class="line"><span class="comment"># 只暂存本次实际修改的文件</span></span><br><span class="line">git add &lt;文件或目录&gt;</span><br><span class="line">git commit <span class="literal">-m</span> <span class="string">&quot;Update blog&quot;</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
-<p>推送成功后会自动运行 <strong>Publish Hexo site</strong>。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">switch</span> dev</span><br><span class="line">git pull <span class="literal">--ff-only</span> origin dev</span><br><span class="line"><span class="comment"># 修改代码</span></span><br><span class="line">hexo clean</span><br><span class="line">hexo generate</span><br><span class="line">git status</span><br><span class="line">git <span class="built_in">diff</span></span><br><span class="line"><span class="comment"># 只暂存本次实际修改的文件</span></span><br><span class="line">git add &lt;文件或目录&gt;</span><br><span class="line">git commit <span class="literal">-m</span> <span class="string">&quot;Update blog&quot;</span></span><br><span class="line">git push origin dev</span><br></pre></td></tr></table></figure>
+<p>推送到 <code>dev</code> 不会发布网站。验证完成后，将 <code>dev</code> 合并到 <code>main</code> 并推送，才会运行 <strong>Publish Hexo site</strong>。</p>
 <h2 id="八-常见问题"><a class="markdownIt-Anchor" href="#八-常见问题"></a> 八、常见问题</h2>
 <h3 id="powershell-提示找不到-hexo"><a class="markdownIt-Anchor" href="#powershell-提示找不到-hexo"></a> PowerShell 提示找不到 <code>hexo</code></h3>
 <p>安装或重新安装全局 Hexo CLI：</p>
@@ -516,9 +525,6 @@
 <script src="/__themes/glass/js/main.js"></script>
 
 
-<script src="/__themes/glass/js/theme-manager.js"></script>
-
-
 <script src="/__themes/glass/js/themes/glass-core.js"></script>
 
 
@@ -543,5 +549,5 @@
 <!-- utterances Comments -->
 
 
-</body>
+<script src="/__themes/glass/double-exposure/switcher.js?v=05449df4afeb" defer data-double-exposure-runtime></script></body>
 </html>

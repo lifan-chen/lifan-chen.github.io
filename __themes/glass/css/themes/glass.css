@@ -383,55 +383,6 @@ html[data-blog-theme="glass"] #header.is-scrolled {
 html[data-blog-theme="glass"] body[data-page-kind="post"] #header {
   display: flex !important;
 }
-html[data-blog-theme="glass"] .blog-theme-selector {
-  display: flex !important;
-  flex: 0 0 112px !important;
-  width: 112px;
-  margin: 0 14px 0 0 !important;
-  padding: 0 !important;
-  justify-content: center;
-  align-items: center;
-}
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-trigger {
-  display: inline-flex;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: #fff;
-  font-family: "Glass-Education-Pencil";
-  text-shadow: 0 0 5px #111;
-}
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-icon {
-  display: inline-block;
-  margin-right: 0.35rem;
-}
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-trigger:hover,
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-trigger[aria-expanded="true"] {
-  background: rgba(255,255,255,0.29);
-}
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu {
-  top: calc(100% + 0.35rem);
-  border-color: rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.88);
-}
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button {
-  text-align: right;
-}
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button {
-  background: transparent;
-  color: #144a74;
-}
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button:hover,
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button:focus-visible,
-html[data-blog-theme="glass"] .blog-theme-selector .blog-theme-menu button[aria-checked="true"] {
-  background: rgba(20,74,116,0.12);
-}
 html[data-blog-theme="glass"] #about[data-theme-slot="profile"] {
   position: relative;
   width: 100%;

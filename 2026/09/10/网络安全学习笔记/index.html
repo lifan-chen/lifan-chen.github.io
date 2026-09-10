@@ -1,60 +1,77 @@
 <!DOCTYPE html>
-
 <html lang=en class="no-js" data-blog-theme="cactus">
-<head>
+<head><script id="double-exposure-config" type="application/json">{"registry":{"version":1,"default":"cactus","current":"cactus","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]},"current":"cactus","switcher":{"presentation":{"label":"Theme","icon":"palette"},"mounts":[{"id":"primary-search","target":"#header #nav \u003e ul \u003e .nav-search","insert":"before","wrapper":"li","unlessPresent":"#header-post"},{"id":"primary","target":"#header #nav \u003e ul","insert":"append","wrapper":"li","unlessPresent":["#header-post","#header #nav \u003e ul \u003e .nav-search"]},{"id":"post-desktop","target":"#header-post #nav \u003e ul","insert":"append","wrapper":"li"},{"id":"post-mobile","target":"#nav-footer \u003e ul","insert":"append","wrapper":"li"}]}}</script><script data-double-exposure-bootstrap>(function () {
+  'use strict';
+
+  var element = document.getElementById('double-exposure-config');
+  if (!element) return;
+  var state;
+  try { state = JSON.parse(element.textContent); } catch (_) { return; }
+  window.__DOUBLE_EXPOSURE__ = state;
+
+  var registry = state.registry || {};
+  var themes = {};
+  var aliases = {};
+  (registry.themes || []).forEach(function (theme) {
+    themes[theme.id] = theme;
+    (theme.aliases || []).forEach(function (alias) { aliases[alias] = theme.id; });
+  });
+
+  function normalize(id) {
+    var candidate = aliases[id] || id;
+    return themes[candidate] ? candidate : null;
+  }
+
+  function parseSaved(raw) {
+    if (!raw) return null;
+    try {
+      var saved = JSON.parse(raw);
+      return normalize(typeof saved === 'string' ? saved : saved && saved.id);
+    } catch (_) {
+      return normalize(raw);
+    }
+  }
+
+  function readCookie(name) {
+    var prefix = encodeURIComponent(name) + '=';
+    var cookies = document.cookie ? document.cookie.split('; ') : [];
+    for (var index = 0; index < cookies.length; index += 1) {
+      if (cookies[index].indexOf(prefix) === 0) {
+        try { return decodeURIComponent(cookies[index].slice(prefix.length)); } catch (_) { return null; }
+      }
+    }
+    return null;
+  }
+
+  var selected = null;
+  try { selected = parseSaved(localStorage.getItem(registry.storageKey)); } catch (_) {}
+  if (!selected) selected = parseSaved(readCookie(registry.storageKey));
+  if (!selected) selected = normalize(registry.default) || registry.current;
+
+  var root = document.documentElement;
+  root.classList.remove('no-js');
+  root.classList.add('js');
+  root.setAttribute('data-de-theme', registry.current);
+  root.setAttribute('data-blog-theme', registry.current);
+
+  if (selected !== registry.current && themes[selected] && themes[registry.current]) {
+    var currentRoot = themes[registry.current].root || '/';
+    var targetRoot = themes[selected].root || '/';
+    var logicalPath = location.pathname;
+    if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
+      logicalPath = '/' + logicalPath.slice(currentRoot.length);
+    }
+    var destination = targetRoot.replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') +
+      location.search + location.hash;
+    location.replace(destination);
+  }
+})();
+</script>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <script id="blog-theme-registry" type="application/json">{"version":1,"default":"cactus","current":"cactus","storageKey":"double-exposure.theme.preference","themes":[{"id":"cactus","label":"Cactus","root":"/","aliases":[]},{"id":"glass","label":"Glass","root":"/__themes/glass/","aliases":["classic"]}]}</script>
-    <script>
-      (function () {
-        var root = document.documentElement;
-        var registry = JSON.parse(document.getElementById('blog-theme-registry').textContent);
-        var aliases = {};
-        var valid = {};
-        registry.themes.forEach(function (theme) {
-          valid[theme.id] = true;
-          theme.aliases.forEach(function (alias) { aliases[alias] = theme.id; });
-        });
-        var selected = registry.current;
-        function themeUrl(id) {
-          var currentTheme = registry.themes.filter(function (theme) { return theme.id === registry.current; })[0];
-          var targetTheme = registry.themes.filter(function (theme) { return theme.id === id; })[0];
-          if (!currentTheme || !targetTheme) return null;
-          var currentRoot = currentTheme.root || '/';
-          var logicalPath = location.pathname;
-          if (currentRoot !== '/' && logicalPath.indexOf(currentRoot) === 0) {
-            logicalPath = '/' + logicalPath.slice(currentRoot.length);
-          }
-          return (targetTheme.root || '/').replace(/\/$/, '') + '/' + logicalPath.replace(/^\//, '') + location.search + location.hash;
-        }
-        try {
-          var raw = localStorage.getItem(registry.storageKey);
-          if (raw) {
-            var saved = JSON.parse(raw);
-            var candidate = typeof saved === 'string'
-              ? saved
-              : saved && saved.v === registry.version && saved.id;
-            candidate = aliases[candidate] || candidate;
-            if (valid[candidate]) selected = candidate;
-          }
-        } catch (_) {}
-        if (selected !== registry.current) {
-          var destination = themeUrl(selected);
-          if (destination) {
-            location.replace(destination);
-            return;
-          }
-        }
-        root.classList.remove('no-js');
-        root.classList.add('js');
-        root.setAttribute('data-blog-theme', registry.current);
-        window.__BLOG_THEME_REGISTRY__ = registry;
-        window.__BLOG_THEME_ID__ = registry.current;
-      })();
-    </script>
     <meta name="description" content="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;sunny11&#x2F;p&#x2F;13583083.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="网络安全学习笔记（小迪）">
@@ -115,7 +132,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 	
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/double-exposure/switcher-base.css?v=b8f9b4faeeae" data-double-exposure-style="base"><link rel="stylesheet" href="/double-exposure/switcher-adapter.css?v=b8f9b4faeeae" data-double-exposure-style="adapter"></head>
 
 <body class="max-width mx-auto px3 ltr" data-theme-slot="page" data-page-kind="post">
     
@@ -172,7 +189,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text"> 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%8D%E5%BC%B9shell-%E8%A7%A3%E5%86%B3%E6%95%B0%E6%8D%AE%E5%9B%9E%E6%98%BE%E5%92%8C%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%9B%9E%E6%98%BE-%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 反弹shell-解决数据回显和交互式回显、数据通信问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-web-%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. Web 应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BF%A1%E6%81%AF%E6%89%93%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. 信息打点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#a-web%E6%9E%B6%E6%9E%84-%E8%AF%AD%E8%A8%80%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%AD%89"><span class="toc-number">1.3.1.</span> <span class="toc-text"> a. Web架构-语言&amp;中间件&amp;数据库&amp;系统等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b-web%E6%BA%90%E7%A0%81-cms%E5%BC%80%E6%BA%90%E9%97%AD%E6%BA%90%E5%94%AE%E5%8D%96%E8%87%AA%E4%B8%BB%E7%A0%94%E5%8F%91%E7%AD%89"><span class="toc-number">1.3.2.</span> <span class="toc-text"> b. Web源码-CMS开源&amp;闭源售卖&amp;自主研发等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c-web%E6%BA%90%E7%A0%81%E8%8E%B7%E5%8F%96-%E6%B3%84%E9%9C%B2%E5%AE%89%E5%85%A8%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7%E5%85%B6%E4%BB%96%E7%AD%89"><span class="toc-number">1.3.3.</span> <span class="toc-text"> c. Web源码获取-泄露安全&amp;资源监控&amp;其他等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#d-web%E5%9F%9F%E5%90%8D-%E5%AD%90%E5%9F%9F%E5%90%8D%E7%9B%B8%E4%BC%BC%E5%9F%9F%E5%90%8D%E5%8F%8D%E6%9F%A5%E5%9F%9F%E5%90%8D%E6%97%81%E6%B3%A8%E7%AD%89"><span class="toc-number">1.3.4.</span> <span class="toc-text"> d. Web域名-子域名&amp;相似域名&amp;反查域名&amp;旁注等</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E9%9D%B6%E5%9C%BA"><span class="toc-number">2.</span> <span class="toc-text"> 在线靶场</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text"> 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%8D%E5%BC%B9shell-%E8%A7%A3%E5%86%B3%E6%95%B0%E6%8D%AE%E5%9B%9E%E6%98%BE%E5%92%8C%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%9B%9E%E6%98%BE-%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 反弹shell-解决数据回显和交互式回显、数据通信问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-web-%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. Web 应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BF%A1%E6%81%AF%E6%89%93%E7%82%B9-web%E6%9E%B6%E6%9E%84"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. 信息打点-Web架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#a-web%E6%9E%B6%E6%9E%84-%E8%AF%AD%E8%A8%80%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%AD%89"><span class="toc-number">1.3.1.</span> <span class="toc-text"> a. Web架构-语言&amp;中间件&amp;数据库&amp;系统等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b-web%E6%BA%90%E7%A0%81-cms%E5%BC%80%E6%BA%90%E9%97%AD%E6%BA%90%E5%94%AE%E5%8D%96%E8%87%AA%E4%B8%BB%E7%A0%94%E5%8F%91%E7%AD%89"><span class="toc-number">1.3.2.</span> <span class="toc-text"> b. Web源码-CMS开源&amp;闭源售卖&amp;自主研发等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c-web%E6%BA%90%E7%A0%81%E8%8E%B7%E5%8F%96-%E6%B3%84%E9%9C%B2%E5%AE%89%E5%85%A8%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7%E5%85%B6%E4%BB%96%E7%AD%89"><span class="toc-number">1.3.3.</span> <span class="toc-text"> c. Web源码获取-泄露安全&amp;资源监控&amp;其他等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#d-web%E5%9F%9F%E5%90%8D-%E5%AD%90%E5%9F%9F%E5%90%8D%E7%9B%B8%E4%BC%BC%E5%9F%9F%E5%90%8D%E5%8F%8D%E6%9F%A5%E5%9F%9F%E5%90%8D%E6%97%81%E6%B3%A8%E7%AD%89"><span class="toc-number">1.3.4.</span> <span class="toc-text"> d. Web域名-子域名&amp;相似域名&amp;反查域名&amp;旁注等</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BF%A1%E6%81%AF%E6%89%93%E7%82%B9-%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.4.</span> <span class="toc-text"> 3. 信息打点-系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E9%9D%B6%E5%9C%BA"><span class="toc-number">2.</span> <span class="toc-text"> 在线靶场</span></a></li></ol>
       </div>
     
   </span>
@@ -205,20 +222,6 @@
    --><!--
      --><li data-nav-key="tag"><a href="/tags/"><i class="nav-item-icon fa-solid fa-tags" aria-hidden="true"></i><span class="nav-item-text">Tag</span></a></li><!--
    -->
-      
-<li class="blog-theme-selector" data-theme-slot="theme-selector">
-  <button class="blog-theme-trigger" id="blog-theme-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="blog-theme-menu" aria-label="Choose visual theme">
-    <i class="blog-theme-icon fa-solid fa-palette" aria-hidden="true"></i><span class="blog-theme-label">Theme</span>
-  </button>
-  <div class="blog-theme-menu" id="blog-theme-menu" role="menu" aria-labelledby="blog-theme-trigger" hidden>
-    
-      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="cactus">Cactus</button>
-    
-      <button type="button" role="menuitemradio" aria-checked="false" data-theme-id="glass">Glass</button>
-    
-  </div>
-</li>
-
       <!--
      --><li class="nav-search">
           <form id="nav-search-form" role="search" data-search-path="/search.xml">
@@ -237,7 +240,7 @@
   <aside class="theme-post-toc-position" data-theme-slot="post-toc-position" aria-label="Table of contents">
     <div class="theme-post-toc" data-theme-slot="post-toc">
       <div class="theme-post-toc-title">目录</div>
-      <ul><li><a href="#基础知识">基础知识</a><ul><li><a href="#1-反弹shell-解决数据回显和交互式回显-数据通信问题">1. 反弹shell-解决数据回显和交互式回显、数据通信问题</a></li><li><a href="#2-web-应用">2. Web 应用</a></li><li><a href="#3-信息打点">3. 信息打点</a><ul><li><a href="#a-web架构-语言中间件数据库系统等">a. Web架构-语言&amp;中间件&amp;数据库&amp;系统等</a></li><li><a href="#b-web源码-cms开源闭源售卖自主研发等">b. Web源码-CMS开源&amp;闭源售卖&amp;自主研发等</a></li><li><a href="#c-web源码获取-泄露安全资源监控其他等">c. Web源码获取-泄露安全&amp;资源监控&amp;其他等</a></li><li><a href="#d-web域名-子域名相似域名反查域名旁注等">d. Web域名-子域名&amp;相似域名&amp;反查域名&amp;旁注等</a></li></ul></li></ul></li><li><a href="#在线靶场">在线靶场</a></li></ul>
+      <ul><li><a href="#基础知识">基础知识</a><ul><li><a href="#1-反弹shell-解决数据回显和交互式回显-数据通信问题">1. 反弹shell-解决数据回显和交互式回显、数据通信问题</a></li><li><a href="#2-web-应用">2. Web 应用</a></li><li><a href="#3-信息打点-web架构">3. 信息打点-Web架构</a><ul><li><a href="#a-web架构-语言中间件数据库系统等">a. Web架构-语言&amp;中间件&amp;数据库&amp;系统等</a></li><li><a href="#b-web源码-cms开源闭源售卖自主研发等">b. Web源码-CMS开源&amp;闭源售卖&amp;自主研发等</a></li><li><a href="#c-web源码获取-泄露安全资源监控其他等">c. Web源码获取-泄露安全&amp;资源监控&amp;其他等</a></li><li><a href="#d-web域名-子域名相似域名反查域名旁注等">d. Web域名-子域名&amp;相似域名&amp;反查域名&amp;旁注等</a></li></ul></li><li><a href="#3-信息打点-系统">3. 信息打点-系统</a></li></ul></li><li><a href="#在线靶场">在线靶场</a></li></ul>
     </div>
   </aside>
 <article class="post h-entry" data-theme-slot="post" itemscope itemtype="http://schema.org/BlogPosting">
@@ -448,7 +451,7 @@ Fiddler、Charles纯抓包</p>
 </ul>
 </li>
 </ul>
-<h3 id="3-信息打点"><a class="markdownIt-Anchor" href="#3-信息打点"></a> 3. 信息打点</h3>
+<h3 id="3-信息打点-web架构"><a class="markdownIt-Anchor" href="#3-信息打点-web架构"></a> 3. 信息打点-Web架构</h3>
 <h4 id="a-web架构-语言中间件数据库系统等"><a class="markdownIt-Anchor" href="#a-web架构-语言中间件数据库系统等"></a> a. Web架构-语言&amp;中间件&amp;数据库&amp;系统等</h4>
 <ul>
 <li>
@@ -502,6 +505,45 @@ Fiddler、Charles纯抓包</p>
 </ul>
 <h4 id="b-web源码-cms开源闭源售卖自主研发等"><a class="markdownIt-Anchor" href="#b-web源码-cms开源闭源售卖自主研发等"></a> b. Web源码-CMS开源&amp;闭源售卖&amp;自主研发等</h4>
 <h4 id="c-web源码获取-泄露安全资源监控其他等"><a class="markdownIt-Anchor" href="#c-web源码获取-泄露安全资源监控其他等"></a> c. Web源码获取-泄露安全&amp;资源监控&amp;其他等</h4>
+<p><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/124398.html">https://www.secpulse.com/archives/124398.html</a></p>
+<ul>
+<li>
+<p>泄露原因：源码本身特性入口、管理员不好的习惯、配置、意识、资源信息搜集入口</p>
+</li>
+<li>
+<p>源码泄露集合</p>
+<ul>
+<li>CMS识别不到时
+<ul>
+<li>composer.json：PHP特性，类似Java的Maven、Node.js的npm</li>
+<li>开源代码控制工具配置不当：
+<ul>
+<li>git (<a target="_blank" rel="noopener" href="https://github.com/lijiejie/GitHack">GitHack</a>): .git文件未删除就发布。domain/.git直接获取，如果能获取到就没删除</li>
+<li>svn (<a target="_blank" rel="noopener" href="https://github.com/callmefeifei/SvnHack">SvnHack</a>): 同理，domain/.svn/entries</li>
+</ul>
+</li>
+<li>.DS_Store 文件泄露（<a target="_blank" rel="noopener" href="https://github.com/lijiejie/ds_store_exp">ds_store_exp</a>）: Mac下Finder用于保存如何展示 文件/文件夹 的数据文件，每个文件夹下对应一个。可能造成文件目录结构泄露，特别是备份文件、源代码文件。同理 domain/.DS_Store</li>
+</ul>
+</li>
+<li>WEB-INF/web.xml 泄露：Java的WEB应用的安全目录，如果想在页面中直接访问其中的文件，必须通过web.xml文件对要访问的文件进行相应映射才能访问。<br />
+主要包含一下文件或目录：<br />
+WEB-INF/web.xml：Web应用程序配置文件，描述了servlet和其他的应用组件配置及命名规则. WEB-INF/database.properties：数据库配置文件<br />
+WEB-INF/classes/：一般用来存放Java类文件（.class) WEB-INF/lib/：用来存放打包好的库（jar)<br />
+WEB-INF/src/：用来放源代码（.asp和.php等）</li>
+<li>SWP文件泄露、CVS 、Bzr、Github、hg、网站压缩备份文件</li>
+</ul>
+</li>
+<li>
+<p>工具<br />
+CMs识别:<a target="_blank" rel="noopener" href="https://www.yunsee.cn/">https://www.yunsee.cn/</a><br />
+备份：敏感目录文件扫描-7kbscan-WebPathBrute CVs:<a target="_blank" rel="noopener" href="https://github.com/kost/dvcs-ripper">https://github.com/kost/dvcs-ripper</a> GIT:<a target="_blank" rel="noopener" href="https://github.com/lijiejie/GitHack">https://github.com/lijiejie/GitHack</a><br />
+SVN:<a target="_blank" rel="noopener" href="https://github.com/callmefeifei/SvnHack">https://github.com/callmefeifei/SvnHack</a><br />
+DS Store:<a target="_blank" rel="noopener" href="https://github.com/lijiejie/ds_store_exp">https://github.com/lijiejie/ds_store_exp</a></p>
+<p>GTTHUB资源搜索：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">n:name test				# 仓库标题搜索含有关键字</span><br><span class="line">in:descripton test		# 仓库描述搜索含有关键字</span><br><span class="line">in:readme test 			# Readme文件搜素含有关键字</span><br><span class="line">stars:&gt;3000 test		# stars数量大于3000的搜索关键字</span><br><span class="line">...</span><br><span class="line"># 关键字配合谷歌搜索：</span><br><span class="line">site:Github.com smtp</span><br><span class="line">site:Github.com smtp @qq.com</span><br><span class="line">site:Github.com smtp @126.com</span><br><span class="line">site:Github.com smtp @163.com</span><br><span class="line">site:Github.com smtp @sina.com.cn</span><br><span class="line">site:Github.com smtp password</span><br><span class="line">site:Github.com String password smtp</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://www.h0r2yc.com/1.zip">www.h0r2yc.com/1.zip</a></p>
+</li>
+</ul>
 <h4 id="d-web域名-子域名相似域名反查域名旁注等"><a class="markdownIt-Anchor" href="#d-web域名-子域名相似域名反查域名旁注等"></a> d. Web域名-子域名&amp;相似域名&amp;反查域名&amp;旁注等</h4>
 <ul>
 <li>
@@ -509,6 +551,20 @@ Fiddler、Charles纯抓包</p>
 <p>用域名查询来查类似的域名，相似的可能有注册信息</p>
 <p>相似域名查询：<a target="_blank" rel="noopener" href="https://wanwang.aliyun.com/domain/searchresult/">https://wanwang.aliyun.com/domain/searchresult/</a></p>
 <p>备案查询：<a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/index">https://beian.miit.gov.cn/#/Integrated/index</a></p>
+</li>
+</ul>
+<h3 id="3-信息打点-系统"><a class="markdownIt-Anchor" href="#3-信息打点-系统"></a> 3. 信息打点-系统</h3>
+<ul>
+<li>
+<p>获取网络服务信息 - 服务厂商 &amp; 网络架构</p>
+<p>通过域名查询ip地址所属：<a target="_blank" rel="noopener" href="https://site.ip138.com/">https://site.ip138.com/</a></p>
+</li>
+<li>
+<p>获取服务信息 - 应用协议 &amp; 内网资产</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#相关利用项目：</span><br><span class="line">Masscan:https://github.com/robertdavidgraham/masscan Wafw00f:https://github.com/EnableSecurity/wafw00f</span><br><span class="line">Kali上自带Nmap，Masscan，lbd等项目，超级ping:ping.chinaz.com </span><br><span class="line"></span><br><span class="line">超级ping：CDN服务识别</span><br><span class="line">Masscan：端口扫描，应用协议</span><br><span class="line">Wafw00f：Web应用防护防火墙识别</span><br><span class="line">Nmap：端口扫描，应用协议，防火墙识别</span><br><span class="line">lbd：负载均衡，广域网负载均衡，应用层负载均衡</span><br><span class="line"></span><br><span class="line">#端口协议安全：</span><br><span class="line">https://www.se7enseC.cn/2018/11/28/%E7%AB%AF%E5%8F%A3%E6%B8%97%E9% 80%8FE680BBE78BB93/</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>获取阻碍信息 - CDN &amp; WAF &amp; 负载 &amp; 防火墙</p>
 </li>
 </ul>
 <h2 id="在线靶场"><a class="markdownIt-Anchor" href="#在线靶场"></a> 在线靶场</h2>
@@ -544,7 +600,7 @@ Fiddler、Charles纯抓包</p>
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text"> 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%8D%E5%BC%B9shell-%E8%A7%A3%E5%86%B3%E6%95%B0%E6%8D%AE%E5%9B%9E%E6%98%BE%E5%92%8C%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%9B%9E%E6%98%BE-%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 反弹shell-解决数据回显和交互式回显、数据通信问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-web-%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. Web 应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BF%A1%E6%81%AF%E6%89%93%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. 信息打点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#a-web%E6%9E%B6%E6%9E%84-%E8%AF%AD%E8%A8%80%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%AD%89"><span class="toc-number">1.3.1.</span> <span class="toc-text"> a. Web架构-语言&amp;中间件&amp;数据库&amp;系统等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b-web%E6%BA%90%E7%A0%81-cms%E5%BC%80%E6%BA%90%E9%97%AD%E6%BA%90%E5%94%AE%E5%8D%96%E8%87%AA%E4%B8%BB%E7%A0%94%E5%8F%91%E7%AD%89"><span class="toc-number">1.3.2.</span> <span class="toc-text"> b. Web源码-CMS开源&amp;闭源售卖&amp;自主研发等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c-web%E6%BA%90%E7%A0%81%E8%8E%B7%E5%8F%96-%E6%B3%84%E9%9C%B2%E5%AE%89%E5%85%A8%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7%E5%85%B6%E4%BB%96%E7%AD%89"><span class="toc-number">1.3.3.</span> <span class="toc-text"> c. Web源码获取-泄露安全&amp;资源监控&amp;其他等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#d-web%E5%9F%9F%E5%90%8D-%E5%AD%90%E5%9F%9F%E5%90%8D%E7%9B%B8%E4%BC%BC%E5%9F%9F%E5%90%8D%E5%8F%8D%E6%9F%A5%E5%9F%9F%E5%90%8D%E6%97%81%E6%B3%A8%E7%AD%89"><span class="toc-number">1.3.4.</span> <span class="toc-text"> d. Web域名-子域名&amp;相似域名&amp;反查域名&amp;旁注等</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E9%9D%B6%E5%9C%BA"><span class="toc-number">2.</span> <span class="toc-text"> 在线靶场</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text"> 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%8D%E5%BC%B9shell-%E8%A7%A3%E5%86%B3%E6%95%B0%E6%8D%AE%E5%9B%9E%E6%98%BE%E5%92%8C%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%9B%9E%E6%98%BE-%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text"> 1. 反弹shell-解决数据回显和交互式回显、数据通信问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-web-%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text"> 2. Web 应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BF%A1%E6%81%AF%E6%89%93%E7%82%B9-web%E6%9E%B6%E6%9E%84"><span class="toc-number">1.3.</span> <span class="toc-text"> 3. 信息打点-Web架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#a-web%E6%9E%B6%E6%9E%84-%E8%AF%AD%E8%A8%80%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%AD%89"><span class="toc-number">1.3.1.</span> <span class="toc-text"> a. Web架构-语言&amp;中间件&amp;数据库&amp;系统等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b-web%E6%BA%90%E7%A0%81-cms%E5%BC%80%E6%BA%90%E9%97%AD%E6%BA%90%E5%94%AE%E5%8D%96%E8%87%AA%E4%B8%BB%E7%A0%94%E5%8F%91%E7%AD%89"><span class="toc-number">1.3.2.</span> <span class="toc-text"> b. Web源码-CMS开源&amp;闭源售卖&amp;自主研发等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c-web%E6%BA%90%E7%A0%81%E8%8E%B7%E5%8F%96-%E6%B3%84%E9%9C%B2%E5%AE%89%E5%85%A8%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7%E5%85%B6%E4%BB%96%E7%AD%89"><span class="toc-number">1.3.3.</span> <span class="toc-text"> c. Web源码获取-泄露安全&amp;资源监控&amp;其他等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#d-web%E5%9F%9F%E5%90%8D-%E5%AD%90%E5%9F%9F%E5%90%8D%E7%9B%B8%E4%BC%BC%E5%9F%9F%E5%90%8D%E5%8F%8D%E6%9F%A5%E5%9F%9F%E5%90%8D%E6%97%81%E6%B3%A8%E7%AD%89"><span class="toc-number">1.3.4.</span> <span class="toc-text"> d. Web域名-子域名&amp;相似域名&amp;反查域名&amp;旁注等</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BF%A1%E6%81%AF%E6%89%93%E7%82%B9-%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.4.</span> <span class="toc-text"> 3. 信息打点-系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E9%9D%B6%E5%9C%BA"><span class="toc-number">2.</span> <span class="toc-text"> 在线靶场</span></a></li></ol>
       </div>
     
 
@@ -648,9 +704,6 @@ Fiddler、Charles纯抓包</p>
 <script src="/js/main.js"></script>
 
 
-<script src="/js/theme-manager.js"></script>
-
-
 
   
 <script src="/js/nav_search.js"></script>
@@ -667,5 +720,5 @@ Fiddler、Charles纯抓包</p>
 <!-- utterances Comments -->
 
 
-</body>
+<script src="/double-exposure/switcher.js?v=b8f9b4faeeae" defer data-double-exposure-runtime></script></body>
 </html>

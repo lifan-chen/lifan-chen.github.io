@@ -1,0 +1,115 @@
+/* Double Exposure adapter for Glass. Keep every rule scoped to this child. */
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  flex: 0 0 112px;
+  width: 112px;
+  height: 100%;
+  margin: 0 14px 0 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  color: #fff;
+  font-family: "Glass-Education-Pencil", "华文中宋", STZhongsong, serif;
+  text-align: center;
+  text-shadow: 0 0 5px #111;
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] button {
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-trigger {
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+  padding: 0 .35rem;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  border-radius: 0;
+  color: #fff;
+  text-shadow: 0 0 5px #111;
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-trigger:hover,
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-trigger[aria-expanded="true"] {
+  background: rgba(255, 255, 255, .29);
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-menu {
+  position: absolute;
+  z-index: 1000;
+  top: calc(100% + .35rem);
+  right: 0;
+  min-width: 8rem;
+  padding: .35rem;
+  border: 1px solid rgba(255, 255, 255, .65);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 10px 28px rgba(17, 17, 17, .22);
+  color: #144a74;
+  text-shadow: none;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-menu[hidden] {
+  display: none;
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-option {
+  display: block;
+  width: 100%;
+  padding: .6rem .75rem;
+  border-radius: 7px;
+  color: #144a74;
+  text-align: right;
+  text-shadow: none;
+  white-space: nowrap;
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-option:hover,
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-option:focus-visible,
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-option[aria-checked="true"] {
+  outline: 0;
+  background: rgba(20, 74, 116, .12);
+  color: #144a74;
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .9);
+  outline-offset: -3px;
+}
+
+:where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-option:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(20, 74, 116, .45);
+}
+
+@media (max-width: 1100px) {
+  :where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) #header #nav > ul > [data-double-exposure-switcher] {
+    flex-basis: auto;
+    width: auto;
+    min-width: 88px;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :where(html[data-de-theme="glass"], html[data-blog-theme="glass"]) [data-double-exposure-switcher] .de-theme-menu {
+    background: #fff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

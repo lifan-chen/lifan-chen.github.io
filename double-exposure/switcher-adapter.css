@@ -1,0 +1,149 @@
+/* Double Exposure adapter for Cactus. Keep every rule scoped to this child. */
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) {
+  --de-cactus-accent: #2bbc8a;
+  --de-cactus-background: #fff;
+  --de-cactus-background-muted: #fafafa;
+  --de-cactus-background-mobile: #e6e6e6;
+  --de-cactus-border: #666;
+  --de-cactus-focus: #619ac3;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] {
+  position: relative;
+  display: inline-flex;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  align-items: center;
+  margin-right: 15px;
+  padding-right: 15px;
+  border-right: 1px dotted var(--de-cactus-accent);
+  color: var(--de-cactus-accent);
+  font: inherit;
+  line-height: 15px;
+  vertical-align: middle;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] button {
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-trigger {
+  display: inline-flex;
+  width: auto;
+  min-width: 0;
+  height: 15px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  border-radius: 0;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-icon {
+  display: none;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-trigger:hover,
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-trigger[aria-expanded="true"] {
+  background-image: linear-gradient(transparent, transparent 5px, var(--de-cactus-accent) 5px, var(--de-cactus-accent));
+  background-position: bottom;
+  background-size: 100% 6px;
+  background-repeat: repeat-x;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-menu {
+  position: absolute;
+  z-index: 500;
+  top: calc(100% + .45rem);
+  right: 0;
+  min-width: 7rem;
+  padding: .3rem;
+  border: 1px solid color-mix(in srgb, var(--de-cactus-border) 28%, transparent);
+  border-radius: 3px;
+  background: var(--de-cactus-background);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-menu[hidden] {
+  display: none;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-option {
+  display: block;
+  width: 100%;
+  padding: .4rem .55rem;
+  border-radius: 3px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-option:hover,
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-option:focus-visible,
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] .de-theme-option[aria-checked="true"] {
+  outline: 0;
+  background: var(--de-cactus-background-muted);
+  color: var(--de-cactus-accent);
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher] button:focus-visible {
+  outline: 2px solid var(--de-cactus-focus);
+  outline-offset: 2px;
+}
+
+/* Cactus uses its dedicated fixed navigation on post pages. */
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) body[data-page-kind="post"] #header {
+  display: none;
+}
+
+/* Cactus' fixed post navigation uses the same compact textual treatment. */
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) #header-post [data-double-exposure-switcher],
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher][data-de-mount="post-desktop"] {
+  margin-right: 15px;
+  padding-right: 15px;
+}
+
+/* The mobile post menu is table-like and opens upward from the fixed footer. */
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) #nav-footer [data-double-exposure-switcher],
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher][data-de-mount="post-mobile"] {
+  width: 20%;
+  margin: 0;
+  padding: 10px;
+  justify-content: center;
+  border-right: 0;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) #nav-footer [data-double-exposure-switcher] .de-theme-trigger,
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher][data-de-mount="post-mobile"] .de-theme-trigger {
+  height: auto;
+  color: var(--de-cactus-accent);
+  font-size: 1em;
+  line-height: normal;
+}
+
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) #nav-footer [data-double-exposure-switcher] .de-theme-menu,
+:where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) [data-double-exposure-switcher][data-de-mount="post-mobile"] .de-theme-menu {
+  top: auto;
+  right: 0;
+  bottom: calc(100% + .45rem);
+  background: var(--de-cactus-background-mobile);
+}
+
+@media screen and (max-width: 480px) {
+  :where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) #header #nav ul:not(.responsive) [data-double-exposure-switcher] {
+    display: none;
+  }
+
+  :where(html[data-de-theme="cactus"], html[data-blog-theme="cactus"]) #header #nav ul.responsive [data-double-exposure-switcher] {
+    display: flex;
+    padding-top: 1rem;
+    padding-left: 70px;
+    border-right: 0;
+    font-size: 1rem;
+  }
+}
